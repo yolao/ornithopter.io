@@ -2,7 +2,7 @@
 /**
  * Ornithopter.io
  * ------------------------------------------------
- * A minimalist, high-speed open source PHP 5.5+ framework
+ * A minimalist, high-speed open source PHP 5.6+ framework
  *
  * @package     Ornithopter.io
  * @author      Corey Olson
@@ -348,26 +348,26 @@ class benchmark
 	 * @param   mixed
 	 * @return  mixed
 	 */
-	 public function __call( $called, $args = array() )
- 	{
- 		$aliases = array(
- 			'mark'		=> ['record', 'break', 'measure', 'point', 'bench'],
- 			'system'	=> ['sys', 'load', 'proc'],
- 			'diff'		=> ['between', 'difference'],
- 			'memory' 	=> ['mem', 'memory_usage', 'mem_usage'],
- 			'peak'		=> ['peak_mem', 'peak_memory_usage', 'peak_mem_usage']
- 		);
+	public function __call( $called, $args = array() )
+	{
+		$aliases = array(
+			'mark'		=> ['record', 'break', 'measure', 'point', 'bench'],
+			'system'	=> ['sys', 'load', 'proc'],
+			'diff'		=> ['between', 'difference'],
+			'memory'	=> ['mem', 'memory_usage', 'mem_usage'],
+			'peak'		=> ['peak_mem', 'peak_memory_usage', 'peak_mem_usage']
+		);
 
- 		// Iterate through methods
- 		foreach ( $aliases as $method => $list )
+		// Iterate through methods
+		foreach ( $aliases as $method => $list )
 
- 			// Check called against accepted alias list
- 			if ( in_array($called, $list) )
+			// Check called against accepted alias list
+			if ( in_array($called, $list) )
 
- 				// Dynamic method (alias) call with arbitrary arguments
- 				return call_user_func_array(array(__CLASS__, $method), $args);
+				// Dynamic method (alias) call with arbitrary arguments
+				return call_user_func_array(array(__CLASS__, $method), $args);
 
-         // Mixed
-         return false;
- 	}
+        // No alias found
+        return false;
+	}
 }

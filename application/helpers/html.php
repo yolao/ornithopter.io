@@ -2,7 +2,7 @@
 /**
  * Ornithopter.io
  * ------------------------------------------------
- * A minimalist, high-speed open source PHP 5.5+ framework
+ * A minimalist, high-speed open source PHP 5.6+ framework
  *
  * @package     Ornithopter.io
  * @author      Corey Olson
