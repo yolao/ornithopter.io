@@ -348,39 +348,26 @@ class benchmark
 	 * @param   mixed
 	 * @return  mixed
 	 */
-	public function __call( $method, $args = array() )
-	{
-		// Aliases for self::method();
-		if ( in_array($method, array('record', 'break', 'measure', 'point', 'bench')) )
+	 public function __call( $called, $args = array() )
+ 	{
+ 		$aliases = array(
+ 			'mark'		=> ['record', 'break', 'measure', 'point', 'bench'],
+ 			'system'	=> ['sys', 'load', 'proc'],
+ 			'diff'		=> ['between', 'difference'],
+ 			'memory' 	=> ['mem', 'memory_usage', 'mem_usage'],
+ 			'peak'		=> ['peak_mem', 'peak_memory_usage', 'peak_mem_usage']
+ 		);
 
-			// Route the alias call to the system() method
-			return self::mark( isset($args[0])?:0 );
+ 		// Iterate through methods
+ 		foreach ( $aliases as $method => $list )
 
-		// Aliases for self::method();
-		if ( in_array($method, array('sys', 'load', 'proc')) )
+ 			// Check called against accepted alias list
+ 			if ( in_array($called, $list) )
 
-			// Route the alias call to the system() method
-			return self::system();
+ 				// Dynamic method (alias) call with arbitrary arguments
+ 				return call_user_func_array(array(__CLASS__, $method), $args);
 
-		// Aliases for self::method();
-		if ( in_array($method, array('between', 'difference')) )
-
-			// Route the alias call to the self::diff() method
-			return self::diff( $args[0], isset($args[1])?$args[1]:0, isset($args[2])?$args[2]:0 );
-
-		// Aliases for self::memory();
-		if ( in_array($method, array('mem', 'memory_usage', 'mem_usage')) )
-
-			// Route the alias call to the self::memory() method
-			return self::memory( isset($args[0])?$args[0]:0, isset($args[1])?$args[1]:0 );
-
-		// Aliases for self::peak();
-		if ( in_array($method, array('peak_mem', 'peak_memory_usage', 'peak_mem_usage')) )
-
-			// Route the alias call to the self::peak() method
-			return self::peak( isset($args[0])?$args[0]:0, isset($args[1])?$args[1]:0 );
-
-        // Mixed
-        return false;
-	}
+         // Mixed
+         return false;
+ 	}
 }
