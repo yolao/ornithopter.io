@@ -17,9 +17,9 @@
 /**
  * A session library
  *
+ * @author      Corey Olson
  * @package     Ornithopter.io
  * @subpackage  Libraries
- * @author      Corey Olson
  *
  * @method		io::library('session')->session();
  * @method		io::library('session')->regenerate();

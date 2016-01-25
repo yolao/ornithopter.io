@@ -19,7 +19,7 @@
  *
  * @author      Corey Olson
  * @package     Ornithopter.io
- * @subpackage  Libraries
+ * @subpackage  Helpers
  *
  * @method		io::library('bcrypt')->hash( $password );
  * @method 		io::library('bcrypt')->verify( $password, $stored_hash );

@@ -19,7 +19,7 @@
  *
  * @author      Corey Olson
  * @package     Ornithopter.io
- * @subpackage
+ * @subpackage	Libraries
  *
  * @method		io::library('benchmark')->mem();
  * @method		io::library('benchmark')->system();

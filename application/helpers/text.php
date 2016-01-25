@@ -19,7 +19,7 @@
  *
  * @author      Corey Olson
  * @package     Ornithopter.io
- * @subpackage
+ * @subpackage	Helpers
  *
  * @method
  */

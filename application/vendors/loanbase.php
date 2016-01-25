@@ -17,9 +17,9 @@
 /**
  * A Loanbase API wrapper: https://loanbase.com/developers
  *
+ * @author      Corey Olson
  * @package     Ornithopter.io
  * @subpackage  Vendors
- * @author      Corey Olson
  */
 namespace vendors;
 class loanbase

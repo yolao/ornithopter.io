@@ -17,9 +17,9 @@
 /**
  * A Coinbase Exchange API wrapper: https://docs.exchange.coinbase.com/
  *
+ * @author      Corey Olson
  * @package     Ornithopter.io
  * @subpackage  Vendors
- * @author      Corey Olson
  */
 namespace vendors;
 class coinbase_exchange
