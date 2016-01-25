@@ -26,5 +26,5 @@
 namespace helpers;
 class file
 {
-
+	// TODO: Make io::helper('file'); class
 }

@@ -26,5 +26,5 @@
 namespace helpers;
 class web
 {
-
+	// TODO: Make io::helper('web'); class
 }

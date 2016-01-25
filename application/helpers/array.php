@@ -26,5 +26,5 @@
 namespace helpers;
 class array
 {
-
+	// TODO: Make io::helper('array'); class
 }

@@ -26,5 +26,5 @@
 namespace helpers;
 class text
 {
-
+	// TODO: Make io::helper('text'); class
 }

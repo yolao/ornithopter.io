@@ -26,5 +26,5 @@
 namespace helpers;
 class inflector
 {
-
+	// TODO: Make io::helper('inflector'); class
 }

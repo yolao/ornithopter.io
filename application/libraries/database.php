@@ -26,5 +26,5 @@
 namespace libraries;
 class database
 {
-
+	// TODO: Make io::library('database'); class
 }
