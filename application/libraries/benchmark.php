@@ -82,7 +82,7 @@ class benchmark
 	 *
 	 * @return  array
 	 */
-	public function all( $friendly = false )
+	public static function all( $friendly = false )
 	{
 		// Create a local copy
 		$tmp = self::$points;
@@ -105,7 +105,7 @@ class benchmark
 	 *
 	 * @return  array
 	 */
-	public function runtime( $precision = 4 )
+	public static function runtime( $precision = 4 )
 	{
 		// Get runtime since initializing
 		return round(microtime(true) - reset(self::$points)['time'], $precision);
@@ -116,7 +116,7 @@ class benchmark
 	 *
 	 * @return  array
 	 */
-	public function first()
+	public static function first()
 	{
 		// Get the first benchmark
 		return reset(self::$points);
@@ -127,7 +127,7 @@ class benchmark
 	 *
 	 * @return  array
 	 */
-	public function last()
+	public static function last()
 	{
 		// Last benchmark
 		return end(self::$points);
@@ -138,7 +138,7 @@ class benchmark
 	 *
 	 * @return  array
 	 */
-	public function since( $mark = 0 )
+	public static function since( $mark = 0 )
 	{
 		// Since last
 		if ( ! $mark )
@@ -168,7 +168,7 @@ class benchmark
 	 *
 	 * @return  array
 	 */
-	public function diff( $first = 0, $second = 0, $precision = 4 )
+	public static function diff( $first = 0, $second = 0, $precision = 4 )
 	{
 		// Check validity
 		if ( ! $first )
@@ -212,7 +212,7 @@ class benchmark
 	 *
 	 * @return  array
 	 */
-	public function mark( $key = 0 )
+	public static function mark( $key = 0 )
 	{
 		// Require name
 		if ( ! $key )
@@ -237,7 +237,7 @@ class benchmark
 	 *
 	 * @return  int
 	 */
-	public function memory( $real_usage = false, $friendly = false )
+	public static function memory( $real_usage = false, $friendly = false )
 	{
 		// Beautify?
 		if ( $friendly )
@@ -254,7 +254,7 @@ class benchmark
 	 *
 	 * @return  int
 	 */
-	public function peak( $real_usage = false, $friendly = true )
+	public static function peak( $real_usage = false, $friendly = true )
 	{
 		// Beautify?
 		if ( $friendly )
@@ -271,7 +271,7 @@ class benchmark
 	 *
 	 * @return  array
 	 */
-	public function friendly( $arg = false )
+	public static function friendly( $arg = false )
 	{
 		// Has a benchmark been provided
 		if ( ! $arg )
@@ -300,7 +300,7 @@ class benchmark
 	 *
 	 * @return  array
 	 */
-	public function system()
+	public static function system()
 	{
 		// Function not available on windows
 		if ( defined('PHP_WINDOWS_VERSION_MAJOR') )
@@ -324,7 +324,7 @@ class benchmark
 	 * @param 	string
 	 * @return  string
 	 */
-	private function bytes( $bytes = 0 )
+	private static function bytes( $bytes = 0 )
 	{
 		// Division by zero
 		if ( !$bytes )

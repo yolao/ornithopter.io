@@ -102,7 +102,7 @@ class time
 	 * @param 	int
 	 * @return  string
 	 */
-    public function xago( $time = 0 )
+    public static function xago( $time = 0 )
     {
         // Wrapper function
         return self::context( $time );
@@ -114,7 +114,7 @@ class time
 	 * @param 	int
 	 * @return  string
 	 */
-    public function context( $time = 0 )
+    public static function context( $time = 0 )
     {
         /*
          * Unit timeframe nouns and lengths in a multi-dimensional array
@@ -169,7 +169,7 @@ class time
 	 * @param 	int
 	 * @return  string
 	 */
-    private function display( $units, $noun, $time )
+    private static function display( $units, $noun, $time )
     {
         // Get the past or future tense
         $tense = ($time <= time()) ? 'past' : 'future';
