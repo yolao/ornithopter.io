@@ -62,7 +62,7 @@ class arr
 	public static $self;
 
 	/**
-	 * Initialize time helper class
+	 * Initialize array helper class
 	 *
 	 * @return  object
 	 */
@@ -97,6 +97,7 @@ class arr
 	 */
 	public static function arr()
 	{
+		// Shortcut for io::arr()
 		return self::$self;
 	}
 

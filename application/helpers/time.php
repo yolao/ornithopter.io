@@ -106,6 +106,7 @@ class time
 	 */
 	public static function time()
 	{
+		// Shortcut for io::time()
 		return self::$self;
 	}
 
