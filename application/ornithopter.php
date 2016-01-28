@@ -79,10 +79,10 @@ class io
 		}
 
 		// Prevents processing files twice
-		if ( ! isset( self::$api['files'][$name] ) )
+		if ( ! isset( self::$api['files'][$type][$name] ) )
 
 			// This [1] Either (a) includes file or (b) exits on failure; [2] adds file tracking array
-			( include self::$api['files'][$name] = self::$api['paths'][$type] . $name . '.php' ) ?:io::error_404();
+			( include self::$api['files'][$type][$name] = self::$api['paths'][$type] . $name . '.php' ) ?:io::error_404();
 
 		if ( ! isset( self::$api['objects'][$name] ) )
 		{
@@ -151,7 +151,7 @@ class io
 		( count($__args) != 0 ) ? extract( $__args, EXTR_PREFIX_SAME, '_conflict_' ) : false ;
 
 		// Again we either (a) includes the file or (b) exit on failure
-		(include( self::$api['paths']['views'] . $__name . $__ext ) )?:exit();
+		(include( self::$api['files']['views'][$__name] = self::$api['paths']['views'] . $__name . $__ext ) )?:exit();
 
 		// Getting the contents of the buffer
 		$__view = ob_get_contents();
@@ -216,10 +216,10 @@ class io
 					$name = $r['controller'] . 'home';
 
 					// Prevents processing files twice
-					if ( ! isset( self::$api['files'][$name] ) )
+					if ( ! isset( self::$api['files']['controllers'][$name] ) )
 
 						// This [1] Either (a) includes file or (b) exits on failure; [2] adds file tracking array
-						( include self::$api['files'][$name] = __DIR__ . '/controllers/' . $name . '.php' ) ?:io::error_404();
+						( include self::$api['files']['controllers'][$name] = __DIR__ . '/controllers/' . $name . '.php' ) ?:io::error_404();
 
 					// Reverse engineer this controller class
 					$reflection = new ReflectionClass('home');
