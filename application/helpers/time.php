@@ -56,7 +56,7 @@ class time
 	 *
 	 * @var array
 	 */
-    private static $self;
+    public static $self;
 
     /**
 	 * Internal settings
@@ -91,6 +91,9 @@ class time
             // Output formatting [1] none, [2] ucfirst, [3] ucwords, [4] strtoupper
             'format'    => ['normal' => 1, 'ucfirst' => 0, 'ucwords' => 0, 'strtoupper' => 0]
         );
+
+		// Register shortcut aliases using h::method();
+		\io::alias('helpers\time', get_class_methods(__CLASS__));
 
         // Allow method chaining for settings
         return self::$self = $this;
