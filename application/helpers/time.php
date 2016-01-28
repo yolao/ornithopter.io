@@ -52,7 +52,7 @@ namespace helpers;
 class time
 {
     /**
-	 * Allows chaining
+    * Allows global self reference
 	 *
 	 * @var array
 	 */
@@ -98,6 +98,16 @@ class time
         // Allow method chaining for settings
         return self::$self = $this;
     }
+
+    /**
+	 * Creates a shortcut for io::time()
+	 *
+	 * @return  object
+	 */
+	public static function time()
+	{
+		return self::$self;
+	}
 
     /**
 	 * Convenience wrapper for self::context()
