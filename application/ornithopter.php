@@ -55,6 +55,60 @@ class io
 	public static $api = array();
 
 	/**
+	 * An array of method() / __CLASS__ keypairs
+	 *
+	 * @var array
+	 */
+	public static $alias = array();
+
+	/**
+	 * Creates aliases using a class name and list of existing methods
+	 *
+	 * @param   string
+	 * @param   array
+	 * @return  void
+	 */
+	public static function alias( $class, $methodArr )
+	{
+		// Iterate through class methods
+		foreach ( $methodArr as $method )
+
+			// Do not create aliases for magic functions
+			if ( substr($method, 0, 2) != '__' )
+
+				// Create the alias
+				self::$alias[$method] = $class;
+	}
+
+	protected static function init()
+	{
+		/*
+		 * These are special aliases required for accessing internal functionality
+		 * like loading and using helpers, libraries, models, views and controllers.
+		 */
+		self::$api['methods'] = array(
+			['models', 'm', 'model'],
+			['views', 'v', 'view'],
+			['controllers', 'c', 'controller'],
+			['libraries', 'l', 'library'],
+			['helpers', 'h', 'helper'],
+			['vendors', 'v3', 'vendor']
+		);
+
+		// Root directory for index.php
+		self::$api['paths']['root'] = dirname(__DIR__) . '/';
+
+		// Root directory for ornithopter.php
+		self::$api['paths']['ioapp'] = __DIR__ . '/';
+
+		// Create the directory paths to each object type
+		foreach ( self::$api['methods'] as $path )
+
+			// Create the file paths for respective file types
+			self::$api['paths'][$path[0]] = __DIR__ . '/' . $path[0] . '/';
+	}
+
+	/**
 	 * Factory method for creating objects within io
 	 *
 	 * @param   string
@@ -65,18 +119,10 @@ class io
 	private static function create( $type, $name, $args = array() )
 	{
 		// Configure on initialization
-		if ( ! isset( self::$api['paths'] ) )
-		{
-			// Root directory for index.php
-			self::$api['paths']['root'] = dirname(__DIR__) . '/';
+		if ( ! isset( self::$api['methods'] ) )
 
-			// Root directory for ornithopter.php
-			self::$api['paths']['ioapp'] = __DIR__ . '/';
-
-			// Create the file paths for respective file types
-			foreach ( array('controllers', 'models', 'views', 'helpers', 'libraries', 'vendors') as $path )
-				self::$api['paths'][$path] = __DIR__ . '/' . $path . '/';
-		}
+			// Run initialization
+			self::init();
 
 		// Prevents processing files twice
 		if ( ! isset( self::$api['files'][$type][$name] ) )
@@ -103,8 +149,11 @@ class io
 
 			// Initialize classes [1] with namespaces or [2] normally
 			if ( in_array($type, array('helpers', 'libraries', 'vendors')) )
+
+				// Initialization for Helpers and Libraries using namespaces
 				$reflection = new ReflectionClass($type . '\\' . $name);
 			else
+				// Controllers and models do not have namespaces
 				$reflection = new ReflectionClass($name);
 
 			// This [1] creates the object instances (with or without arguments) and [2] adds to object tracking array
@@ -123,13 +172,19 @@ class io
 	 * @param   mixed
 	 * @return  object
 	 */
-	public static function __callStatic( $type, $args )
+	public static function __callStatic( $called, $args = array() )
 	{
-		// Uses magic PHP function to allow abbreviations and condense wrappers into one
-		$wrapperArray = array('c' => 'controllers', 'm' => 'models', 'h' => 'helpers', 'l' => 'libraries', 'v' => 'vendors');
+		// Iterate MVC and Library / Helper methods and Vendor libraries
+		foreach ( self::$api['methods'] as $method => $aliases )
 
-		// Wrapper for self::create() factory method; allows abbreviations
-		return self::create( $wrapperArray[substr($type,0,1)], array_shift($args), $args );
+			// Check for valid aliases
+			if ( in_array($called, $aliases) )
+
+				// Send to factory self::create() for MCLH and send V to self::views()
+				return self::create( $aliases[0], array_shift($args), $args );
+
+		// Use the alias to call the static class method with arguments
+		return call_user_func_array([self::$alias[$called], $called], $args);
 	}
 
 	/**
@@ -316,7 +371,7 @@ class io
  *
  * @return		closure
  */
-class route
+class route extends io
 {
 	/**
 	 * Route matching
@@ -343,6 +398,8 @@ class route
 
 		// Route matching; Checks [1] literal matches, then [2] Regex
 		if ( $route == $url OR preg_match( '#^' . $route . '$#' , $url) )
+
+			// Add to internal routes tracking array
 			return io::$api['route'][][$request] = $route;
 
 		// No pattern matches
@@ -357,10 +414,18 @@ class route
 	 * @param   mixed
 	 * @return  void
 	 */
-	public static function __callStatic( $type, $args )
+	public static function __callStatic( $type, $args = array() )
 	{
+		// Configure on initialization
+		if ( ! isset( io::$api['paths'] ) )
+
+			// Run initialization
+			io::init();
+
 		// Check route against self::match()
 		if ( self::match(strtoupper($type), $args[0]) )
+
+			// Closure
 			$args[1]();
 
 		// Discontinue processing on TRUE
