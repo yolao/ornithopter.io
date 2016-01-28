@@ -21,52 +21,84 @@
  * @package     Ornithopter.io
  * @subpackage	Helpers
  *
- * @method		io::helper('arrays')->add( $array, $keypair, [notfound] );
- * @method		io::helper('arrays')->add( $array, $keypair [, 'notfound'] )
- * @method		io::helper('arrays')->merge( $array1, $array2 [, $array3...] );
- * @method		io::helper('arrays')->combine( $keyArray, $valueArray );
- * @method		io::helper('arrays')->divide( $array );
- * @method		io::helper('arrays')->keys( $array );
- * @method		io::helper('arrays')->values( $array );
- * @method		io::helper('arrays')->first( $array );
- * @method		io::helper('arrays')->last( $array );
- * @method		io::helper('arrays')->rand( $array );
- * @method		io::helper('arrays')->eq( $array, $itemNumber );
- * @method		io::helper('arrays')->odd( $array );
- * @method		io::helper('arrays')->even( $array );
- * @method		io::helper('arrays')->nth( $array [, $modulus] );
- * @method		io::helper('arrays')->mod( $array [, $modulus] [, $operator] );
- * @method		io::helper('arrays')->element( $array, $key [, 'notfound'] );
- * @method		io::helper('arrays')->fetch( $array, $key [, 'notfound'] );
- * @method		io::helper('arrays')->pull( $array, $key [, 'notfound'] );
- * @method		io::helper('arrays')->keep( $array, $keyArray );
- * @method		io::helper('arrays')->sort( $array, $sortMethod [, $makeCopy] );
- * @method		io::helper('arrays')->flatten( $array [, boolean] );
- * @method 		io::helper('arrays')->dot( $array [, boolean] );
- * @method 		io::helper('arrays')->undot( $array [, boolean] [, boolean] );
- * @method 		io::helper('arrays')->select( $array, $dotPath );
- * @method 		io::helper('arrays')->exists( $array, $dotPath );
- * @method 		io::helper('arrays')->write( $array, $dotPath, $value );
- * @method 		io::helper('arrays')->insert( $array, $dotPath, $value );
- * @method 		io::helper('arrays')->update( $array, $dotPath, $value );
- * @method 		io::helper('arrays')->delete( $array, $dotPath );
+ * @method		io::helper('arr')->add( $array, $keypair, [notfound] );
+ * @method		io::helper('arr')->add( $array, $keypair [, 'notfound'] )
+ * @method		io::helper('arr')->merge( $array1, $array2 [, $array3...] );
+ * @method		io::helper('arr')->combine( $keyArray, $valueArray );
+ * @method		io::helper('arr')->divide( $array );
+ * @method		io::helper('arr')->keys( $array );
+ * @method		io::helper('arr')->values( $array );
+ * @method		io::helper('arr')->first( $array );
+ * @method		io::helper('arr')->last( $array );
+ * @method		io::helper('arr')->rand( $array );
+ * @method		io::helper('arr')->eq( $array, $itemNumber );
+ * @method		io::helper('arr')->odd( $array );
+ * @method		io::helper('arr')->even( $array );
+ * @method		io::helper('arr')->nth( $array [, $modulus] );
+ * @method		io::helper('arr')->mod( $array [, $modulus] [, $operator] );
+ * @method		io::helper('arr')->element( $array, $key [, 'notfound'] );
+ * @method		io::helper('arr')->fetch( $array, $key [, 'notfound'] );
+ * @method		io::helper('arr')->pull( $array, $key [, 'notfound'] );
+ * @method		io::helper('arr')->keep( $array, $keyArray );
+ * @method		io::helper('arr')->sort( $array, $sortMethod [, $makeCopy] );
+ * @method		io::helper('arr')->flatten( $array [, boolean] );
+ * @method 		io::helper('arr')->dot( $array [, boolean] );
+ * @method 		io::helper('arr')->undot( $array [, boolean] [, boolean] );
+ * @method 		io::helper('arr')->select( $array, $dotPath );
+ * @method 		io::helper('arr')->exists( $array, $dotPath );
+ * @method 		io::helper('arr')->write( $array, $dotPath, $value );
+ * @method 		io::helper('arr')->insert( $array, $dotPath, $value );
+ * @method 		io::helper('arr')->update( $array, $dotPath, $value );
+ * @method 		io::helper('arr')->delete( $array, $dotPath );
  */
 namespace helpers;
-class arrays
+class arr
 {
 	/**
-	 * Internal data for objectifying an array
+	 * Allows global self reference
 	 *
 	 * @var array
 	 */
-	private static $data = array();
+	public static $self;
 
 	/**
-	 * Internal data for objectifying an array
+	 * Initialize time helper class
 	 *
-	 * @var array
+	 * @return  object
 	 */
-	private static $instance;
+    public function __construct()
+    {
+		// Methods within this class
+		$methodArr = get_class_methods(__CLASS__);
+
+		// Create a list of methods that use references
+		$referenceMethodArr = ['add', 'pull', 'keep', 'sort', 'flatten', 'dot',
+			'undot', 'write', 'select', 'exists', 'insert', 'update', 'delete'];
+
+		// Remove the reference methods from shortcuts (not allowed)
+		$methodArr = array_diff($methodArr, $referenceMethodArr);
+
+		// Create an instance
+		self::$self = $this;
+
+		// Developer notes for troubleshooting
+		\io::_notes('helpers\arr',
+			'Following shortcuts are not available: ' . implode(', ', $referenceMethodArr)
+			. ' ... try using io::arr()->method() instead of io::method()');
+
+		// Register shortcut aliases using h::method();
+		\io::alias('helpers\arr', array_merge($methodArr, $referenceMethodArr));
+	}
+
+	/**
+	 * Creates a shortcut for io::arr()
+	 *
+	 * @return  object
+	 */
+	public static function arr()
+	{
+		return self::$self;
+	}
 
 	/**
 	 * Add an element to an array if it does not exist
