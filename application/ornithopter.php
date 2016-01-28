@@ -36,7 +36,7 @@
  * @package     Ornithopter.io
  * @subpackage	io::ornithopter (main class)
  *
- * @var			io::$api
+ * @var			io::$_developers
  * @method  	io::controller('class')->method();
  * @method  	io::model('class')->method();
  * @method  	io::view('file');
@@ -48,18 +48,18 @@
 class io
 {
 	/**
-	 * Internal variables
+	 * Internal Ornithopter.io variables
 	 *
 	 * @var array
 	 */
-	public static $api = array();
+	private static $_internals = array();
 
 	/**
-	 * An array of method() / __CLASS__ keypairs
+	 * External Ornithopter.io variables and notes for developers
 	 *
 	 * @var array
 	 */
-	public static $alias = array();
+	protected static $_developers = array();
 
 	/**
 	 * Creates aliases using a class name and list of existing methods
@@ -70,23 +70,32 @@ class io
 	 */
 	public static function alias( $class, $methodArr )
 	{
+		// Reserved Ornithopter.io methods
+		$reservedMethods = array_merge(self::$_internals['methods']);
+
 		// Iterate through class methods
 		foreach ( $methodArr as $method )
 
+			// Check for protected internal methods
+			if ( in_array($method, $reservedMethods ) )
+
+				// Disallow overwriting internals
+				return false;
+
 			// Do not create aliases for magic functions
-			if ( substr($method, 0, 2) != '__' )
+			else if ( substr($method, 0, 2) != '__' )
 
 				// Create the alias
-				self::$alias[$method] = $class;
+				self::$_internals['alias'][$method] = $class;
 	}
 
-	protected static function init()
+	protected static function _init()
 	{
 		/*
 		 * These are special aliases required for accessing internal functionality
 		 * like loading and using helpers, libraries, models, views and controllers.
 		 */
-		self::$api['methods'] = array(
+		self::$_internals['methods'] = array(
 			['models', 'm', 'model'],
 			['views', 'v', 'view'],
 			['controllers', 'c', 'controller'],
@@ -96,16 +105,16 @@ class io
 		);
 
 		// Root directory for index.php
-		self::$api['paths']['root'] = dirname(__DIR__) . '/';
+		self::$_developers['paths']['root'] = dirname(__DIR__) . '/';
 
 		// Root directory for ornithopter.php
-		self::$api['paths']['ioapp'] = __DIR__ . '/';
+		self::$_developers['paths']['ioapp'] = __DIR__ . '/';
 
 		// Create the directory paths to each object type
-		foreach ( self::$api['methods'] as $path )
+		foreach ( self::$_internals['methods'] as $path )
 
 			// Create the file paths for respective file types
-			self::$api['paths'][$path[0]] = __DIR__ . '/' . $path[0] . '/';
+			self::$_developers['paths'][$path[0]] = __DIR__ . '/' . $path[0] . '/';
 	}
 
 	/**
@@ -116,21 +125,21 @@ class io
 	 * @param   array
 	 * @return  object
 	 */
-	private static function create( $type, $name, $args = array() )
+	private static function _factory( $type, $name, $args = array() )
 	{
 		// Configure on initialization
-		if ( ! isset( self::$api['methods'] ) )
+		if ( ! isset( self::$_developers['paths'] ) )
 
 			// Run initialization
-			self::init();
+			self::_init();
 
 		// Prevents processing files twice
-		if ( ! isset( self::$api['files'][$type][$name] ) )
+		if ( ! isset( self::$_developers['files'][$type][$name] ) )
 
 			// This [1] Either (a) includes file or (b) exits on failure; [2] adds file tracking array
-			( include self::$api['files'][$type][$name] = self::$api['paths'][$type] . $name . '.php' ) ?:io::error_404();
+			( include self::$_developers['files'][$type][$name] = self::$_developers['paths'][$type] . $name . '.php' ) ?:io::error_404();
 
-		if ( ! isset( self::$api['objects'][$name] ) )
+		if ( ! isset( self::$_developers['objects'][$name] ) )
 		{
 			// Subdirectory controllers
 			if ( strpos($name, '/') !== false )
@@ -157,11 +166,11 @@ class io
 				$reflection = new ReflectionClass($name);
 
 			// This [1] creates the object instances (with or without arguments) and [2] adds to object tracking array
-			self::$api['objects'][$name] = ( count($args) == 0 ) ? $reflection->newInstance() : $reflection->newInstanceArgs($args);
+			self::$_developers['objects'][$name] = ( count($args) == 0 ) ? $reflection->newInstance() : $reflection->newInstanceArgs($args);
 		}
 
 		// Returns object; allows chaining
-		return self::$api['objects'][$name];
+		return self::$_developers['objects'][$name];
 	}
 
 	/**
@@ -175,16 +184,16 @@ class io
 	public static function __callStatic( $called, $args = array() )
 	{
 		// Iterate MVC and Library / Helper methods and Vendor libraries
-		foreach ( self::$api['methods'] as $method => $aliases )
+		foreach ( self::$_internals['methods'] as $method => $aliases )
 
 			// Check for valid aliases
 			if ( in_array($called, $aliases) )
 
 				// Send to factory self::create() for MCLH and send V to self::views()
-				return self::create( $aliases[0], array_shift($args), $args );
+				return self::_factory( $aliases[0], array_shift($args), $args );
 
 		// Use the alias to call the static class method with arguments
-		return call_user_func_array([self::$alias[$called], $called], $args);
+		return call_user_func_array([self::$_internals['alias'][$called], $called], $args);
 	}
 
 	/**
@@ -206,7 +215,7 @@ class io
 		( count($__args) != 0 ) ? extract( $__args, EXTR_PREFIX_SAME, '_conflict_' ) : false ;
 
 		// Again we either (a) includes the file or (b) exit on failure
-		(include( self::$api['files']['views'][$__name] = self::$api['paths']['views'] . $__name . $__ext ) )?:exit();
+		(include( self::$_developers['files']['views'][$__name] = self::$_developers['paths']['views'] . $__name . $__ext ) )?:exit();
 
 		// Getting the contents of the buffer
 		$__view = ob_get_contents();
@@ -223,27 +232,27 @@ class io
 	 * framework. This is the standard way to use Ornithopter.io and no special
 	 * parameters or output are needed or avaiable. This method basically parses
 	 * REQUEST_URI and then traces out which controller to load, methods to run
-	 * and makes the data available via io::$api static variable while running.
+	 * and makes the data available via io::$_developers static variable while running.
 	 *
 	 * @return  void
 	 */
 	public static function ornithopter()
 	{
 		// Readability reference
-		$r =& self::$api['route'];
+		$r =& self::$_developers['route'];
 
 		// Splits the REQUEST_URI for [0] the Path and [1] the Query String
-		self::$api['request'] = explode('?', $_SERVER['REQUEST_URI']);
+		self::$_developers['request'] = explode('?', $_SERVER['REQUEST_URI']);
 
 		// Removes bad characters except ":" (colon), "~" (tilde), "/" (slash) and "." (period)
-		self::$api['request'][0] = preg_replace('/[^a-zA-Z0-9:~\/\.\-\_]|:{2,}|\.{2,}/', '', self::$api['request'][0] );
+		self::$_developers['request'][0] = preg_replace('/[^a-zA-Z0-9:~\/\.\-\_]|:{2,}|\.{2,}/', '', self::$_developers['request'][0] );
 
-		// Recording routes for io::$api
+		// Recording routes for io::$_developers
 		$r = array(
 			// Initially setting controller and action to empty
 			'controller' => '', 'action' => '',
 			// This [1] out empty parameters and [2] splits parameters on "/" marks
-			'params' => array_filter( explode("/", (self::$api['request'][0])?: '' ) )
+			'params' => array_filter( explode("/", (self::$_developers['request'][0])?: '' ) )
 		);
 
 		/*
@@ -271,10 +280,10 @@ class io
 					$name = $r['controller'] . 'home';
 
 					// Prevents processing files twice
-					if ( ! isset( self::$api['files']['controllers'][$name] ) )
+					if ( ! isset( self::$_developers['files']['controllers'][$name] ) )
 
 						// This [1] Either (a) includes file or (b) exits on failure; [2] adds file tracking array
-						( include self::$api['files']['controllers'][$name] = __DIR__ . '/controllers/' . $name . '.php' ) ?:io::error_404();
+						( include self::$_developers['files']['controllers'][$name] = __DIR__ . '/controllers/' . $name . '.php' ) ?:io::error_404();
 
 					// Reverse engineer this controller class
 					$reflection = new ReflectionClass('home');
@@ -303,7 +312,7 @@ class io
 		$r['action'] = ( array_shift($r['params']) ?: 'index');
 
 		// initialization of the routed controller by Ornithopter.io
-		$controller = self::create('controllers', self::$api['route']['controller']);
+		$controller = self::_factory('controllers', self::$_developers['route']['controller']);
 
 		/*
 		 * Iterates through possible methods looking for "before" and "after"
@@ -313,10 +322,10 @@ class io
 		foreach (array('before', strtolower($_SERVER['REQUEST_METHOD']), 'after') as $k => $method)
 
 			// Check if the method exists within the controller
-			if ( method_exists($controller, $method.'_'.self::$api['route']['action']) )
+			if ( method_exists($controller, $method.'_'.self::$_developers['route']['action']) )
 
 				// Execute the method within the routed controller if it exists
-				$controller->{$method.'_'.self::$api['route']['action']}();
+				$controller->{$method.'_'.self::$_developers['route']['action']}();
 
 			// Ignoreing missing before_method() and after_method()
 			else if ( $k == 1 )
@@ -326,11 +335,38 @@ class io
 	}
 
 	/**
+	 * Returns the io::$_developers information
+	 *
+	 * @method  io::api();
+	 * @return  void
+	 */
+	public static function help()
+	{
+		// Record a note for the develop to troubleshoot
+		return self::$_developers;
+	}
+
+	/**
+	 * Python provides some notation and documention for functions so there is
+	 * an attempt to provide as much info as possible within Ornithopter.io
+	 *
+	 * @method  io::notes();
+	 * @param 	string
+	 * @param 	string
+	 * @return  void
+	 */
+	public static function _notes( $title, $note )
+	{
+		// Record a note for the develop to troubleshoot
+		self::$_developers['notes'][][$title] = $note;
+	}
+
+	/**
 	 * Public function the developer can call for sending a 404 error. This is
 	 * the default error which uses 404.html in the root directory. If the file
 	 * is not provided PHP will still send a 404 HEADER to the browser.
 	 *
- 	 * @method  io::error_404();
+	 * @method  io::error_404();
 	 * @return  void
 	 */
 	public static function error_404()
@@ -380,7 +416,7 @@ class route extends io
 	 * @param   string
 	 * @return  boolean
 	 */
-	public static function match( $request, $route )
+	public static function _match( $request, $route )
 	{
 		// Check REQUEST_METHOD method against route
 		if ( $request == 'ANY' )
@@ -391,16 +427,16 @@ class route extends io
 			return false;
 
 		// Update the internal variables for developers
-		io::$api['request'] = explode('?', $_SERVER['REQUEST_URI']);
+		io::$_developers['request'] = explode('?', $_SERVER['REQUEST_URI']);
 
 		// Removes bad characters except ":" (colon), "~" (tilde), "/" (slash) and "." (period)
-		$url = ( preg_replace('/[^a-zA-Z0-9:~\/\.\-\_]|:{2,}|\.{2,}/', '', io::$api['request'][0] ) ) ?:'/';
+		$url = ( preg_replace('/[^a-zA-Z0-9:~\/\.\-\_]|:{2,}|\.{2,}/', '', io::$_developers['request'][0] ) ) ?:'/';
 
 		// Route matching; Checks [1] literal matches, then [2] Regex
 		if ( $route == $url OR preg_match( '#^' . $route . '$#' , $url) )
 
 			// Add to internal routes tracking array
-			return io::$api['route'][][$request] = $route;
+			return io::$_developers['route'][][$request] = $route;
 
 		// No pattern matches
 		return false;
@@ -417,13 +453,13 @@ class route extends io
 	public static function __callStatic( $type, $args = array() )
 	{
 		// Configure on initialization
-		if ( ! isset( io::$api['paths'] ) )
+		if ( ! isset( io::$_developers['paths'] ) )
 
 			// Run initialization
-			io::init();
+			io::_init();
 
 		// Check route against self::match()
-		if ( self::match(strtoupper($type), $args[0]) )
+		if ( self::_match(strtoupper($type), $args[0]) )
 
 			// Closure
 			$args[1]();
