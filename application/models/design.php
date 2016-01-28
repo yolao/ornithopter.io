@@ -93,7 +93,7 @@
 		echo '<a href="/">Go back to Ornithopter.io homepage</a>';
 
 		// Access the internals of Ornithopter.io easily
-		var_dump(io::$api);
+		var_dump(io::help());
 
 		// Print a Go Home link
 		echo '<a href="/">Go back to Ornithopter.io homepage</a>';
