@@ -40,7 +40,7 @@ class html
 	 *
 	 * @var array
 	 */
-	public static $tags = array('a', 'abbr', 'address', 'area', 'article', 'aside', 'audio',
+	private static $tags = array('a', 'abbr', 'address', 'area', 'article', 'aside', 'audio',
 		'b', 'base', 'bdi', 'bdo', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption',
 		'cite', 'code', 'col', 'colgroup', 'command', 'datalist', 'dd', 'del', 'details',
 		'dfn', 'div', 'dl', 'doctype', 'dt', 'em', 'embed', 'fieldset', 'figcaption',
@@ -58,7 +58,7 @@ class html
 	 *
 	 * @var array
 	 */
-	public static $singleTags = array('area', 'base', 'br', 'col', 'command', 'doctype',
+	private static $singleTags = array('area', 'base', 'br', 'col', 'command', 'doctype',
 		'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'source', 'track', 'wbr');
 
 	/**
