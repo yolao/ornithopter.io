@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.01.23
+ * @version     2016.01.30
  */
 
 // ########################################################################################
@@ -36,14 +36,14 @@
  * @package     Ornithopter.io
  * @subpackage	io::ornithopter (main class)
  *
- * @var			io::$_developers
  * @method  	io::controller('class')->method();
  * @method  	io::model('class')->method();
  * @method  	io::view('file');
  * @method  	io::library('class')->method();
  * @method  	io::helper('file');
  *
- * @return
+ * @method  	io::help();
+ * @method  	io::route();
  */
 class io
 {
@@ -337,13 +337,43 @@ class io
 	/**
 	 * Returns the io::$_developers information
 	 *
-	 * @method  io::api();
+	 * @method  io::help();
 	 * @return  void
 	 */
 	public static function help()
 	{
 		// Record a note for the develop to troubleshoot
 		return self::$_developers;
+	}
+
+	/**
+	 * Returns the Ornithopter.io Routing information
+	 *
+	 * @method  io::route();
+	 * @return  void
+	 */
+	public static function route()
+	{
+		// Get the request information
+		$request = self::$_developers['request'][0];
+
+		// Get the query string if it exists
+		if ( isset(self::$_developers['request'][1]) )
+
+			// Set the query string
+			array($query = self::$_developers['request'][1], $get = $_GET);
+
+		else
+			// No query string parameters
+			array($query = false, $get = false);
+
+		// Record a note for the develop to troubleshoot
+		return array_merge(
+			self::$_developers['route'],
+			array('request' => $request),
+			array('query' => $query),
+			array('get' => $get)
+		);
 	}
 
 	/**
