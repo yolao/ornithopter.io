@@ -63,6 +63,6 @@
 		echo '<h3>This script ran in: ' . $this->runtime . ' seconds</h3>';
 
 		// Try skipping io::helper('bcrypt')->hash('password');
-		echo '<h2><a href="?skip_bcrypt=true">Skip Password Hashing?</a> This was slower thanks to bycrpting a password.</h2>';
+		echo '<h2><a href="?skip_bcrypt=true">Skip Password Hashing?</a> This was slower thanks to using bcrypt to hash a password.</h2>';
 	}
 }
