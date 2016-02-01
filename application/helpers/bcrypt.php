@@ -28,6 +28,48 @@ namespace helpers;
 class bcrypt
 {
 	/**
+	 * This is a singleton class
+	 *
+	 * @var object
+	 */
+	private static $instance;
+
+	/**
+	 * Allows global self reference
+	 *
+	 * @var array
+	 */
+	public static $self;
+
+	/**
+	 * Ornithopter.io looks for an instance() method when loading a library
+	 *
+	 * @return  object
+	 */
+	public static function instance()
+	{
+		// Check for an instance
+		if ( ! isset( self::$instance ) )
+
+			// Create a new instance
+			self::$instance = new bcrypt;
+
+		// Return existing instance
+		return self::$instance;
+	}
+
+	/**
+	 * Creates a shortcut for io::bcrypt()
+	 *
+	 * @return  object
+	 */
+	public static function bcrypt()
+	{
+		// Shortcut for io::bcrypt()
+		return self::$self;
+	}
+
+	/**
 	 * Default bcrypt difficulty
 	 *
 	 * @var int
