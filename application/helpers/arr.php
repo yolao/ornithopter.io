@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.01.20
+ * @version     2016.01.31
  */
 
  // ########################################################################################
@@ -55,11 +55,35 @@ namespace helpers;
 class arr
 {
 	/**
+	 * This is a singleton class
+	 *
+	 * @var object
+	 */
+	private static $instance;
+
+	/**
 	 * Allows global self reference
 	 *
 	 * @var array
 	 */
 	public static $self;
+
+	/**
+	 * Ornithopter.io looks for an instance() method when loading a library
+	 *
+	 * @return  object
+	 */
+	public static function instance()
+	{
+		// Check for an instance
+		if ( ! isset( self::$instance ) )
+
+			// Create a new instance
+			self::$instance = new arr;
+
+		// Return existing instance
+		return self::$instance;
+	}
 
 	/**
 	 * Initialize array helper class
