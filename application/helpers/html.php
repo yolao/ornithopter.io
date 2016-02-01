@@ -29,6 +29,13 @@ namespace helpers;
 class html
 {
 	/**
+	 * This is a singleton class
+	 *
+	 * @var object
+	 */
+	private static $instance;
+
+	/**
 	 * Allows global self reference
 	 *
 	 * @var array
@@ -60,6 +67,23 @@ class html
 	 */
 	private static $singleTags = array('area', 'base', 'br', 'col', 'command', 'doctype',
 		'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'source', 'track', 'wbr');
+
+	/**
+	 * Ornithopter.io looks for an instance() method when loading a library
+	 *
+	 * @return  object
+	 */
+	public static function instance()
+	{
+		// Check for an instance
+		if ( ! isset( self::$instance ) )
+
+			// Create a new instance
+			self::$instance = new html;
+
+		// Return existing instance
+		return self::$instance;
+	}
 
 	/**
 	 * Initialize html helper class
