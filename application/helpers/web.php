@@ -143,7 +143,7 @@ class web
 	}
 
 	/**
-	 * Creates a shortcut for io::arr()
+	 * Creates a shortcut for io::web()
 	 *
 	 * @return  object
 	 */

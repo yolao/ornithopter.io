@@ -104,7 +104,7 @@ class file
 	}
 
 	/**
-	 * Creates a shortcut for io::arr()
+	 * Creates a shortcut for io::file()
 	 *
 	 * @return  object
 	 */

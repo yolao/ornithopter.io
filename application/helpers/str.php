@@ -105,7 +105,7 @@ class str
 	}
 
 	/**
-	 * Creates a shortcut for io::arr()
+	 * Creates a shortcut for io::str()
 	 *
 	 * @return  object
 	 */

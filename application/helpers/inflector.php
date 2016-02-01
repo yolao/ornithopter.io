@@ -224,7 +224,7 @@ class inflector
 	}
 
 	/**
-	 * Creates a shortcut for io::arr()
+	 * Creates a shortcut for io::inflector()
 	 *
 	 * @return  object
 	 */
