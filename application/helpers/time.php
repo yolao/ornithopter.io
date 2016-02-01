@@ -51,6 +51,13 @@
 namespace helpers;
 class time
 {
+	/**
+	 * This is a singleton class
+	 *
+	 * @var object
+	 */
+	private static $instance;
+
     /**
     * Allows global self reference
 	 *
@@ -64,6 +71,23 @@ class time
 	 * @var array
 	 */
     private static $settings = array();
+
+	/**
+	 * Ornithopter.io looks for an instance() method when loading a library
+	 *
+	 * @return  object
+	 */
+	public static function instance()
+	{
+		// Check for an instance
+		if ( ! isset( self::$instance ) )
+
+			// Create a new instance
+			self::$instance = new time;
+
+		// Return existing instance
+		return self::$instance;
+	}
 
     /**
 	 * Initialize time helper class
