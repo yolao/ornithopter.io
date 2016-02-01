@@ -57,11 +57,35 @@ namespace helpers;
 class str
 {
 	/**
+	 * This is a singleton class
+	 *
+	 * @var object
+	 */
+	private static $instance;
+
+	/**
 	 * Allows global self reference
 	 *
 	 * @var array
 	 */
 	public static $self;
+
+	/**
+	 * Ornithopter.io looks for an instance() method when loading a library
+	 *
+	 * @return  object
+	 */
+	public static function instance()
+	{
+		// Check for an instance
+		if ( ! isset( self::$instance ) )
+
+			// Create a new instance
+			self::$instance = new str;
+
+		// Return existing instance
+		return self::$instance;
+	}
 
 	/**
 	 * Initialize str helper class
