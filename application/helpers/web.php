@@ -45,6 +45,13 @@ namespace helpers;
 class web
 {
 	/**
+	 * This is a singleton class
+	 *
+	 * @var object
+	 */
+	private static $instance;
+
+	/**
 	 * Allows global self reference
 	 *
 	 * @var array
@@ -103,6 +110,23 @@ class web
 		504	=> 'Gateway Timeout',
 		505	=> 'HTTP Version Not Supported'
 	);
+
+	/**
+	 * Ornithopter.io looks for an instance() method when loading a library
+	 *
+	 * @return  object
+	 */
+	public static function instance()
+	{
+		// Check for an instance
+		if ( ! isset( self::$instance ) )
+
+			// Create a new instance
+			self::$instance = new web;
+
+		// Return existing instance
+		return self::$instance;
+	}
 
 	/**
 	 * Initialize web helper class
