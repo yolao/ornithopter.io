@@ -427,6 +427,25 @@ class web
 	}
 
 	/**
+	 * Public function the developer can call for sending a 404 error. This is
+	 * the default error which uses 404.html in the root directory. If the file
+	 * is not provided PHP will still send a 404 HEADER to the browser.
+	 *
+	 * @return  void
+	 */
+	public static function error_404( $path = false )
+	{
+		// Send a 404 HTTP HEADER error code to the browser
+		header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+
+		// Include the 404.html file or exit on failure
+		( include (($path)?: \io::help()['paths']['root'] . '/404.html') ) ?:exit();
+
+		// Exit anyways
+		exit();
+	}
+
+	/**
 	 * Method aliases and function wrappers for coders who like to use alternative
 	 * names for these methods. Slight performance impact when using method aliases.
 	 *
