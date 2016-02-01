@@ -76,9 +76,7 @@
 		<strong>Password Hash:</strong> <?= $pwd; ?>
 	</li>
 </ul>
-<h3><a href="sample.php">sample.php :: See how alternative routing works!</a></h3>
-
-<h3><a href="/info">Ornithopter.io/info :: Show internal framework information</a></h3>
+<hr />
 <p>
 	Note: If you can not see the above page, you may want to check that mod_rewrite (see the .htaccess file) is enabled and working. Routing depends on it.
 </p>

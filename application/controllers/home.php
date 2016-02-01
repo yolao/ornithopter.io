@@ -60,7 +60,7 @@
 		$this->runtime = microtime(true) - $this->runtime;
 
 		// Print out the runtime
-		echo '<h3>This script ran in: ' . $this->runtime . ' seconds</h3>';
+		echo '<small>This script ran in: ' . $this->runtime . ' seconds</small>';
 
 		// Try skipping io::helper('bcrypt')->hash('password');
 		echo '<h3><a href="?skip_bcrypt=true">Skip Password Hashing?</a> This was slower thanks to using bcrypt to hash a password.</h3>';
