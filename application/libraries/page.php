@@ -21,7 +21,8 @@
  * @package     Ornithopter.io
  * @subpackage	Libraries
  *
- * @method
+ * @method		io::library('page')->theme( $view );
+ * @method		io::library('page')->nav( $path, $str );
  */
 namespace libraries;
 class page
