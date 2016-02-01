@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.01.20
+ * @version     2016.01.31
  */
 
  // ########################################################################################
@@ -56,6 +56,20 @@ class bcrypt
 
 		// Return existing instance
 		return self::$instance;
+	}
+
+	/**
+	 * Initialize bcrypt helper class
+	 *
+	 * @return  object
+	 */
+    public function __construct()
+    {
+		// Create an instance
+		self::$self = $this;
+
+		// Register shortcut aliases using h::method();
+		\io::alias('helpers\bcrypt', get_class_methods(__CLASS__));
 	}
 
 	/**
