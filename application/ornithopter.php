@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.01.30
+ * @version     2016.01.31
  */
 
 // ########################################################################################
@@ -139,38 +139,39 @@ class io
 			// This [1] Either (a) includes file or (b) exits on failure; [2] adds file tracking array
 			( include self::$_developers['files'][$type][$name] = self::$_developers['paths'][$type] . $name . '.php' ) ?:io::error_404();
 
-		if ( ! isset( self::$_developers['objects'][$name] ) )
-		{
-			// Subdirectory controllers
-			if ( strpos($name, '/') !== false )
-				$name = substr(strrchr($name, '/'),1);
+		// Sub directory controllers
+		if ( strpos($name, '/') !== false )
 
-			// Remove hiphens from class names
-			$name = str_replace('-', '', $name);
+			// Get controller of a subdirectory
+			$name = substr(strrchr($name, '/'),1);
 
-			// Executes singleton methods in classes
-			if ( method_exists( $name, 'instance' ) )
-				return $name::instance();
+		// Remove hiphens from class names
+		$name = str_replace('-', '', $name);
 
-			// Executes singleton methods for Libraries & Helpers (namespaces)
-			if ( method_exists( $type . '\\' . $name, 'instance' ) )
-				return call_user_func( $type . '\\' . $name . '::instance' );
+		// Executes singleton methods in classes
+		if ( method_exists( $name, 'instance' ) )
 
-			// Initialize classes [1] with namespaces or [2] normally
-			if ( in_array($type, array('helpers', 'libraries', 'vendors')) )
+			// Returns the singleton
+			return $name::instance();
 
-				// Initialization for Helpers and Libraries using namespaces
-				$reflection = new ReflectionClass($type . '\\' . $name);
-			else
-				// Controllers and models do not have namespaces
-				$reflection = new ReflectionClass($name);
+		// Executes singleton methods for Libraries & Helpers (namespaces)
+		if ( method_exists( $type . '\\' . $name, 'instance' ) )
 
-			// This [1] creates the object instances (with or without arguments) and [2] adds to object tracking array
-			self::$_developers['objects'][$name] = ( count($args) == 0 ) ? $reflection->newInstance() : $reflection->newInstanceArgs($args);
-		}
+			// Returns the instance of the singleton design pattern
+			return call_user_func( $type . '\\' . $name . '::instance' );
 
-		// Returns object; allows chaining
-		return self::$_developers['objects'][$name];
+		// Initialize classes [1] with namespaces or [2] normally
+		if ( in_array($type, array('helpers', 'libraries', 'vendors')) )
+
+			// Initialization for Helpers and Libraries using namespaces
+			$reflection = new ReflectionClass($type . '\\' . $name);
+
+		else
+			// Controllers and models do not have namespaces
+			$reflection = new ReflectionClass($name);
+
+		// This [1] creates the object instances (with or without arguments) and [2] adds to object tracking array
+		return self::$_developers['objects'][$name][] = ( count($args) == 0 ) ? $reflection->newInstance() : $reflection->newInstanceArgs($args);
 	}
 
 	/**
