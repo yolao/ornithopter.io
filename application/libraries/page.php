@@ -79,6 +79,9 @@ class page
             // Sets a default page description
             'description' => false
         );
+
+        // Register shortcut aliases using h::method();
+		\io::alias('libraries\page', ['nav']);
     }
 
     /**
@@ -91,7 +94,24 @@ class page
         // Set the page design
         self::$data['theme'] = $view;
     }
-    
+
+	/**
+     * Returns a string if controller / action is matched
+     *
+     * @return
+     */
+    public static function nav( $path, $str )
+    {
+        // Check if the path equals the controller action
+        if ( $path == \io::route()['controller'] . '/' . \io::route()['action'] )
+
+            // Return the provided string
+            return $str;
+
+        // Does not match
+		return false;
+    }
+
     /**
      * Generate the page
      *
@@ -123,6 +143,6 @@ class page
 		ob_end_clean();
 
 		// Send the page to the browser (Compressed) or normally
-        echo ( true ) ? preg_replace('~>\s+<~', '><', $__page) : $__page;
+        echo ( false ) ? preg_replace('~>\s+<~', '><', $__page) : $__page;
     }
 }
