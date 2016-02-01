@@ -26,8 +26,6 @@
  * @method      io::helpers('inflector')->singular('string');   // books, songs, movies
  * @method      io::helpers('inflector')->plural('string');     // book, song, movie
  *
- * @NOTE: Seems like one could refactor singular / plural into a single method
- *
  * -----------------------------------------------------------------------------------------
  *
  * The methods in these classes are from several different sources collected
@@ -45,6 +43,13 @@
 namespace helpers;
 class inflector
 {
+	/**
+	 * This is a singleton class
+	 *
+	 * @var object
+	 */
+	private static $instance;
+
 	/**
 	 * Allows global self reference
 	 *
@@ -183,6 +188,23 @@ class inflector
         'gold', 'knowledge', 'love', 'rain', 'money', 'offspring', 'plankton', 'police',
         'species', 'traffic', 'meta', 'php', 'html', 'md', 'xml', 'txt'
     );
+
+	/**
+	 * Ornithopter.io looks for an instance() method when loading a library
+	 *
+	 * @return  object
+	 */
+	public static function instance()
+	{
+		// Check for an instance
+		if ( ! isset( self::$instance ) )
+
+			// Create a new instance
+			self::$instance = new inflector;
+
+		// Return existing instance
+		return self::$instance;
+	}
 
 	/**
 	 * Initialize inflector helper class
