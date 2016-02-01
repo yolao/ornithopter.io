@@ -62,6 +62,18 @@ class io
 	protected static $_developers = array();
 
 	/**
+	 * Returns the io::$_developers information
+	 *
+	 * @method  io::help();
+	 * @return  void
+	 */
+	public static function help()
+	{
+		// Record a note for the develop to troubleshoot
+		return self::$_developers;
+	}
+
+	/**
 	 * Creates aliases using a class name and list of existing methods
 	 *
 	 * @param   string
@@ -89,7 +101,111 @@ class io
 				self::$_internals['alias'][$method] = $class;
 	}
 
-	protected static function _init()
+	/**
+	 * Returns the Ornithopter.io Routing information
+	 *
+	 * @method  io::route();
+	 * @return  void
+	 */
+	public static function route()
+	{
+		// Get the request information
+		$request = self::$_developers['request'][0];
+
+		// Get the query string if it exists
+		if ( isset(self::$_developers['request'][1]) )
+
+			// Set the query string
+			array($query = self::$_developers['request'][1], $get = $_GET);
+
+		else
+			// No query string parameters
+			array($query = false, $get = false);
+
+		// Record a note for the develop to troubleshoot
+		return array_merge(
+			self::$_developers['route'],
+			array('request' => $request),
+			array('query' => $query),
+			array('get' => $get)
+		);
+	}
+
+	/**
+	 * Standard Ornithopter.io routing from index.php and initialization of the
+	 * framework. This is the standard way to use Ornithopter.io and no special
+	 * parameters or output are needed or avaiable. This method basically parses
+	 * REQUEST_URI and then traces out which controller to load, methods to run
+	 * and makes the data available via io::$_developers static variable while running.
+	 *
+	 * @return  void
+	 */
+	public static function ornithopter()
+	{
+		// Internal routing initialization
+		io::_router();
+
+		// initialization of the routed controller by Ornithopter.io
+		$controller = self::_factory('controllers', self::$_developers['route']['controller']);
+
+		/*
+		 * Iterates through possible methods looking for "before" and "after"
+		 * hooks for controllers. Replicating __contstruct() and __destruct()
+		 * specifically for methods instead of the entire class. Conveneince.
+		 */
+		foreach (array('before', strtolower($_SERVER['REQUEST_METHOD']), 'after') as $k => $method)
+
+			// Check if the method exists within the controller
+			if ( method_exists($controller, $method.'_'.self::$_developers['route']['action']) )
+
+				// Execute the method within the routed controller if it exists
+				$controller->{$method.'_'.self::$_developers['route']['action']}();
+
+			// Ignoreing missing before_method() and after_method()
+			else if ( $k == 1 )
+
+				// 404: Appears the routing method is missing
+				io::helper('web')->error_404();
+	}
+
+	/**
+	 * Views load .php files by default, and extracts $args for an effecient
+	 * albeit basic teplating engine. Simply set the $key => $variables as you
+	 * would in your models or controllers and echo the variables in the view.
+	 *
+	 * @param   string
+	 * @param   array
+	 * @param   string
+	 * @return  string
+	 */
+	public static function view( $__name, $__args = array(), $__ext = '.php' )
+	{
+		// Encapsulates all output
+		ob_start();
+
+		// Arrays passed to the view become $key => $variables for templating
+		( count($__args) != 0 ) ? extract( $__args, EXTR_PREFIX_SAME, '_conflict_' ) : false ;
+
+		// Again we either (a) includes the file or (b) exit on failure
+		(include( self::$_developers['files']['views'][$__name] = self::$_developers['paths']['views'] . $__name . $__ext ) )?:exit();
+
+		// Getting the contents of the buffer
+		$__view = ob_get_contents();
+
+		// Cleaning everything done here
+		ob_end_clean();
+
+		// Views sent back as strings
+		return $__view;
+	}
+
+	/**
+	 * Initialize Ornithopter.io for normal and alternative usage
+	 *
+	 * @param 	boolean
+	 * @return  void
+	 */
+	protected static function _init( $alternative = false )
 	{
 		/*
 		 * These are special aliases required for accessing internal functionality
@@ -115,6 +231,9 @@ class io
 
 			// Create the file paths for respective file types
 			self::$_developers['paths'][$path[0]] = __DIR__ . '/' . $path[0] . '/';
+
+		// Step to internal router
+		io::_router( $alternative );
 	}
 
 	/**
@@ -137,7 +256,7 @@ class io
 		if ( ! isset( self::$_developers['files'][$type][$name] ) )
 
 			// This [1] Either (a) includes file or (b) exits on failure; [2] adds file tracking array
-			( include self::$_developers['files'][$type][$name] = self::$_developers['paths'][$type] . $name . '.php' ) ?:io::error_404();
+			( include self::$_developers['files'][$type][$name] = self::$_developers['paths'][$type] . $name . '.php' ) ?:io::helper('web')->error_404();
 
 		// Sub directory controllers
 		if ( strpos($name, '/') !== false )
@@ -175,69 +294,12 @@ class io
 	}
 
 	/**
-	 * Serves as a wrapper, condenses code and allows developers to use
-	 * abbreviations for loading controllers, models, helpers and libraries.
+	 * Internal routing logic
 	 *
-	 * @param   string
-	 * @param   mixed
-	 * @return  object
-	 */
-	public static function __callStatic( $called, $args = array() )
-	{
-		// Iterate MVC and Library / Helper methods and Vendor libraries
-		foreach ( self::$_internals['methods'] as $method => $aliases )
-
-			// Check for valid aliases
-			if ( in_array($called, $aliases) )
-
-				// Send to factory self::create() for MCLH and send V to self::views()
-				return self::_factory( $aliases[0], array_shift($args), $args );
-
-		// Use the alias to call the static class method with arguments
-		return call_user_func_array([self::$_internals['alias'][$called], $called], $args);
-	}
-
-	/**
-	 * Views load .php files by default, and extracts $args for an effecient
-	 * albeit basic teplating engine. Simply set the $key => $variables as you
-	 * would in your models or controllers and echo the variables in the view.
-	 *
-	 * @param   string
-	 * @param   array
-	 * @param   string
-	 * @return  string
-	 */
-	public static function view( $__name, $__args = array(), $__ext = '.php' )
-	{
-		// Encapsulates all output
-		ob_start();
-
-		// Arrays passed to the view become $key => $variables for templating
-		( count($__args) != 0 ) ? extract( $__args, EXTR_PREFIX_SAME, '_conflict_' ) : false ;
-
-		// Again we either (a) includes the file or (b) exit on failure
-		(include( self::$_developers['files']['views'][$__name] = self::$_developers['paths']['views'] . $__name . $__ext ) )?:exit();
-
-		// Getting the contents of the buffer
-		$__view = ob_get_contents();
-
-		// Cleaning everything done here
-		ob_end_clean();
-
-		// Views sent back as strings
-		return $__view;
-	}
-
-	/**
-	 * Standard Ornithopter.io routing from index.php and initialization of the
-	 * framework. This is the standard way to use Ornithopter.io and no special
-	 * parameters or output are needed or avaiable. This method basically parses
-	 * REQUEST_URI and then traces out which controller to load, methods to run
-	 * and makes the data available via io::$_developers static variable while running.
-	 *
+	 * @param   boolean
 	 * @return  void
 	 */
-	public static function ornithopter()
+	private static function _router( $alternative = false )
 	{
 		// Readability reference
 		$r =& self::$_developers['route'];
@@ -284,7 +346,7 @@ class io
 					if ( ! isset( self::$_developers['files']['controllers'][$name] ) )
 
 						// This [1] Either (a) includes file or (b) exits on failure; [2] adds file tracking array
-						( include self::$_developers['files']['controllers'][$name] = __DIR__ . '/controllers/' . $name . '.php' ) ?:io::error_404();
+						( include self::$_developers['files']['controllers'][$name] = __DIR__ . '/controllers/' . $name . '.php' ) ?:io::helper('web')->error_404();
 
 					// Reverse engineer this controller class
 					$reflection = new ReflectionClass('home');
@@ -298,9 +360,11 @@ class io
 
 						// Shift array to use the default home controller
 						array_unshift($r['params'], 'home');
-					else
+
+					else if ( ! $alternative )
+
 						// 404: Parameter makes no sense
-						self::error_404();
+						io::helper('web')->error_404();
 
 					// Prevent errors
 					break;
@@ -311,70 +375,6 @@ class io
 
 		// Setting the method to run based on routing (default: index)
 		$r['action'] = ( array_shift($r['params']) ?: 'index');
-
-		// initialization of the routed controller by Ornithopter.io
-		$controller = self::_factory('controllers', self::$_developers['route']['controller']);
-
-		/*
-		 * Iterates through possible methods looking for "before" and "after"
-		 * hooks for controllers. Replicating __contstruct() and __destruct()
-		 * specifically for methods instead of the entire class. Conveneince.
-		 */
-		foreach (array('before', strtolower($_SERVER['REQUEST_METHOD']), 'after') as $k => $method)
-
-			// Check if the method exists within the controller
-			if ( method_exists($controller, $method.'_'.self::$_developers['route']['action']) )
-
-				// Execute the method within the routed controller if it exists
-				$controller->{$method.'_'.self::$_developers['route']['action']}();
-
-			// Ignoreing missing before_method() and after_method()
-			else if ( $k == 1 )
-
-				// 404: Appears the routing method is missing
-				self::error_404();
-	}
-
-	/**
-	 * Returns the io::$_developers information
-	 *
-	 * @method  io::help();
-	 * @return  void
-	 */
-	public static function help()
-	{
-		// Record a note for the develop to troubleshoot
-		return self::$_developers;
-	}
-
-	/**
-	 * Returns the Ornithopter.io Routing information
-	 *
-	 * @method  io::route();
-	 * @return  void
-	 */
-	public static function route()
-	{
-		// Get the request information
-		$request = self::$_developers['request'][0];
-
-		// Get the query string if it exists
-		if ( isset(self::$_developers['request'][1]) )
-
-			// Set the query string
-			array($query = self::$_developers['request'][1], $get = $_GET);
-
-		else
-			// No query string parameters
-			array($query = false, $get = false);
-
-		// Record a note for the develop to troubleshoot
-		return array_merge(
-			self::$_developers['route'],
-			array('request' => $request),
-			array('query' => $query),
-			array('get' => $get)
-		);
 	}
 
 	/**
@@ -393,23 +393,26 @@ class io
 	}
 
 	/**
-	 * Public function the developer can call for sending a 404 error. This is
-	 * the default error which uses 404.html in the root directory. If the file
-	 * is not provided PHP will still send a 404 HEADER to the browser.
+	 * Serves as a wrapper, condenses code and allows developers to use
+	 * abbreviations for loading controllers, models, helpers and libraries.
 	 *
-	 * @method  io::error_404();
-	 * @return  void
+	 * @param   string
+	 * @param   mixed
+	 * @return  object
 	 */
-	public static function error_404()
+	public static function __callStatic( $called, $args = array() )
 	{
-		// Send a 404 HTTP HEADER error code to the browser
-		header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+		// Iterate MVC and Library / Helper methods and Vendor libraries
+		foreach ( self::$_internals['methods'] as $method => $aliases )
 
-		// Include the 404.html file or exit on failure
-		( include dirname(__DIR__) . '/404.html' ) ?:exit();
+			// Check for valid aliases
+			if ( in_array($called, $aliases) )
 
-		// Exit anyways
-		exit();
+				// Send to factory self::create() for MCLH and send V to self::views()
+				return self::_factory( $aliases[0], array_shift($args), $args );
+
+		// Use the alias to call the static class method with arguments
+		return call_user_func_array([self::$_internals['alias'][$called], $called], $args);
 	}
 }
 
@@ -487,7 +490,7 @@ class route extends io
 		if ( ! isset( io::$_developers['paths'] ) )
 
 			// Run initialization
-			io::_init();
+			io::_init( true );
 
 		// Check route against self::match()
 		if ( self::_match(strtoupper($type), $args[0]) )
