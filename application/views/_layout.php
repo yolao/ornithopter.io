@@ -22,9 +22,9 @@
         <nav class="nav">
 			<div class="col c9">
 				<a class="pagename current" href="./">Ornithopter.io</a>
-                <a class="current" href="./">Welcome</a>
-				<a href="./info">Framework Info</a>
-				<a href="./sample.php">Alternative Routing</a>
+                <a class="<?= io::nav('home/index', 'current'); ?>" href="./">Welcome</a>
+				<a class="<?= io::nav('home/info', 'current'); ?>" href="./info">Framework Info</a>
+				<a class="<?= io::nav('sample.php', 'current'); ?>"href="./sample.php">Alternative Routing</a>
             </div>
             <div class="col c3" style="float:right;text-align:right;">
 				<a class="pagename" href="https://github.com/olscore/ornithopter.io" target="_blank">Github</a>
