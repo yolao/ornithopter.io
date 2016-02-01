@@ -1,4 +1,4 @@
-<?php class design
+<?php class demo
 {
 	function hello()
 	{
@@ -60,7 +60,7 @@
 		$christmas = $time->prefix('future')->postfix('future')->context( strtotime('December 25 ' . date('Y')) );
 
 		// Now we can show some information with a view
-		$page = io::view('sample', array(
+		$page = io::view('welcome', array(
 			'name' 		=> $first . ' ' . $last,
 			'bday' 		=> $dob,
 			'bday_ago'	=> $birthday,

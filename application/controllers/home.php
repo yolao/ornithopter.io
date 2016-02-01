@@ -22,7 +22,7 @@
 	 */
 	function get_index()
 	{
-		io::model('design')->hello();
+		io::model('demo')->hello();
 	}
 
 	/*
@@ -32,7 +32,7 @@
 	 */
 	function get_info()
 	{
-		io::model('design')->internals();
+		io::model('demo')->internals();
 	}
 
 	/*

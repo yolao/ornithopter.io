@@ -1,5 +1,5 @@
 <style>
-	strong { display: inline-block; width: 120px; }
+	strong { display: inline-block; width: 160px; }
 </style>
 
 <h1>Welcome to Ornithopter.io</h1>
