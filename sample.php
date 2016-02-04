@@ -10,11 +10,14 @@ route::get('/sample.php', function(){
 	// Ornithopter.io can be used outside of normal routing...
 	io::library('session');
 
-	// Print a Go Home link
-	echo '<a href="/">Go back to Ornithopter.io homepage</a>';
+	// Load the page
+	io::library('page')->theme('_layout');
 
 	// Say hello
 	echo '<h3>1: All matching <stron>GET</stron> Requests</h3>';
+
+	// Print a Go Home link
+	echo '<a href="/">Go back to Ornithopter.io homepage</a>';
 
 	// Show what session information has been recorded
 	var_dump($_SESSION);

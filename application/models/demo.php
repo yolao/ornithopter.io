@@ -23,14 +23,14 @@
 		$birthday = io::helper('time')->context( strtotime($dob) );
 
 		// Hash a password or skip
-		if ( isset($_GET['skip_bcrypt']) )
+		if ( isset($_GET['do_bcrypt']) )
 
-			// Slows down the script runtime severely
-			$password = 'Skipped secure password hashing (CPU intensive)';
-
-		else
 			// A long time ago I used the password...
 			$password = io::helper('bcrypt')->hash('yippie');
+			
+		else
+			// Slows down the script runtime severely
+			$password = 'Skipped secure password hashing (CPU intensive)';
 
 		// My home town is Chicago...
 		date_default_timezone_set('America/Chicago');
