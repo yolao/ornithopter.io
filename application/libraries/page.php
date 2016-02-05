@@ -126,6 +126,12 @@ class page
      */
     public function __destruct()
     {
+        // Check HTTP Status Code
+        if ( http_response_code() != 200 )
+
+            // Only show pages on 200 OK
+            return false;
+
         // Ensure a theme is selected
         if ( isset(self::$data['theme']) )
 
