@@ -14,15 +14,19 @@ requests to a controller. The main logic is in [application/ornithopter.php][4].
 can also use the alternative routing method as seen in [sample.php][5] if you want to
 build an application outside the standard folder structure. You will find folders
 are intuitively labeled; controllers, helpers, libraries, models, vendors and views
-all within the main **application** folder. Your website or web application should by
-default by made up of files in the **controllers**, **models** and **views** folders or
-alternatively routed files like the **samples.php** file which may be useful for building
-RESTful API's or your own custom routing behavior. Using alternative routing still allows
-you access to the Ornithopter libraries, helpers and vendors, but from your own routes.
+all within the main **application** folder.
+
+##### Structuring your website or web application
+
+Your website or web application should by default by made up of files in the
+**controllers**, **models** and **views** folders or alternatively routed files like
+the **samples.php** file which may be useful for building RESTful API's or your own
+custom routing behavior. Using alternative routing still allows you access to the
+Ornithopter libraries, helpers and vendors, but from your own routes.
 
 The framework comes with a demo controller, demo model and demo view to showcase the
 MVC relationship behavior. Highly recommend copying a tinkering with a local copy. After
-a few minutes it should become apparent how Ornithopter works. 
+a few minutes, how Ornithopter works should be obvious.
 
 # Routing
 
