@@ -13,10 +13,16 @@ Ornithopter works by routing all requests through index.php and translating thos
 requests to a controller. The main logic is in [application/ornithopter.php][4]. You
 can also use the alternative routing method as seen in [sample.php][5] if you want to
 build an application outside the standard folder structure. You will find folders
-are intuitively labeled; controllers, helpers, libraries, models, vendors and views.
+are intuitively labeled; controllers, helpers, libraries, models, vendors and views
+all within the main **application** folder. Your website or web application should by
+default by made up of files in the **controllers**, **models** and **views** folders or
+alternatively routed files like the **samples.php** file which may be useful for building
+RESTful API's or your own custom routing behavior. Using alternative routing still allows
+you access to the Ornithopter libraries, helpers and vendors, but from your own routes.
 
 The framework comes with a demo controller, demo model and demo view to showcase the
-MVC relationship behavior. Highly recommend copying a tinkering with a local copy.
+MVC relationship behavior. Highly recommend copying a tinkering with a local copy. After
+a few minutes it should become apparent how Ornithopter works. 
 
 # Routing
 
@@ -25,7 +31,7 @@ on and so forth. Printing the internal methods io::help() and io::route() should
 useful to developers looking to get started with understanding framework behavior.
 
 The default controller is **home.php** with the default action being **index** which
-you can see in the demo application controller. Ornithopter will look for before() and 
+you can see in the demo application controller. Ornithopter will look for before() and
 after() methods to run respectively according to routing. For example;
 
 //yoursite.com/project/list
@@ -60,7 +66,7 @@ You can see more information by printing io::help() or io::route()
 
 # License
 
-MIT License
+MIT License [OSS][6] or [Project file][7]
 
 # Contributing
 
@@ -79,3 +85,5 @@ it a bit. Ask [@Olscore][2] on Twitter for help or [other ways to contact me][3]
 [3]: http://coreyolson.me/
 [4]: https://github.com/olscore/ornithopter.io/blob/master/application/ornithopter.php
 [5]: https://github.com/olscore/ornithopter.io/blob/master/sample.php
+[6]: https://opensource.org/licenses/MIT
+[7]: https://github.com/olscore/ornithopter.io/blob/master/LICENSE.md
