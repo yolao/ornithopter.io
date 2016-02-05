@@ -16,13 +16,12 @@ build an application outside the standard folder structure. You will find folder
 are intuitively labeled; controllers, helpers, libraries, models, vendors and views
 all within the main **application** folder.
 
-##### Structuring your website or web application
+### Structuring your website or web application
 
-Your website or web application should by default by made up of files in the
-**controllers**, **models** and **views** folders or alternatively routed files like
-the **samples.php** file which may be useful for building RESTful API's or your own
-custom routing behavior. Using alternative routing still allows you access to the
-Ornithopter libraries, helpers and vendors, but from your own routes.
+Your website or web application should be made up of files in the **controllers**,
+**models** and **views** folders or alternatively routed files like the **samples.php**
+file which may be useful for building RESTful API's or your own custom routing. Using
+alternative routes still allows you access to the Ornithopter libraries, helpers, etc.
 
 The framework comes with a demo controller, demo model and demo view to showcase the
 MVC relationship behavior. Highly recommend copying a tinkering with a local copy. After
@@ -32,13 +31,13 @@ a few minutes, how Ornithopter works should be obvious.
 
 By default Ornithopter.io routes by {controller}/{action}/{param1}/{param2} and so
 on and so forth. Printing the internal methods io::help() and io::route() should be
-useful to developers looking to get started with understanding framework behavior.
+useful those looking to get started with understanding Ornithopter.
 
 The default controller is **home.php** with the default action being **index** which
 you can see in the demo application controller. Ornithopter will look for before() and
 after() methods to run respectively according to routing. For example;
 
-//yoursite.com/project/list
+### //yoursite.com/project/list
  * Would route to the **project.php** controller
  * Would invoke the before_list() method if it exists
  * Would invoke the get_list() method for a HTTP GET request
