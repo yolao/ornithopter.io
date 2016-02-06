@@ -52,13 +52,6 @@ class web
 	private static $instance;
 
 	/**
-	 * Allows global self reference
-	 *
-	 * @var array
-	 */
-	public static $self;
-
-	/**
 	 * Array of HTTP Status Codes
 	 *
 	 * @var array
@@ -135,9 +128,6 @@ class web
 	 */
     public function __construct()
     {
-		// Create an instance
-		self::$self = $this;
-
 		// Register shortcut aliases using h::method();
 		\io::alias('helpers\web', get_class_methods(__CLASS__));
 	}
@@ -150,7 +140,7 @@ class web
 	public static function web()
 	{
 		// Shortcut for io::web()
-		return self::$self;
+		return self::$instance;
 	}
 
 	/**
