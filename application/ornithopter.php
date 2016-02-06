@@ -116,18 +116,24 @@ class io
 		if ( isset(self::$_developers['request'][1]) )
 
 			// Set the query string
-			array($query = self::$_developers['request'][1], $get = $_GET);
+			array($query = self::$_developers['request'][1]);
 
 		else
 			// No query string parameters
 			array($query = false, $get = false);
+
+		// Iterate through the PHP global variables
+		foreach ($gArr = ['get', 'post', 'cookie', 'session'] as $global)
+
+			// Create a reference to the globals
+			$gArr[$global] =& $GLOBALS[ '_' . strtoupper($global) ];
 
 		// Record a note for the develop to troubleshoot
 		return array_merge(
 			self::$_developers['route'],
 			array('request' => $request),
 			array('query' => $query),
-			array('get' => $get)
+			$gArr
 		);
 	}
 
@@ -232,8 +238,36 @@ class io
 			// Create the file paths for respective file types
 			self::$_developers['paths'][$path[0]] = __DIR__ . '/' . $path[0] . '/';
 
+		// Lightweight (minimal) security measures
+		foreach ( $gArr = ['get', 'cookie'] as $global )
+
+			// Simple global cleaning
+			self::_purify($global);
+
 		// Step to internal router
 		io::_router( $alternative );
+	}
+
+	/**
+	 * Quick $_GET, $_COOKIE or $GLOBALS cleaning for lightweight security. This
+	 * is not comprehensive but is merely simple cleaning of certain globals while
+	 * still allowing the developer a great deal of freedom with $_POST data.
+	 *
+	 * @return  array
+	 */
+	private static function _purify( $global )
+	{
+		// Shortcut reference
+		$gVar =& $GLOBALS[ '_' . strtoupper($global) ];
+
+		// Iterate through each varaible
+		foreach ( $gVar as $var => $unsanitized )
+
+			// Very basic $_GET and $_COOKIE cleaning
+			$gVar[$var] = strip_tags($unsanitized);
+
+		// Return the global
+		return $gVar;
 	}
 
 	/**
@@ -353,6 +387,8 @@ class io
 
 					// Pull the methods from the reflected class
 					foreach( $reflection->getMethods() as $methods )
+
+						// Add to class tracking array
 						$classes[] = $methods->name;
 
 					// Check for a matching method in the reflected class
@@ -361,6 +397,7 @@ class io
 						// Shift array to use the default home controller
 						array_unshift($r['params'], 'home');
 
+					// Alternative route check
 					else if ( ! $alternative )
 
 						// 404: Parameter makes no sense
