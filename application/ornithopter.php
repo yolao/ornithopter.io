@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.01.31
+ * @version     2016.02.06
  */
 
 // ########################################################################################
@@ -244,8 +244,11 @@ class io
 			// Simple global cleaning
 			self::_purify($global);
 
+		// Register shortcut aliases
+		self::alias('route', ['has']);
+
 		// Step to internal router
-		io::_router( $alternative );
+		self::_router( $alternative );
 	}
 
 	/**
@@ -480,6 +483,18 @@ class io
  */
 class route extends io
 {
+	/**
+	 * Checks if a $_GET variable exists
+	 *
+	 * @param   string
+	 * @return  boolean
+	 */
+	public static function has( $var )
+	{
+		// Return $var existance as boolean
+		return isset(io::route()['get'][$var]);
+	}
+
 	/**
 	 * Route matching
 	 *

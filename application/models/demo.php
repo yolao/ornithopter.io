@@ -22,11 +22,16 @@
 		// My birthday was a long time ago...
 		$birthday = io::helper('time')->context( strtotime($dob) );
 
+		/*
+		 * You can check if a $_GET variable exists by using either
+		 * route::has('var') or the short syntax io::has('var')
+		 */
+
 		// Hash a password or skip
-		if ( isset($_GET['do_bcrypt']) )
+		if ( io::has('do_bcrypt') )
 
 			// A long time ago I used the password...
-			$password = io::helper('bcrypt')->hash('yippie');
+			$password = io::helper('security')->hash('yippie');
 
 		else
 			// Slows down the script runtime severely
