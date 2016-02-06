@@ -21,7 +21,7 @@
  * @package     Ornithopter.io
  * @subpackage  Libraries
  *
- * @method		io::library('session')->session();
+ * @method		io::library('session')->session_id();
  * @method		io::library('session')->regenerate();
  * @method		io::library('session')->get();
  * @method		io::library('session')->set();
@@ -94,7 +94,7 @@ class session
 		if ( ! isset($_COOKIE['app_id']) OR ! isset($_COOKIE['app_id'][63]) )
 
 			// Generate a new session id
-			session_id( self::session(true) );
+			session_id( self::session_id(true) );
 
 		else
 			// Use the user provided session
@@ -111,6 +111,20 @@ class session
 
 		// User tracking
 		self::tracking();
+
+		// Register shortcut aliases using io::method();
+		\io::alias('libraries\session', get_class_methods(__CLASS__));
+	}
+
+	/**
+	 * Creates a shortcut for io::session()
+	 *
+	 * @return  object
+	 */
+	public static function session()
+	{
+		// Shortcut for io::()
+		return self::$instance;
 	}
 
 	/**
@@ -118,7 +132,7 @@ class session
 	 *
 	 * @return  string
 	 */
-	public static function session( $new = false )
+	public static function session_id( $new = false )
 	{
 		// Get the current session identifier
 		if ( ! $new )
@@ -202,7 +216,7 @@ class session
 		unset($_SESSION);
 
 		// Generate a new session id
-		session_id( self::session(true) );
+		session_id( self::session_id(true) );
 
 		// Open the new session
 		session_start();
@@ -251,7 +265,7 @@ class session
 		if ( ! isset($_COOKIE['app_id']) )
 
 			// Create a new session
-			return self::session(true);
+			return self::session_id(true);
 
 		// Trunacte session ID
 		if ( $truncate !== false )
@@ -270,7 +284,17 @@ class session
 	 */
 	public static function landing()
 	{
-		//TODO: helpers\session ::landing()
+		// Get pages visited
+		$pages = self::get('pages');
+
+		// Page array exists
+		if ( ! is_array($pages) )
+
+			// No landing page available
+			return false;
+
+		// Return visitor's landing page
+		return end($pages)['url'];
 	}
 
 	/**
@@ -280,7 +304,20 @@ class session
 	 */
 	public static function back()
 	{
-		//TODO: helpers\session ::back()
+		// Get pages visited
+		$pages = self::get('pages');
+
+		// Page array exists
+		if ( ! is_array($pages) )
+
+			// No landing page available
+			return false;
+
+		// Move cursor to end of pages array
+		end($pages);
+
+		// Return visitor's previous page
+		return prev($pages)['url'];
 	}
 
 	/**
