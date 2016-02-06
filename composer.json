@@ -1,0 +1,7 @@
+{
+    "name": "olscore/ornithopter.io",
+    "description": "Extremely fast, easy-to-use, hackable PHP 5.6+ framework",
+    "require": {
+        "php": ">=5.6.0"
+    }
+}
