@@ -64,13 +64,6 @@ class str
 	private static $instance;
 
 	/**
-	 * Allows global self reference
-	 *
-	 * @var array
-	 */
-	public static $self;
-
-	/**
 	 * Ornithopter.io looks for an instance() method when loading a library
 	 *
 	 * @return  object
@@ -94,9 +87,6 @@ class str
 	 */
     public function __construct()
     {
-		// Create an instance
-		self::$self = $this;
-
 		// Private methods to exclude from shortcuts
 		$excluded = array('casespace');
 
@@ -112,7 +102,7 @@ class str
 	public static function str()
 	{
 		// Shortcut for io::str()
-		return self::$self;
+		return self::$instance;
 	}
 
 	/**
@@ -135,6 +125,7 @@ class str
 				// Perform a string to lower
 				$sArr[$k] = strtolower($word);
 
+		// Return
 		return $sArr;
 	}
 
@@ -155,6 +146,7 @@ class str
 			// Uppercase first letter
 			$sArr[$k] = ucfirst($words);
 
+		// Return StudlyCase string
 		return trim(implode('', $sArr));
 	}
 
