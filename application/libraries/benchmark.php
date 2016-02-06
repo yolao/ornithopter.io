@@ -75,6 +75,9 @@ class benchmark
 	{
 		// Run the first benchmark
 		self::mark('init');
+
+		// Register shortcut aliases using l::method();
+		\io::alias('libraries\benchmark', get_class_methods(__CLASS__));
 	}
 
 	/**
