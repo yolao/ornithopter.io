@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.01.23
+ * @version     2016.02.06
  */
 
  // ########################################################################################
@@ -48,7 +48,13 @@
  * @method      io::helper('time')->format('ucwords');
  * @method      io::helper('time')->format('strtoupper');
  *
- *
+ * @method      io::helper('time')->now();
+ * @method      io::helper('time')->sql();
+ * @method      io::helper('time')->unix();
+ * @method      io::helper('time')->human();
+ * @method      io::helper('time')->friendly();
+ * @method      io::helper('time')->days_in();
+ * @method      io::helper('time')->date_range();
  */
 namespace helpers;
 class time
@@ -318,93 +324,187 @@ class time
     }
 
 	/**
+	 * Get the current time
 	 *
-	 *
-	 * @return
+	 * @return	int
 	 */
 	public static function now()
 	{
-		//TODO: helpers\time ::now()
+		// Current UNIX time
+		return time();
 	}
 
 	/**
+	 * Get an DATETIME string for SQL
 	 *
-	 *
-	 * @return
+	 * @param 	mixed
+	 * @return	mixed
 	 */
-	public static function sql()
+	public static function sql( $time = false )
 	{
-		//TODO: helpers\time ::sql()
+		// Check for user provided time
+		if ( ! $time )
+
+			// Use current time
+			$time = time();
+
+		// Check for strings
+		if ( is_string($time) )
+
+			// Attempt a conversion to UNIX
+			$time = strtotime($time);
+
+		// Check for valid time
+		if ( ! $time )
+
+			// Improper input
+			return false;
+
+		// Convert time to SQL DATETIME
+		return date("Y-m-d H:i:s", $time);
 	}
 
 	/**
+	 * Wrapper function for strtotime with failure checking
 	 *
-	 *
-	 * @return
+	 * @param 	mixed
+	 * @return	mixed
 	 */
-	public static function gmt()
+	public static function unix( $time = false  )
 	{
-		//TODO: helpers\time ::gmt()
+		// Check for user provided time
+		if ( ! $time )
+
+			// Use current time
+			$time = time();
+
+		// Check for strings
+		if ( is_string($time) )
+
+			// Attempt conversion to UNIX time
+			$time = strtotime($time);
+
+		// Check for valid time
+		if ( ! $time )
+
+			// Improper input
+			return false;
+
+		// Seems OK
+		return $time;
 	}
 
 	/**
+	 * Return a 12-hour AM/PM human timestamp
 	 *
-	 *
-	 * @return
+	 * @param 	mixed
+	 * @return	mixed
 	 */
-	public static function unix()
+	public static function human( $time = false )
 	{
-		//TODO: helpers\time ::unix()
+		// Check for user provided time
+		if ( ! $time )
+
+			// Use current time
+			$time = time();
+
+		// Check for strings
+		if ( is_string($time) )
+
+			// Attempt conversion to UNIX time
+			$time = strtotime($time);
+
+		// Check for valid time
+		if ( ! $time )
+
+			// Improper input
+			return false;
+
+		// Create a human friendly time
+		return date("Y-m-d H:i:s A", $time);
 	}
 
 	/**
+	 * Return an (American) friendly timestamp #murica
 	 *
-	 *
-	 * @return
+	 * @param 	mixed
+	 * @return	mixed
 	 */
-	public static function human()
+	public static function friendly( $time = false )
 	{
-		//TODO: helpers\time ::human()
+		// Check for user provided time
+		if ( ! $time )
+
+			// Use current time
+			$time = time();
+
+		// Check for strings
+		if ( is_string($time) )
+
+			// Attempt conversion to UNIX time
+			$time = strtotime($time);
+
+		// Check for valid time
+		if ( ! $time )
+
+			// Improper input
+			return false;
+
+		// Create an American friendly time
+		return date("l, F j, Y g:i A", $time);
 	}
 
 	/**
+	 * Wrapper for cal_days_in_month(CAL_GREGORIAN, $month, $year)
 	 *
-	 *
-	 * @return
+	 * @param	mixed
+	 * @param	mixed
+	 * @return	mixed
 	 */
-	public static function span()
+	public static function days_in( $month, $year = false )
 	{
-		//TODO: helpers\time ::span()
+		// Valid months
+		$mArr = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
+		// Year selection
+		if ( ! $year )
+
+			// Use the current year
+			$year = date('Y');
+
+		// Check for strings
+		if ( is_string($month) )
+
+			// Check validity of string months
+			if ( in_array( strtolower(substr($month, 0, 3)), $mArr) )
+
+				// Attempt conversion to UNIX time
+				$month = (int) date('n', strtotime($month));
+
+			else
+				// Unexpected input
+				return false;
+
+		// Check for valid time
+		if ( ! $month )
+
+			// Improper input
+			return false;
+
+		// Number of days in the month for that year
+		return cal_days_in_month(CAL_GREGORIAN, $month, $year);
 	}
 
 	/**
+	 * Determine if a year is a leap year or not
 	 *
-	 *
-	 * @return
+	 * @return 	int
+	 * @return	boolean
 	 */
-	public static function in()
+	function leap_year( $year )
 	{
-		//TODO: helpers\time ::in()
-	}
-
-	/**
-	 *
-	 *
-	 * @return
-	 */
-	public static function range()
-	{
-		//TODO: helpers\time ::range()
-	}
-
-	/**
-	 *
-	 *
-	 * @return
-	 */
-	public static function timezone()
-	{
-		//TODO: helpers\time ::timezone()
+		// Ternary magic for detecting leap years in PHP
+		return ((($year % 4) == 0) && ((($year % 100) != 0) || (($year %400) == 0)));
 	}
 
     /**
