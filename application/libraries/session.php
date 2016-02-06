@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.01.20
+ * @version     2016.02.05
  */
 
 // ########################################################################################
@@ -87,8 +87,6 @@ class session
 	 */
 	public function __construct()
 	{
-		error_reporting(E_ALL);
-
 		// This sets the cookie name
 		session_name('app_id');
 
@@ -251,13 +249,38 @@ class session
 	{
 		// Check that $_COOKIE exists
 		if ( ! isset($_COOKIE['app_id']) )
+
+			// Create a new session
 			return self::session(true);
 
+		// Trunacte session ID
 		if ( $truncate !== false )
+
+			// Get a truncated version of the session ID
 			return substr($_COOKIE['app_id'], 0, $truncate);
 
 		// Return session identifier
 		return $_COOKIE['app_id'];
+	}
+
+	/**
+	 * Get the visitor's landing page
+	 *
+	 * @return  string
+	 */
+	public static function landing()
+	{
+		//TODO: helpers\session ::landing()
+	}
+
+	/**
+	 * Get the visitor's previous page
+	 *
+	 * @return  string
+	 */
+	public static function back()
+	{
+		//TODO: helpers\session ::back()
 	}
 
 	/**
@@ -357,10 +380,14 @@ class session
 
 			// Remove expired time-based flashdata
 			if ( $_flashdata[$var]['time'] AND $_flashdata[$var]['persist'] < time() )
+
+				// Goodbye flashdata
 				unset($_flashdata[$var]);
 
 			// Remove expired request-based flashdata
 			else if ( $_flashdata[$var]['persist']-- <= 0 )
+
+				// Goodbye flashdata
 				unset($_flashdata[$var]);
 	}
 
@@ -373,22 +400,27 @@ class session
 	{
 		// Get pages visited
 		$pages = self::get('pages');
-		if ( ! is_array($pages) ) {
+
+		// Page array exists
+		if ( ! is_array($pages) )
+
+			// Create array
 			$pages = array();
-		}
 
 		// Detect https by SERVER_PORT (80: http)
 		$https = ( $_SERVER["SERVER_PORT"] == 80 ) ? '' : 's';
 
 		// Push non-POST data to page history
-		if ( $_SERVER['REQUEST_METHOD'] != 'POST' ) {
+		if ( $_SERVER['REQUEST_METHOD'] != 'POST' )
+
+			// Add page to array
 			$pages[] = array(
 				'time' => time(),
 				'url' => 'http' . $https . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
 				'page' => $_SERVER['REQUEST_URI']
 			);
-		}
 
+		// Generate statistics
 		$stats = array(
 			'time_hello' => $hi = $pages[0]['time'],
 			'time_goodbye' => $bye = $pages[count($pages)-1]['time'],
@@ -397,6 +429,7 @@ class session
 			'pages_visited' => count($pages)
 		);
 
+		// Record the session data
 		self::set('pages', $pages);
 		self::set('stats', $stats);
 	}
