@@ -151,56 +151,56 @@ class security
 	 */
 	public static function xss()
 	{
-		//TODO: helpers\security ::xss()
+
 	}
 
 	/**
-	 *
+	 * Sanitize a string for use as a filename
 	 *
 	 * @return
 	 */
 	public static function filename()
 	{
-		//TODO: helpers\security ::filename()
+
 	}
 
 	/**
-	 *
+	 * Check images for bad behavior
 	 *
 	 * @return
 	 */
 	public static function image_tags()
 	{
-		//TODO: helpers\security ::image_tags()
+
 	}
 
 	/**
-	 *
+	 * Cleans user input from potentially dangerous items
 	 *
 	 * @return
 	 */
-	public static function php_tags()
+	public static function clean_input()
 	{
-		//TODO: helpers\security ::php_tags()
+
 	}
 
 	/**
-	 *
+	 * Generate a CSRF Name
 	 *
 	 * @return
 	 */
 	public static function csrf_field()
 	{
-		//TODO: helpers\security ::csrf_field()
+
 	}
 
 	/**
-	 *
+	 * Generate a CSRF Token
 	 *
 	 * @return
 	 */
 	public static function csrf_token()
 	{
-		//TODO: helpers\security ::csrf_token()
+
 	}
 }
