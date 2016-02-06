@@ -9,23 +9,23 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.01.31
+ * @version     2016.02.05
  */
 
  // ########################################################################################
 
 /**
- * A bcrypt wrapper (convenience) library
+ * A security class with helper security functions
  *
  * @author      Corey Olson
  * @package     Ornithopter.io
  * @subpackage  Helpers
  *
- * @method		io::library('bcrypt')->hash( $password );
- * @method 		io::library('bcrypt')->verify( $password, $stored_hash );
+ * @method		io::library('security')->hash( $password );
+ * @method 		io::library('security')->verify( $password, $stored_hash );
  */
 namespace helpers;
-class bcrypt
+class security
 {
 	/**
 	 * This is a singleton class
@@ -33,13 +33,6 @@ class bcrypt
 	 * @var object
 	 */
 	private static $instance;
-
-	/**
-	 * Allows global self reference
-	 *
-	 * @var array
-	 */
-	public static $self;
 
 	/**
 	 * Ornithopter.io looks for an instance() method when loading a library
@@ -52,46 +45,43 @@ class bcrypt
 		if ( ! isset( self::$instance ) )
 
 			// Create a new instance
-			self::$instance = new bcrypt;
+			self::$instance = new security;
 
 		// Return existing instance
 		return self::$instance;
 	}
 
 	/**
-	 * Initialize bcrypt helper class
+	 * Initialize security helper class
 	 *
 	 * @return  object
 	 */
     public function __construct()
     {
-		// Create an instance
-		self::$self = $this;
-
 		// Register shortcut aliases using h::method();
-		\io::alias('helpers\bcrypt', get_class_methods(__CLASS__));
+		\io::alias('helpers\security', get_class_methods(__CLASS__));
 	}
 
 	/**
-	 * Creates a shortcut for io::bcrypt()
+	 * Creates a shortcut for io::security()
 	 *
 	 * @return  object
 	 */
-	public static function bcrypt()
+	public static function security()
 	{
-		// Shortcut for io::bcrypt()
-		return self::$self;
+		// Shortcut for io::security()
+		return self::$instance;
 	}
 
 	/**
-	 * Default bcrypt difficulty
+	 * Default security difficulty
 	 *
 	 * @var int
 	 */
 	private static $default = 12;
 
 	/**
-	 * Supply a password and receive a bcrypt hash
+	 * Supply a password and receive a security hash
 	 *
 	 * @param 	string
 	 * @param 	int
@@ -116,7 +106,7 @@ class bcrypt
 	}
 
 	/**
-	 * Supply a password and receive a bcrypt hash
+	 * Supply a password and receive a security hash
 	 *
 	 * @param 	string
 	 * @param 	string
@@ -152,5 +142,65 @@ class bcrypt
 	{
 		// Return a boolean answer
 		return substr($hash, 0, 4) != '$2a$';
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function xss()
+	{
+		//TODO: helpers\security ::xss()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function filename()
+	{
+		//TODO: helpers\security ::filename()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function image_tags()
+	{
+		//TODO: helpers\security ::image_tags()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function php_tags()
+	{
+		//TODO: helpers\security ::php_tags()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function csrf_field()
+	{
+		//TODO: helpers\security ::csrf_field()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function csrf_token()
+	{
+		//TODO: helpers\security ::csrf_token()
 	}
 }
