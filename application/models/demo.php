@@ -27,7 +27,7 @@
 
 			// A long time ago I used the password...
 			$password = io::helper('bcrypt')->hash('yippie');
-			
+
 		else
 			// Slows down the script runtime severely
 			$password = 'Skipped secure password hashing (CPU intensive)';
@@ -85,6 +85,9 @@
 		 * You can echo HTML and other information directly from the controller
 		 * however it is usually better to create views for displaying model data.
 		 */
+
+		// Track the age visit
+		io::library('session');
 
 		// HTML Header
 		echo '<h3>Ornithopter Routing Information</h3>';
