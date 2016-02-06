@@ -62,13 +62,6 @@ class arr
 	private static $instance;
 
 	/**
-	 * Allows global self reference
-	 *
-	 * @var array
-	 */
-	public static $self;
-
-	/**
 	 * Ornithopter.io looks for an instance() method when loading a library
 	 *
 	 * @return  object
@@ -102,9 +95,6 @@ class arr
 		// Remove the reference methods from shortcuts (not allowed)
 		$methodArr = array_diff($methodArr, $referenceMethodArr);
 
-		// Create an instance
-		self::$self = $this;
-
 		// Developer notes for troubleshooting
 		\io::_notes('helpers\arr',
 			'Following shortcuts are not available: ' . implode(', ', $referenceMethodArr)
@@ -122,7 +112,7 @@ class arr
 	public static function arr()
 	{
 		// Shortcut for io::arr()
-		return self::$self;
+		return self::$instance;
 	}
 
 	/**
