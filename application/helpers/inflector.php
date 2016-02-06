@@ -50,13 +50,6 @@ class inflector
 	 */
 	private static $instance;
 
-	/**
-	 * Allows global self reference
-	 *
-	 * @var array
-	 */
-	public static $self;
-
     /**
      * Internal class storage
      *
@@ -213,9 +206,6 @@ class inflector
 	 */
     public function __construct()
     {
-		// Create an instance
-		self::$self = $this;
-
         // Setup internal data arrays
         self::internals();
 
@@ -231,7 +221,7 @@ class inflector
 	public static function inflector()
 	{
 		// Shortcut for io::inflector()
-		return self::$self;
+		return self::$instance;
 	}
 
     /**
