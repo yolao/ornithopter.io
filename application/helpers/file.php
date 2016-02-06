@@ -49,13 +49,6 @@ class file
 	private static $instance;
 
 	/**
-	 * Allows global self reference
-	 *
-	 * @var array
-	 */
-	public static $self;
-
-	/**
 	 * An array of files to exclude (e.g., Mac / Windows tracking files)
 	 *
 	 * @var array
@@ -93,9 +86,6 @@ class file
 	 */
     public function __construct()
     {
-		// Create an instance
-		self::$self = $this;
-
 		// By default exclude annoying files
 		self::exclusive();
 
@@ -111,7 +101,7 @@ class file
 	public static function file()
 	{
 		// Shortcut for io::file()
-		return self::$self;
+		return self::$instance;
 	}
 
 	/**
