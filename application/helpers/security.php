@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.02.05
+ * @version     2016.02.06
  */
 
  // ########################################################################################
@@ -78,70 +78,37 @@ class security
 	 *
 	 * @var int
 	 */
-	private static $default = 12;
+	private static $cost = 12;
 
 	/**
-	 * Supply a password and receive a security hash
+	 * Hash a password using bcrypt (default as of PHP 5.5)
 	 *
-	 * @param 	string
-	 * @param 	int
-	 * @return  string
+	 * @return
 	 */
-	public static function hash( $password, $wf = 0 )
+	public static function bcrypt( $pwd )
 	{
-		// Requires Open SSL to function
-		if ( ! function_exists('openssl_random_pseudo_bytes') )
-			throw new Exception('Bcrypt requires openssl PHP extension');
-
-		// Appropriate work factor range
-		if ( $wf < 10 OR $wf > 50)
-			$wf = self::$default;
-
-		// Creates a unique salt for each password
-		$salt = '$2a$' . str_pad($wf, 2, '0', STR_PAD_LEFT) . '$'
-		. substr(strtr(base64_encode(openssl_random_pseudo_bytes(22)), '+', '.'), 0, 22);
-
-		// Return the hashed password
-		return crypt($password, $salt);
+		return password_hash( $pwd, PASSWORD_BCRYPT, ['cost' => self::$cost] );
 	}
 
 	/**
-	 * Supply a password and receive a security hash
+	 * Hash a password using the default PHP hashing algo
 	 *
-	 * @param 	string
-	 * @param 	string
-	 * @param 	mixed
-	 * @return  bool
+	 * @return
 	 */
-	public static function verify( $password, $hash, $legacy_handler = null )
+	public static function password( $pwd )
 	{
-		// Check to see if this is a legacy hash
-		if ( self::legacy($hash) )
-
-			// Call that legacy function to deal with the old password
-			if ( $legacy_handler )
-
-				// Handle the legacy password
-				return call_user_func($legacy_handler, $password, $hash);
-
-			else
-				// There's no legacy function
-				throw new Exception('Unsupported hash format');
-
-		// Return boolean, does it match?
-		return crypt($password, $hash) == $hash;
+		return password_hash( $pwd, PASSWORD_DEFAULT, ['cost' => self::$cost] );
 	}
 
 	/**
-	 * Checks for legacy hashes
+	 * Verify a password against a hash
 	 *
-	 * @param 	string
-	 * @return  bool
+	 * @return
 	 */
-	public static function legacy( $hash )
+	public static function verify( $pwd, $hash )
 	{
-		// Return a boolean answer
-		return substr($hash, 0, 4) != '$2a$';
+		// Verifies password against a stored hash
+		return password_verify( $pwd, $hash );
 	}
 
 	/**
@@ -202,5 +169,33 @@ class security
 	public static function csrf_token()
 	{
 
+	}
+
+	/**
+	 * Method aliases and function wrappers for coders who like to use alternative
+	 * names for these methods. Slight performance impact when using method aliases.
+	 *
+	 * @param   string
+	 * @param   mixed
+	 * @return  mixed
+	 */
+	public function __call( $called, $args = array() )
+	{
+		$aliases = array(
+			'password' 	=> ['hash', 'hash_pwd', 'hash_password'],
+			'verify' 	=> ['verify_pwd', 'verify_pass', 'verify_password']
+		);
+
+		// Iterate through methods
+		foreach ( $aliases as $method => $list )
+
+			// Check called against accepted alias list
+			if ( in_array($called, $list) )
+
+				// Dynamic method (alias) call with arbitrary arguments
+				return call_user_func_array(array(__CLASS__, $method), $args);
+
+		// No alias found
+		return false;
 	}
 }
