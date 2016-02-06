@@ -36,13 +36,6 @@ class html
 	private static $instance;
 
 	/**
-	 * Allows global self reference
-	 *
-	 * @var array
-	 */
-	public static $self;
-
-	/**
 	 * An array of all valid HTML elements
 	 *
 	 * @var array
@@ -92,9 +85,6 @@ class html
 	 */
     public function __construct()
     {
-		// Create an instance
-		self::$self = $this;
-
 		// Register shortcut aliases using h::method();
 		\io::alias('helpers\html', ['html', 'tag', 'mailto']);
 	}
@@ -107,7 +97,7 @@ class html
 	public static function html()
 	{
 		// Shortcut for io::html()
-		return self::$self;
+		return self::$instance;
 	}
 
 	/**
