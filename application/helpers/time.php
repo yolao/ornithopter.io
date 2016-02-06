@@ -47,6 +47,8 @@
  * @method      io::helper('time')->format('ucfirst');
  * @method      io::helper('time')->format('ucwords');
  * @method      io::helper('time')->format('strtoupper');
+ *
+ *
  */
 namespace helpers;
 class time
@@ -57,13 +59,6 @@ class time
 	 * @var object
 	 */
 	private static $instance;
-
-    /**
-    * Allows global self reference
-	 *
-	 * @var array
-	 */
-    public static $self;
 
     /**
 	 * Internal settings
@@ -118,9 +113,6 @@ class time
 
 		// Register shortcut aliases using h::method();
 		\io::alias('helpers\time', get_class_methods(__CLASS__));
-
-        // Allow method chaining for settings
-        return self::$self = $this;
     }
 
     /**
@@ -131,7 +123,7 @@ class time
 	public static function time()
 	{
 		// Shortcut for io::time()
-		return self::$self;
+		return self::$instance;
 	}
 
     /**
@@ -289,13 +281,13 @@ class time
             // Update the prefix for this tense
             self::$settings[$tense][0] = trim($mixed) . ' ';
 
-
         // Allow chaining
-        return self::$self;
+        return self::$instance;
     }
 
     /**
-	 *
+	 * Changing the postfix on past or future tense. Allows changing adjectives
+     * displayed before the units and also toggling or controlling visibility.
 	 *
 	 * @param   string
 	 * @param   mixed
@@ -321,14 +313,108 @@ class time
             // Update the postfix for this tense
             self::$settings[$tense][1] = ' ' . trim($mixed);
 
-
         // Allow chaining
-        return self::$self;
+        return self::$instance;
     }
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function now()
+	{
+		//TODO: helpers\time ::now()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function sql()
+	{
+		//TODO: helpers\time ::sql()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function gmt()
+	{
+		//TODO: helpers\time ::gmt()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function unix()
+	{
+		//TODO: helpers\time ::unix()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function human()
+	{
+		//TODO: helpers\time ::human()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function span()
+	{
+		//TODO: helpers\time ::span()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function in()
+	{
+		//TODO: helpers\time ::in()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function range()
+	{
+		//TODO: helpers\time ::range()
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public static function timezone()
+	{
+		//TODO: helpers\time ::timezone()
+	}
 
     /**
 	 * Creates a concise way to manage the class settings since most of the
      * settings are held in a multi-dimensional array. Reduces code size.
+	 *
+	 * ----------------------------------------------------------------------------------------
+	 *
+	 * Method aliases and function wrappers for coders who like to use alternative
+	 * names for these methods. Slight performance impact when using method aliases.
 	 *
 	 * @param   string
 	 * @param   mixed
@@ -338,14 +424,32 @@ class time
 	{
         // Checks for a valid setting call
         if ( isset(self::$settings[$category][$args[0]]) )
-
+		{
             // Iterate through [Category] [Named] Settings
             foreach (self::$settings[$category] as $setting => $flag)
 
                 // Sets the setting to false or true based on matching
                 self::$settings[$category][$setting] = ( $setting == $args[0] );
 
-        // Allow chaining
-        return self::$self;
+	        // Allow chaining
+	        return self::$instance;
+		}
+
+		// Check for aliases
+		$aliases = array(
+			'method' => ['alias'],
+		);
+
+		// Iterate through methods
+		foreach ( $aliases as $method => $list )
+
+			// Check called against accepted alias list
+			if ( in_array($called, $list) )
+
+				// Dynamic method (alias) call with arbitrary arguments
+				return call_user_func_array(array(__CLASS__, $method), $args);
+
+		// No alias found
+		return false;
 	}
 }
