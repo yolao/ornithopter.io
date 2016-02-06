@@ -67,8 +67,6 @@ class caching
         // Register shortcut aliases using io::method();
 		\io::alias('libraries\caching', get_class_methods(__CLASS__));
     }
-
-	//TODO: libraries\caching
 }
 
 /**
