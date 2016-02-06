@@ -11,7 +11,7 @@
     "authors": [
         {
             "name": "Corey Olson (Olscore)",
-			"homepage": "http://coreyolson.me/",
+			"homepage": "http://coreyolson.me/"
         }
     ],
 	"require": {
