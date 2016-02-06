@@ -81,9 +81,20 @@ class page
             'description' => false
         );
 
-        // Register shortcut aliases using h::method();
-		\io::alias('libraries\page', ['nav']);
+        // Register shortcut aliases using io::method();
+		\io::alias('libraries\page', get_class_methods(__CLASS__));
     }
+
+	/**
+	 * Creates a shortcut for io::page()
+	 *
+	 * @return  object
+	 */
+	public static function page()
+	{
+		// Shortcut for io::page()
+		return self::$instance;
+	}
 
     /**
      * Sets a theme for rendering

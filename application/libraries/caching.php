@@ -64,9 +64,20 @@ class caching
      */
     public function __construct()
     {
-        // Register shortcut aliases using l::method();
+        // Register shortcut aliases using io::method();
 		\io::alias('libraries\caching', get_class_methods(__CLASS__));
     }
 
 	//TODO: libraries\caching
+}
+
+/**
+ * Creates a shortcut for io::caching()
+ *
+ * @return  object
+ */
+public static function caching()
+{
+	// Shortcut for io::caching()
+	return self::$instance;
 }

@@ -76,8 +76,19 @@ class benchmark
 		// Run the first benchmark
 		self::mark('init');
 
-		// Register shortcut aliases using l::method();
+		// Register shortcut aliases using io::method();
 		\io::alias('libraries\benchmark', get_class_methods(__CLASS__));
+	}
+
+	/**
+	 * Creates a shortcut for io::benchmark()
+	 *
+	 * @return  object
+	 */
+	public static function benchmark()
+	{
+		// Shortcut for io::benchmark()
+		return self::$instance;
 	}
 
 	/**
