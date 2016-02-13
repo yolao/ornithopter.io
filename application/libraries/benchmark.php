@@ -35,7 +35,7 @@
 namespace libraries;
 class benchmark
 {
-    /**
+	/**
 	 * This is a singleton class
 	 *
 	 * @var object
@@ -342,16 +342,16 @@ class benchmark
 	{
 		// Division by zero
 		if ( !$bytes )
-	        return '0 B';
+			return '0 B';
 
 		// Array of sizes
-	    $sizeArr = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB');
+		$sizeArr = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB');
 
 		// Gets the exponential size
-	    $exponent = floor(log($bytes, 1024));
+		$exponent = floor(log($bytes, 1024));
 
 		// Perform calculation of bytes to larger sizes and return
-	    return round($bytes/pow(1024, $exponent), 2) . ' ' . $sizeArr[$exponent];
+		return round($bytes/pow(1024, $exponent), 2) . ' ' . $sizeArr[$exponent];
 	}
 
 	/**
@@ -381,7 +381,7 @@ class benchmark
 				// Dynamic method (alias) call with arbitrary arguments
 				return call_user_func_array(array(__CLASS__, $method), $args);
 
-        // No alias found
-        return false;
+		// No alias found
+		return false;
 	}
 }

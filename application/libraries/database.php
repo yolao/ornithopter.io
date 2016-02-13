@@ -97,7 +97,7 @@
 namespace libraries;
 class database
 {
-    /**
+	/**
 	 * Inernal storage array
 	 *
 	 * @var string
@@ -254,8 +254,8 @@ class database
 		// Set result information
 		$this->data['result'] = false;
 
-        // Set affected information
-        $this->data['affected'] = false;
+		// Set affected information
+		$this->data['affected'] = false;
 
 		// Set fetch information
 		$this->data['fetched'] = false;
@@ -511,8 +511,8 @@ class database
 		// Clear the result
 		$this->data['result'] = false;
 
-        // Set affected information
-        $this->data['affected'] = false;
+		// Set affected information
+		$this->data['affected'] = false;
 	}
 
 	/**
@@ -582,18 +582,18 @@ class database
 	 */
 	public function last()
 	{
-        // Return last insert ID from database
+		// Return last insert ID from database
 		return $this->data['dbh']->lastInsertId();
 	}
 
-    /**
+	/**
 	 * Returns number of rows affected by a query statement
 	 *
 	 * @param
 	 */
 	public function affected()
 	{
-        // Return number of affected rows
+		// Return number of affected rows
 		return $this->data['affected'];
 	}
 
@@ -613,15 +613,15 @@ class database
 			// Query already executed
 			return $this;
 
-        // Selection (Result) or Custom (Unknown) query types
-        if ( $this->data['type'] == 'SELECT' OR $this->custom() )
+		// Selection (Result) or Custom (Unknown) query types
+		if ( $this->data['type'] == 'SELECT' OR $this->custom() )
 
-    		// Set result information
-    		$this->data['result'] = $this->data['dbh']->query( $this->statement() );
+			// Set result information
+			$this->data['result'] = $this->data['dbh']->query( $this->statement() );
 
-        else
-            // Altering (UPDATE, INSERT, REPLACE, DELETE) queries
-            $this->data['affected'] = $this->data['dbh']->exec( $this->statement() );
+		else
+			// Altering (UPDATE, INSERT, REPLACE, DELETE) queries
+			$this->data['affected'] = $this->data['dbh']->exec( $this->statement() );
 
 		// Allow chaining
 		return $this;
@@ -633,10 +633,10 @@ class database
 	 * @return 	boolean
 	 */
 	public function status()
-    {
+	{
 		// Converts the result into boolean status
 		return ( $this->data['result'] !== false ) ? true : false;
-    }
+	}
 
 	/**
 	 * Select a table for the query statement
@@ -1725,9 +1725,9 @@ class database
 			'result_clear'	=> ['clear', 'clean', 'results_clear', 'result_clean', 'results_clean'],
 			'row'			=> ['row_arr', 'row_array', 'row_as_arr', 'row_as_array'],
 			'row_obj'		=> ['row_obj', 'row_object', 'row_as_obj', 'row_as_object'],
-            'fields'		=> ['columns', 'get_fields', 'get_columns'],
-            'last'		    => ['last_id', 'last_insert', 'last_insert_id', 'id'],
-            'affected'      => ['rows_affected', 'rows_changed', 'rows_updated', 'rows_impacted', 'impact', 'impacted'],
+			'fields'		=> ['columns', 'get_fields', 'get_columns'],
+			'last'		    => ['last_id', 'last_insert', 'last_insert_id', 'id'],
+			'affected'      => ['rows_affected', 'rows_changed', 'rows_updated', 'rows_impacted', 'impact', 'impacted'],
 			'statement'		=> ['query', 'stmt'],
 			'between'		=> ['within', 'range'],
 			'not_between'	=> ['not_within', 'outside'],
@@ -1756,7 +1756,7 @@ class database
 				// Dynamic method (alias) call with arbitrary arguments
 				return call_user_func_array(array(__CLASS__, $method), $args);
 
-        // No alias found
-        return false;
+		// No alias found
+		return false;
 	}
 }

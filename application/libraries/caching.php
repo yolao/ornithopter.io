@@ -26,21 +26,21 @@
 namespace libraries;
 class caching
 {
-    /**
+	/**
 	 * This is a singleton class
 	 *
 	 * @var object
 	 */
 	private static $instance;
 
-    /**
+	/**
 	 * Internal class variables
 	 *
 	 * @var array
 	 */
-    private static $data;
+	private static $data;
 
-    /**
+	/**
 	 * Ornithopter.io looks for an instance() method when loading a library
 	 *
 	 * @return  object
@@ -57,16 +57,16 @@ class caching
 		return self::$instance;
 	}
 
-    /**
-     * Initialize the caching class
-     *
-     * @return
-     */
-    public function __construct()
-    {
-        // Register shortcut aliases using io::method();
+	/**
+	 * Initialize the caching class
+	 *
+	 * @return
+	 */
+	public function __construct()
+	{
+		// Register shortcut aliases using io::method();
 		\io::alias('libraries\caching', get_class_methods(__CLASS__));
-    }
+	}
 }
 
 /**
