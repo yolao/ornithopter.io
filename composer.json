@@ -1,20 +1,20 @@
 {
-    "name": "olscore/ornithopter.io",
-    "description": "Extremely fast, easy-to-use, hackable PHP 5.6+ framework",
-    "keywords": ["ornithopter", "framework"],
-    "license": "MIT",
-    "homepage": "http://ornithopter.io",
-    "support": {
+	"name": "olscore/ornithopter.io",
+	"description": "Extremely fast, easy-to-use, hackable PHP 5.6+ framework",
+	"keywords": ["ornithopter", "framework"],
+	"license": "MIT",
+	"homepage": "http://ornithopter.io",
+	"support": {
 		"source": "https://github.com/olscore/ornithopter.io",
-        "issues": "https://github.com/olscore/ornithopter.io/issues"
-    },
-    "authors": [
-        {
-            "name": "Corey Olson (Olscore)",
+		"issues": "https://github.com/olscore/ornithopter.io/issues"
+	},
+	"authors": [
+		{
+			"name": "Corey Olson (Olscore)",
 			"homepage": "http://coreyolson.me/"
-        }
-    ],
+		}
+	],
 	"require": {
-        "php": ">=5.6.0"
-    }
+		"php": ">=5.6.0"
+	}
 }
