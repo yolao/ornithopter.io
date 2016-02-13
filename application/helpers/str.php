@@ -85,8 +85,8 @@ class str
 	 *
 	 * @return  object
 	 */
-    public function __construct()
-    {
+	public function __construct()
+	{
 		// Private methods to exclude from shortcuts
 		$excluded = array('casespace');
 

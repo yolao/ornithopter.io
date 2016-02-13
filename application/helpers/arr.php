@@ -83,8 +83,8 @@ class arr
 	 *
 	 * @return  object
 	 */
-    public function __construct()
-    {
+	public function __construct()
+	{
 		// Methods within this class
 		$methodArr = get_class_methods(__CLASS__);
 

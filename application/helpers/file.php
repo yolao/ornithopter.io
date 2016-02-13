@@ -84,8 +84,8 @@ class file
 	 *
 	 * @return  object
 	 */
-    public function __construct()
-    {
+	public function __construct()
+	{
 		// By default exclude annoying files
 		self::exclusive();
 
@@ -571,16 +571,16 @@ class file
 
 		// Division by zero
 		if ( !$bytes )
-	        return '0 B';
+			return '0 B';
 
 		// Array of sizes
-	    $sizeArr = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+		$sizeArr = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
 
 		// Gets the exponential size
-	    $exponent = floor(log($bytes, 1024));
+		$exponent = floor(log($bytes, 1024));
 
 		// Perform calculation of bytes to larger sizes and return
-	    return round($bytes/pow(1024, $exponent), 2) . ' ' . $sizeArr[$exponent];
+		return round($bytes/pow(1024, $exponent), 2) . ' ' . $sizeArr[$exponent];
 	}
 
 	/**

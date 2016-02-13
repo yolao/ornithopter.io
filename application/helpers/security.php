@@ -56,8 +56,8 @@ class security
 	 *
 	 * @return  object
 	 */
-    public function __construct()
-    {
+	public function __construct()
+	{
 		// Register shortcut aliases using h::method();
 		\io::alias('helpers\security', get_class_methods(__CLASS__));
 	}
