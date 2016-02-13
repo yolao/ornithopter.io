@@ -52,6 +52,8 @@
  * @method io::helpers('str')->ellipsis( $str, $limit);
  * @method io::helpers('str')->word_limit( $str, $limit );
  * @method io::helpers('str')->word_ellipsis( $str, $limit );
+ *
+ * @method io::helpers('str')->between( $str, $start, $end );
  */
 namespace helpers;
 class str
@@ -470,6 +472,40 @@ class str
 	{
 		// Wrapper for self::word_limit()
 		return self::word_limit($str, $limit) . '...';
+	}
+
+	/**
+	 * Get string between two strings
+	 *
+	 * @param  string
+	 * @param  string
+	 * @param  string
+	 * @return string
+	 */
+	public function between( $str, $start, $end )
+	{
+		// Check if $start exists
+		if ( $from = strpos($str, $start) )
+
+			// Trim from $start
+			$from += strlen($start);
+
+		else
+			// Trim from beginning of $str
+			$start = 0;
+
+		// Check if $end exists
+		if ( $to = strpos($str, $end, $from) )
+
+			// Trim to $end
+			$to -= $from;
+
+		else
+			// Trim to end of $str
+			return substr($str, $from);
+
+		// Return a string between two strings
+		return substr($str, $from, $to);
 	}
 
 	/**
