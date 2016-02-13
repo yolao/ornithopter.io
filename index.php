@@ -34,7 +34,7 @@ include('./application/ornithopter.php');
 // Pre application code
 route::any('/*', function(){
 
-     // Your code here
+	// Your code here
 	io::library('page')->theme('_layout');
 });
 
@@ -44,7 +44,7 @@ io::ornithopter();
 // Post application code
 route::any('/*', function(){
 
-     // Your code here
+	// Your code here
 });
 
 /**
