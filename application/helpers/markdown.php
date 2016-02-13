@@ -9,10 +9,100 @@
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/olscore/ornithopter.io
- * @version     2016.01.23
+ * @version     2016.02.13
  */
 
 // ########################################################################################
+
+/**
+ * This is a wrapper for the Parsedown class which can be found below. Basically bringing
+ * the Parsedown class into Ornithopter.io as a helper class by extending it, and adding
+ * standard io functionality like io::shortcuts(), aliases and making it a singleton.
+ *
+ * @author      Corey Olson
+ * @package     Ornithopter.io
+ * @subpackage	Helpers
+ *
+ * @method      io::helpers('markdown')->parse( [file.md] );
+ */
+namespace helpers;
+class markdown extends parsedown
+{
+	/**
+	 * This is a singleton class
+	 *
+	 * @var object
+	 */
+	private static $instance;
+
+	/**
+	 * Ornithopter.io looks for an instance() method when loading a library
+	 *
+	 * @return  object
+	 */
+	public static function instance( $name = 'default' )
+	{
+		// Check for an instance
+		if ( ! isset( self::$instance ) )
+
+			// Create a new instance
+			self::$instance = new markdown;
+
+		// Return existing instance
+		return self::$instance;
+	}
+
+	/**
+	 * Initialize markdown helper class
+	 *
+	 * @return  object
+	 */
+	public function __construct()
+	{
+		// Register shortcut aliases using h::method();
+		\io::alias('helpers\markdown', ['markdown', 'parsedown']);
+	}
+
+	/**
+	 * Creates a shortcut for io::markdown()
+	 *
+	 * @return  object
+	 */
+	public static function markdown()
+	{
+		// Shortcut for io::markdown()
+		return self::$instance;
+	}
+
+	/**
+	 * Method aliases and function wrappers for coders who like to use alternative
+	 * names for these methods. Slight performance impact when using method aliases.
+	 *
+	 * @param   string
+	 * @param   mixed
+	 * @return  mixed
+	 */
+	public function __call( $called, $args = array() )
+	{
+		$aliases = array(
+			'text' => ['md', 'md_parse', 'md_html', 'to_html', 'md_to_html', 'parse'],
+		);
+
+		// Iterate through methods
+		foreach ( $aliases as $method => $list )
+
+			// Check called against accepted alias list
+			if ( in_array($called, $list) )
+
+				// Dynamic method (alias) call with arbitrary arguments
+				return call_user_func_array(array(__CLASS__, $method), $args);
+
+		// No alias found
+		return false;
+	}
+}
+
+// ------------------------------------------------------------------------------------------------
 
 /**
  * Parsedown: http://parsedown.org
@@ -23,6 +113,7 @@
  * @license     http://opensource.org/licenses/MIT (MIT License)
  * @link        https://github.com/erusev/parsedown
  * @version     1.6.0
+ * @internal 	Slight modifications made to work within Ornithopter.io
  *
  * The MIT License (MIT)
  *
@@ -45,7 +136,6 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace helpers;
 class parsedown
 {
 	# ~
