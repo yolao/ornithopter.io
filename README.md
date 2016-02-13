@@ -1,4 +1,11 @@
-# Purpose
+# Ornithopter.io
+
+[![Latest Stable Version](https://poser.pugx.org/olscore/ornithopter.io/v/stable)](https://packagist.org/packages/olscore/ornithopter.io)
+[![Total Downloads](https://poser.pugx.org/olscore/ornithopter.io/downloads)](https://packagist.org/packages/olscore/ornithopter.io)
+[![Latest Unstable Version](https://poser.pugx.org/olscore/ornithopter.io/v/unstable)](https://packagist.org/packages/olscore/ornithopter.io)
+[![License](https://poser.pugx.org/olscore/ornithopter.io/license)](https://packagist.org/packages/olscore/ornithopter.io)
+
+# High-speed, Minimalist, Simple MVC PHP 5.6+ Framework
 
 Designed to be lightweight, fast and easy to use. Provides the bare essentials
 for a modern website; e.g., simple request routing to controllers which can then
@@ -6,6 +13,14 @@ go on to invoke models or views as required. Framework seeks to organize externa
 vendor code, helpers and libraries into their own folders as well. Basically this
 provides a simple structure for your website or web application which can be used
 in standard routing mode or alternative routing mode.
+
+Ornithopter.io has been used in high-frequency trading algorithms along with other
+high-performance, mission-critical production environments. Ornithopter.io is designed
+for speed first while remaining highly convenience for fast prototyping and is capable
+of operating in production environments so long as you are familiar with security and
+best practices (depending on your application.) This framework is lax and forgiving
+while also not holding your hand as a developer and making security assumptions which
+in turn can slow down application speeds. First and foremost; a minimalist framework.
 
 # Getting Started
 
@@ -67,20 +82,15 @@ You can see more information by printing io::help() or io::route()
 
 	echo io::view('welcome');
 
-# License
-
-MIT License [OSS][6] or [Project file][7]
-
-# Contributing
-
-Not really seeking contributions, but see [contributing.md][1] for details.
-
 # Support
 
 First see code samples and inline documentation within helpers, libraries and
 vendor classes. The best way to learn is to run it for yourself and tinker with
 it a bit. Ask [@Olscore][2] on Twitter for help or [other ways to contact me][3].
 
+Not really seeking contributions, but see [contributing.md][1] for details. This is
+a MIT License [OSS][6] only project; aiming to remain true to open source ideology. The
+official documentation is planned for when the main developer (Olscore) has more time.
 
 [0]: http://ornithopter.io
 [1]: https://github.com/olscore/ornithopter.io/blob/master/CONTRIBUTING.md
