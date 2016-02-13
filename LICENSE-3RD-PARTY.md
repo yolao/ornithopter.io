@@ -40,6 +40,15 @@ CONNECTION WITH THIS DOCUMENT OR THE USE OR OTHER DEALINGS IN THIS DOCUMENT.
 
 ##### *Included as an Ornithopter.io Helper Class* in **/application/helpers/parsedown.php**
 
+### 3. [Doctrine Inflector](http://www.doctrine-project.org/projects/inflector.html) via [MIT License][0]
+ * Copyright (c) 2006 - 2015 [Doctrine Team](http://www.doctrine-project.org/)
+ * Original License Text ( [Commit][3c] or [Raw][3r] ) from [GitHub](https://github.com/doctrine/inflector)
+
+[3c]: https://github.com/doctrine/inflector/blob/f40e89ad7eaaca1d456e9b68b7fcb51e8eb78d72/LICENSE
+[3r]: https://raw.githubusercontent.com/doctrine/inflector/f40e89ad7eaaca1d456e9b68b7fcb51e8eb78d72/LICENSE
+
+##### *Included (Modified) as an Ornithopter.io Helper Class* in **/application/helpers/inflector.php**
+
 ---
 ## Appendix: Standard Licenses
 
