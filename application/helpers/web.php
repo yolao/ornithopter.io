@@ -356,6 +356,23 @@ class web
 	}
 
 	/**
+	 * Get the Proper domain name
+	 *
+	 * @return  string
+	 */
+	public static function proper()
+	{
+		// Get the current sub, domain and TLD
+		$proper = explode('.', self::domain());
+
+		// Remove the TLD
+		array_pop($proper);
+
+		// Return a proper name for the site
+		return ucwords(implode('.', $proper));
+	}
+
+	/**
 	 * Get the REQUEST_URI
 	 *
 	 * @return  string
