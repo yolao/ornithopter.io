@@ -260,21 +260,21 @@ class agent
 		$this->data['headers']['Status'] = key($this->data['headers']);
 
 		// Set the CURL status code
-		$this->data['status'] = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		$this->data['code'] = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 		// Set the CURL body
 		$this->data['body'] = substr($request, curl_getinfo($curl, CURLINFO_HEADER_SIZE));
 
 		// Detect redirects and record redirection history
-		if ( in_array($this->data['status'], [301, 302, 303, 307, 308]) )
+		if ( in_array($this->data['code'], [301, 302, 303, 307, 308]) )
 		{
-			// Record history
+			// Add to the redirect history
 			$this->data['redirects'][] = array(
-				'code' => $this->data['status'],
-				'path' => $this->data['headers']['Path'],
-				'status' => $this->data['headers']['Status'],
-				'headers' => $this->data['headers'],
-				'body' => $this->data['body']
+				'Code'    => $this->data['code'],
+				'Status'  => $this->data['headers']['Status'],
+				'Path'    => $this->data['headers']['Path'],
+				'Headers' => $this->data['headers'],
+				'Body'    => $this->data['body']
 			);
 
 			// Reissue the request (keeping redirect history)
@@ -297,19 +297,30 @@ class agent
 	 */
 	public function redirects()
 	{
-		// Execute Immediately
+		// Get the redirects
 		return $this->data['redirects'];
+	}
+
+	/**
+	 * Request CURL HTTP Response Status Code
+	 *
+	 * @return 	int
+	 */
+	public function status_code()
+	{
+		// Get the HTTP Status Code
+		return $this->data['code'];
 	}
 
 	/**
 	 * Request CURL Response Status
 	 *
-	 * @return 	int
+	 * @return 	string
 	 */
 	public function status()
 	{
-		// Execute Immediately
-		return $this->data['status'];
+		// Get the full HTTP Status
+		return $this->data['headers']['Status'];
 	}
 
 	/**
@@ -319,7 +330,7 @@ class agent
 	 */
 	public function headers()
 	{
-		// Execute Immediately
+		// Get the HTTP Headers
 		return $this->data['headers'];
 	}
 
@@ -330,7 +341,7 @@ class agent
 	 */
 	public function body()
 	{
-		// Execute Immediately
+		// Get the CURL Response Body
 		return $this->data['body'];
 	}
 
@@ -342,8 +353,8 @@ class agent
 	 */
 	public function get( $path )
 	{
-		// Execute Immediately
-		return self::crawl( $path );
+		// Execute CURL request
+		return self::curl( $path );
 	}
 
 	/**
@@ -365,8 +376,8 @@ class agent
 		// Set the POST data
 		$this->data['post'] = $post;
 
-		// Execute Immediately
-		return self::crawl( $path );
+		// Execute CURL request
+		return self::curl( $path );
 	}
 
 	/**
@@ -388,8 +399,8 @@ class agent
 		// Set the put data
 		$this->data['put'] = $put;
 
-		// Execute Immediately
-		return self::crawl( $path );
+		// Execute CURL request
+		return self::curl( $path );
 	}
 
 	/**
@@ -403,8 +414,8 @@ class agent
 		// Set the delete parameter
 		$this->data['delete'] = true;
 
-		// Execute Immediately
-		return self::crawl( $path );
+		// Execute CURL request
+		return self::curl( $path );
 	}
 
 	/**
