@@ -31,6 +31,16 @@ build an application outside the standard folder structure. You will find folder
 are intuitively labeled; controllers, helpers, libraries, models, vendors and views
 all within the main **application** folder.
 
+### Quick Installation
+
+Ornithopter.io will work out of the box if you download the zip and unpack the
+contents. Just make sure you have **mod_rewrite enabled**. The .htaccess included
+routes everything to index.php already. Modify as required for your purposes.
+
+##### Using Composer (Command line)
+
+    composer create-project olscore/ornithopter.io folder_name
+
 ### Structuring your website or web application
 
 Your website or web application should be made up of files in the **controllers**,
