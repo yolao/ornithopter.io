@@ -14,7 +14,7 @@ vendor code, helpers and libraries into their own folders as well. Basically thi
 provides a simple structure for your website or web application which can be used
 in standard routing mode or alternative routing mode.
 
-Ornithopter.io has been used in high-frequency trading algorithms along with other
+[Ornithopter.io][0] has been used in high-frequency trading algorithms along with other
 high-performance, mission-critical production environments. Ornithopter.io is designed
 for speed first while remaining highly convenience for fast prototyping and is capable
 of operating in production environments so long as you are familiar with security and
@@ -35,9 +35,9 @@ all within the main **application** folder.
 
 Ornithopter.io will work out of the box if you download the zip and unpack the
 contents. Just make sure you have **mod_rewrite enabled**. The .htaccess included
-routes everything to index.php already. Modify as required for your purposes.
+routes everything to index.php already. Modify for your purposes.
 
-##### Using Composer (Command line)
+##### Using PHP Composer (command line)
 
     composer create-project olscore/ornithopter.io folder_name
 
