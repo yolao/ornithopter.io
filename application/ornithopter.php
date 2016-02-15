@@ -207,6 +207,13 @@ class io
      */
     protected static function _init($alternative = false)
     {
+        // Include Composer auto loading if available
+        if (file_exists($composer = 'vendor/autoload.php')) {
+
+            // Complimentary auto-loading
+            include $composer;
+        }
+
         /*
          * These are special aliases required for accessing internal functionality
          * like loading and using helpers, libraries, models, views and controllers.
