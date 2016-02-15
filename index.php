@@ -3,14 +3,13 @@
 /**
  * Ornithopter.io
  * ------------------------------------------------
- * A minimalist, high-speed open source PHP 5.6+ framework
+ * A minimalist, high-speed open source PHP 5.6+ framework.
  *
- * @package     Ornithopter.io
  * @author      Corey Olson
  * @copyright   Copyright (c) 2011 - 2016 Corey Olson
  * @license     http://opensource.org/licenses/MIT (MIT License)
- * @link        https://github.com/olscore/ornithopter.io
  *
+ * @link        https://github.com/olscore/ornithopter.io
  */
 
 // ########################################################################################
@@ -20,8 +19,7 @@
  * ------------------------------------------------
  * All requests get routed through this file.
  */
-
-include('./application/ornithopter.php');
+include './application/ornithopter.php';
 
 /*
  * Looking for a way to implement universal rules for your site? You can place
@@ -32,22 +30,22 @@ include('./application/ornithopter.php');
  */
 
 // Pre application code
-route::any('/*', function(){
+route::any('/*', function () {
 
-	// Your code here
-	io::library('page')->theme('_layout');
+    // Your code here
+    io::library('page')->theme('_layout');
 });
 
 // Standard routing
 io::ornithopter();
 
 // Post application code
-route::any('/*', function(){
+route::any('/*', function () {
 
-	// Your code here
+    // Your code here
 });
 
-/**
+/*
  * Other routing types are possible based on any REQUEST_METHOD, url pattern,
  * or even exact route matching. You can add as many unique routes to this file
  * as you want. Just remember io::ornithopter() is the main framework routing.
