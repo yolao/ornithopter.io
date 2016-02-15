@@ -66,10 +66,19 @@ class agent
 	 * @var array
 	 */
 	private $param = array(
-		'pre'    => ['code', 'headers', 'protocol', 'domain', 'root', 'body', 'details'],
+		'pre'    => ['code', 'headers', 'protocol', 'domain', 'tld', 'root', 'body', 'details'],
 		'post'   => ['post', 'put', 'delete'],
 		'status' => ['status', 'redirect']
 	);
+
+	/**
+	 * Non-exhaustive list of common second-level domain TLDs. Should you absolutely need better
+	 * domain parsing consider using project: https://github.com/jeremykendall/php-domain-parser
+	 *
+	 * @var array
+	 */
+	private static $secondary = array('com', 'net', 'org', 'edu', 'gov', 'mil', 'int', 'rec', 'web',
+		'nic', 'ltd', 'sch', 'soc', 'grp', 'asn', 'med', 'biz', 'gob', 'info', 'pro', 'nom');
 
 	/**
 	 * Initialize the agent class
@@ -272,7 +281,9 @@ class agent
 				'Status'  => $this->data['code'],
 				'Path'    => $this->data['path'],
 				'Protocol'=> $this->data['protocol'],
+				'Root'    => $this->data['root'],
 				'Domain'  => $this->data['domain'],
+				'TLD'     => $this->data['tld'],
 				'Headers' => $this->data['headers'],
 				'Body'    => $this->data['body'],
 				'Details' => $this->data['details']
@@ -323,14 +334,36 @@ class agent
 	}
 
 	/**
-	 * Returns the domain used in the CURL Request
+	 * Returns the domain root from the CURL Request
+	 *
+	 * @return 	string
+	 */
+	public function root()
+	{
+		// Get the root domain name
+		return $this->data['root'];
+	}
+
+	/**
+	 * Returns the domain or sub-domain from the CURL Request
 	 *
 	 * @return 	string
 	 */
 	public function domain()
 	{
-		// Get the domain name
+		// Get the domain name (potentially a sub-domain)
 		return $this->data['domain'];
+	}
+
+	/**
+	 * Returns the domain TLD from the CURL Request
+	 *
+	 * @return 	string
+	 */
+	public function tld()
+	{
+		// Get the TLD of the domain name
+		return $this->data['tld'];
 	}
 
 	/**
@@ -496,8 +529,43 @@ class agent
 		// Set the protocol used
 		$this->data['protocol'] = strtolower(substr(array_shift($domainArr), 0, -1));
 
-		// Set the protocol used
+		// Set the domain name (might be a sub-domain)
 		$this->data['domain'] = array_shift($domainArr);
+
+		// Parse the domain and get the root
+		$rootArr = explode('.', $this->data['domain']);
+
+		// Set the domain name TLD
+		$tldBackup = $this->data['tld'] = array_pop($rootArr);
+
+		// Next piece is a wildcard (e.g., second-level TLD)
+		$mixed = array_pop($rootArr);
+
+		// Check for third-level domains and second-level TLDs
+		if ( strlen($mixed) <= 2 OR in_array($mixed, self::$secondary) )
+		{
+			// Reset the domain name TLD using the secondary $mixed piece
+			$this->data['tld'] = $mixed . '.' . $this->data['tld'];
+
+			// Set the root using the second-level domain
+			$this->data['root'] = array_pop($rootArr) . '.' . $this->data['tld'];
+
+			// Exceptions for sites like Web.com
+			if ( $this->data['domain'] == $this->data['root'] )
+			{
+				// Revert back to first TLD
+				$this->data['tld'] = $tldBackup;
+
+				// Reset the root
+				$this->data['root'] = $mixed . '.' . $this->data['tld'];
+			}
+
+			// Stop processing
+			return false;
+		}
+
+		// Seems to be a normal second level domain and TLD
+		$this->data['root'] = $mixed . '.' . $this->data['tld'];
 	}
 
 	/**
