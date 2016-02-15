@@ -217,7 +217,7 @@ class io
             ['controllers', 'c', 'controller'],
             ['libraries', 'l', 'library'],
             ['helpers', 'h', 'helper'],
-            ['vendors', 'v3', 'vendor'],
+            //['vendors', 'v3', 'vendor'],
         );
 
         // Root directory for index.php
