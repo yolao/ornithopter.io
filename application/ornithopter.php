@@ -350,7 +350,12 @@ class io
         $r = &self::$_developers['route'];
 
         // Splits the REQUEST_URI for [0] the Path and [1] the Query String
-        self::$_developers['request'] = explode('?', str_replace(str_replace('index.php', '', $_SERVER['SCRIPT_NAME']), '/', $_SERVER['REQUEST_URI']));
+        self::$_developers['request'] = explode('?', (stripos($_SERVER['REQUEST_URI'], 'index.php'))
+            // Ornithopter working without mod_rewrite (index.php visible)
+            ? $mod_rewrite_disabled = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI'])
+            // Ornithopter with mod_rewrite enabled (index.php not visible)
+            : $mod_rewrite_enabled = str_replace(str_replace('index.php', '', $_SERVER['SCRIPT_NAME']), '/', $_SERVER['REQUEST_URI'])
+        );
 
         // Removes bad characters except ":" (colon), "~" (tilde), "/" (slash) and "." (period)
         self::$_developers['request'][0] = preg_replace('/[^a-zA-Z0-9:~\/\.\-\_]|:{2,}|\.{2,}/', '', self::$_developers['request'][0]);
@@ -362,6 +367,13 @@ class io
             // This [1] out empty parameters and [2] splits parameters on "/" marks
             'params' => array_filter(explode('/', (self::$_developers['request'][0]) ?: '')),
         );
+
+        // Alternative routing
+        if ($alternative) {
+
+            // Set the alternative Controller, Action and then stop further processing
+            return [$r['controller'] = $_SERVER['SCRIPT_NAME'], $r['action'] = $_SERVER['REQUEST_METHOD']];
+        }
 
         /*
          * Iterates through parameters and checks for sub directories. Routing
