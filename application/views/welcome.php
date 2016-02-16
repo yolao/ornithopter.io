@@ -76,7 +76,3 @@
         <strong>Password Hash:</strong> <?= $pwd; ?>
     </li>
 </ul>
-<hr />
-<p>
-    Note: If you can not see the above page, you may want to check that mod_rewrite (see the .htaccess file) is enabled and working. Routing depends on it.
-</p>
