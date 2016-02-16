@@ -34,7 +34,7 @@
  * @method io::library()->method();
  * @method io::helper()->method();
  * @method io::view();
- * @method io::help();
+ * @method io::info();
  * @method io::route();
  */
 class io
@@ -56,9 +56,9 @@ class io
     /**
      * Returns the io::$_developers information.
      *
-     * @method io::help();
+     * @method io::info();
      */
-    public static function help()
+    public static function info()
     {
         // Record a note for the develop to troubleshoot
         return self::$_developers;
