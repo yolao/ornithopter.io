@@ -14,8 +14,8 @@
  *
  * A security class with helper security functions
  *
- * @method		io::library('security')->hash( $password );
- * @method 		io::library('security')->verify( $password, $stored_hash );
+ * @method io::library('security')->hash( $password );
+ * @method io::library('security')->verify( $password, $stored_hash );
  */
 namespace helpers;
 
@@ -162,8 +162,8 @@ class security
      * Method aliases and function wrappers for coders who like to use alternative
      * names for these methods. Slight performance impact when using method aliases.
      *
-     * @param   string
-     * @param   mixed
+     * @param string
+     * @param mixed
      *
      * @return mixed
      */
@@ -171,7 +171,7 @@ class security
     {
         $aliases = array(
             'password' => ['hash', 'hash_pwd', 'hash_password'],
-            'verify' => ['verify_pwd', 'verify_pass', 'verify_password'],
+            'verify'   => ['verify_pwd', 'verify_pass', 'verify_password'],
         );
 
         // Iterate through methods
