@@ -1,4 +1,5 @@
 # Introduction:     https://help.github.com/articles/ignoring-files
 # Templates:        https://github.com/github/gitignore
 
+vendor/
 .DS_Store
