@@ -34,7 +34,7 @@
  * @method io::helpers('web')->index();
  * @method io::helpers('web')->current();
  */
-namespace helpers;
+namespace ornithopter\helpers;
 
 class web
 {
@@ -124,7 +124,7 @@ class web
     public function __construct()
     {
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\web', get_class_methods(__CLASS__));
+        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**

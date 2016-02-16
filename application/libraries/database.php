@@ -87,7 +87,7 @@
  * @method io::library('database')->offset();
  * @method io::library('database')->statement();
  */
-namespace libraries;
+namespace ornithopter\libraries;
 
 class database
 {

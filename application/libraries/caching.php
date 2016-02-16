@@ -16,7 +16,7 @@
  *
  * @method placeholder class
  */
-namespace libraries;
+namespace ornithopter\libraries;
 
 class caching
 {
@@ -60,7 +60,7 @@ class caching
     public function __construct()
     {
         // Register shortcut aliases using io::method();
-        \io::alias('libraries\caching', get_class_methods(__CLASS__));
+        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**

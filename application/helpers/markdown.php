@@ -18,7 +18,7 @@
  *
  * @method io::helpers('markdown')->parse( [file.md] );
  */
-namespace helpers;
+namespace ornithopter\helpers;
 
 class markdown extends parsedown
 {
@@ -55,7 +55,7 @@ class markdown extends parsedown
     public function __construct()
     {
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\markdown', ['markdown', 'parsedown']);
+        \io::alias(__CLASS__, ['markdown', 'parsedown']);
     }
 
     /**

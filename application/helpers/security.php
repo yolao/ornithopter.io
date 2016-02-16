@@ -17,7 +17,7 @@
  * @method io::library('security')->hash( $password );
  * @method io::library('security')->verify( $password, $stored_hash );
  */
-namespace helpers;
+namespace ornithopter\helpers;
 
 class security
 {
@@ -54,7 +54,7 @@ class security
     public function __construct()
     {
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\security', get_class_methods(__CLASS__));
+        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**

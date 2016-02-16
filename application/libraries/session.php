@@ -25,7 +25,7 @@
  * @method io::library('session')->keep_flashdata();
  * @method io::library('session')->clean_flashdata();
  */
-namespace libraries;
+namespace ornithopter\libraries;
 
 class session
 {
@@ -106,7 +106,7 @@ class session
         self::tracking();
 
         // Register shortcut aliases using io::method();
-        \io::alias('libraries\session', get_class_methods(__CLASS__));
+        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**

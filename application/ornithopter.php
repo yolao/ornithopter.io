@@ -319,17 +319,17 @@ class io
         }
 
         // Executes singleton methods for Libraries & Helpers (namespaces)
-        if (method_exists($type.'\\'.$name, 'instance')) {
+        if (method_exists('ornithopter\\'.$type.'\\'.$name, 'instance')) {
 
             // Returns the instance of the singleton design pattern
-            return call_user_func($type.'\\'.$name.'::instance');
+            return call_user_func('ornithopter\\'.$type.'\\'.$name.'::instance');
         }
 
         // Initialize classes [1] with namespaces or [2] normally
-        if (in_array($type, array('helpers', 'libraries', 'vendors'))) {
+        if (in_array($type, array('helpers', 'libraries'))) {
 
             // Initialization for Helpers and Libraries using namespaces
-            $reflection = new ReflectionClass($type.'\\'.$name);
+            $reflection = new ReflectionClass('ornithopter\\'.$type.'\\'.$name);
         } else {
             // Controllers and models do not have namespaces
             $reflection = new ReflectionClass($name);
@@ -469,7 +469,7 @@ class io
      */
     public static function __callStatic($called, $args = array())
     {
-        // Iterate MVC and Library / Helper methods and Vendor libraries
+        // Iterate MVC and Library / Helper methods
         foreach (self::$_internals['methods'] as $method => $aliases) {
 
             // Check for valid aliases

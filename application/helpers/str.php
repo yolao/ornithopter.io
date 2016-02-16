@@ -41,7 +41,7 @@
  * @method io::helpers('str')->word_ellipsis( $str, $limit );
  * @method io::helpers('str')->between( $str, $start, $end );
  */
-namespace helpers;
+namespace ornithopter\helpers;
 
 class str
 {
@@ -81,7 +81,7 @@ class str
         $excluded = array('casespace');
 
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\str', array_diff(get_class_methods(__CLASS__), $excluded));
+        \io::alias(__CLASS__, array_diff(get_class_methods(__CLASS__), $excluded));
     }
 
     /**

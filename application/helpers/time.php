@@ -43,7 +43,7 @@
  * @method io::helper('time')->days_in();
  * @method io::helper('time')->date_range();
  */
-namespace helpers;
+namespace ornithopter\helpers;
 
 class time
 {
@@ -107,7 +107,7 @@ class time
         );
 
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\time', get_class_methods(__CLASS__));
+        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**

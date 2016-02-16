@@ -32,7 +32,7 @@
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */
-namespace helpers;
+namespace ornithopter\helpers;
 
 class inflector
 {
@@ -204,7 +204,7 @@ class inflector
         self::internals();
 
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\inflector', ['singular', 'plural', 'inflector']);
+        \io::alias(__CLASS__, ['singular', 'plural', 'inflector']);
     }
 
     /**

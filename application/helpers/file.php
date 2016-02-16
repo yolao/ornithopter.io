@@ -31,7 +31,7 @@
  * @method io::helpers('file')->octal( $path );
  * @method io::helpers('file')->size( $mixed, $precision );
  */
-namespace helpers;
+namespace ornithopter\helpers;
 
 class file
 {
@@ -85,7 +85,7 @@ class file
         self::exclusive();
 
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\file', get_class_methods(__CLASS__));
+        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**

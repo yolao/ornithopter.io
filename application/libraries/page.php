@@ -17,7 +17,7 @@
  * @method io::library('page')->theme( $view );
  * @method io::library('page')->nav( $path, $str );
  */
-namespace libraries;
+namespace ornithopter\libraries;
 
 class page
 {
@@ -77,7 +77,7 @@ class page
         );
 
         // Register shortcut aliases using io::method();
-        \io::alias('libraries\page', get_class_methods(__CLASS__));
+        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**

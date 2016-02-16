@@ -18,7 +18,7 @@
  * @method io::helpers('html')->tag('p#intro', 'hello world');
  * @method io::helpers('html')->tag('a.submit', 'submit', ['href' => '/link/path/']);
  */
-namespace helpers;
+namespace ornithopter\helpers;
 
 class html
 {
@@ -81,7 +81,7 @@ class html
     public function __construct()
     {
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\html', ['html', 'tag', 'mailto']);
+        \io::alias(__CLASS__, ['html', 'tag', 'mailto']);
     }
 
     /**

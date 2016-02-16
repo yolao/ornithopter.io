@@ -44,7 +44,7 @@
  * @method io::helper('arr')->update( $array, $dotPath, $value );
  * @method io::helper('arr')->delete( $array, $dotPath );
  */
-namespace helpers;
+namespace ornithopter\helpers;
 
 class arr
 {
@@ -81,7 +81,7 @@ class arr
     public function __construct()
     {
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\arr', get_class_methods(__CLASS__));
+        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**

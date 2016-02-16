@@ -17,7 +17,7 @@
  * @method io::library('crawler')->crawl();
  * @method io::library('crawler')->wait();
  */
-namespace libraries;
+namespace ornithopter\libraries;
 
 class crawler
 {
@@ -73,7 +73,7 @@ class crawler
         self::$data['crawler']->secure(false);
 
         // Register shortcut aliases using io::method();
-        \io::alias('libraries\crawler', ['crawler', 'crawl', 'wait']);
+        \io::alias(__CLASS__, ['crawler', 'crawl', 'wait']);
     }
 
     /**

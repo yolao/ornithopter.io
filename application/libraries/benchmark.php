@@ -25,7 +25,7 @@
  * @method io::library('benchmark')->all();
  * @method io::library('benchmark')->friendly();
  */
-namespace libraries;
+namespace ornithopter\libraries;
 
 class benchmark
 {
@@ -70,7 +70,7 @@ class benchmark
         self::mark('init');
 
         // Register shortcut aliases using io::method();
-        \io::alias('libraries\benchmark', get_class_methods(__CLASS__));
+        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**
