@@ -60,8 +60,8 @@ class agent
      * @var array
      */
     private $param = array(
-        'pre' => ['code', 'headers', 'protocol', 'domain', 'tld', 'root', 'body', 'details'],
-        'post' => ['post', 'put', 'delete'],
+        'pre'    => ['code', 'headers', 'protocol', 'domain', 'tld', 'root', 'body', 'details'],
+        'post'   => ['post', 'put', 'delete'],
         'status' => ['status', 'redirect'],
     );
 
@@ -261,15 +261,15 @@ class agent
         if (isset($this->data['code']) and in_array($this->data['code'], [301, 302, 303, 307, 308])) {
             // Add to the redirect history
             $this->data['redirects'][] = array(
-                'Status' => $this->data['code'],
-                'Path' => $this->data['path'],
+                'Status'   => $this->data['code'],
+                'Path'     => $this->data['path'],
                 'Protocol' => $this->data['protocol'],
-                'Root' => $this->data['root'],
-                'Domain' => $this->data['domain'],
-                'TLD' => $this->data['tld'],
-                'Headers' => $this->data['headers'],
-                'Body' => $this->data['body'],
-                'Details' => $this->data['details'],
+                'Root'     => $this->data['root'],
+                'Domain'   => $this->data['domain'],
+                'TLD'      => $this->data['tld'],
+                'Headers'  => $this->data['headers'],
+                'Body'     => $this->data['body'],
+                'Details'  => $this->data['details'],
             );
 
             // Reissue the request (keeping redirect history)
@@ -600,7 +600,7 @@ class agent
     public function __call($called, $args = array())
     {
         $aliases = array(
-            'curl' => ['execute'],
+            'curl'   => ['execute'],
             'status' => ['status_code', 'code', 'http_code'],
         );
 
