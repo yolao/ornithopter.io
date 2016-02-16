@@ -203,7 +203,7 @@ class io
     /**
      * Initialize Ornithopter.io for normal and alternative usage.
      *
-     * @param bool
+     * @param boolean
      */
     protected static function _init($alternative = false)
     {
@@ -224,7 +224,6 @@ class io
             ['controllers', 'c', 'controller'],
             ['libraries', 'l', 'library'],
             ['helpers', 'h', 'helper'],
-            //['vendors', 'v3', 'vendor'],
         );
 
         // Root directory for index.php
