@@ -444,21 +444,6 @@ class io
     }
 
     /**
-     * Python provides some notation and documention for functions so there is
-     * an attempt to provide as much info as possible within Ornithopter.io.
-     *
-     * @method io::notes();
-     *
-     * @param string
-     * @param string
-     */
-    public static function _notes($title, $note)
-    {
-        // Record a note for the develop to troubleshoot
-        self::$_developers['notes'][][$title] = $note;
-    }
-
-    /**
      * Serves as a wrapper, condenses code and allows developers to use
      * abbreviations for loading controllers, models, helpers and libraries.
      *
@@ -497,12 +482,12 @@ class io
  * for tying models, libraries, helpers and even controllers from external apps;
  * however this form of routing can be very useful for building RESTful APIs.
  *
- * @method  	route::get('.*', function(){}, false)
- * @method		route::post('/[0-9]/.*', function(){}, true)
- * @method		route::any('.*', function(){})
- * @method		route::put('/[a-z]/.*', function(){})
- * @method		route::delete('/user/delete/[0-9]/', function(){})
- * @method		route::custom('.*', function(){})
+ * @method route::get('.*', function(){}, false)
+ * @method route::post('/[0-9]/.*', function(){}, true)
+ * @method route::any('.*', function(){})
+ * @method route::put('/[a-z]/.*', function(){})
+ * @method route::delete('/user/delete/[0-9]/', function(){})
+ * @method route::custom('.*', function(){})
  *
  * @return closure
  */
