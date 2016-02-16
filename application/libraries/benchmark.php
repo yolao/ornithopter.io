@@ -23,7 +23,7 @@
  * @method io::library('benchmark')->since();
  * @method io::library('benchmark')->diff();
  * @method io::library('benchmark')->all();
- * @method io::library('benchmark')->friendly();
+ * @method io::library('benchmark')->nice_mark();
  */
 namespace ornithopter\libraries;
 
@@ -101,7 +101,7 @@ class benchmark
             foreach ($tmp as $name => $benchmark) {
 
                 // Beautify the memory usage into human readable
-                $tmp[$name] = self::friendly($benchmark);
+                $tmp[$name] = self::nice_mark($benchmark);
             }
         }
 
@@ -288,7 +288,7 @@ class benchmark
      *
      * @return array
      */
-    public static function friendly($arg = false)
+    public static function nice_mark($arg = false)
     {
         // Has a benchmark been provided
         if (!$arg) {
@@ -371,11 +371,12 @@ class benchmark
     public function __call($called, $args = array())
     {
         $aliases = array(
-            'mark' => ['record', 'break', 'measure', 'point', 'bench'],
-            'system' => ['sys', 'load', 'proc'],
-            'diff' => ['between', 'difference'],
-            'memory' => ['mem', 'memory_usage', 'mem_usage'],
-            'peak' => ['peak_mem', 'peak_memory_usage', 'peak_mem_usage'],
+            'mark'      => ['record', 'break', 'measure', 'point', 'bench'],
+            'system'    => ['sys', 'load', 'proc'],
+            'diff'      => ['between', 'difference'],
+            'memory'    => ['mem', 'memory_usage', 'mem_usage'],
+            'peak'      => ['peak_mem', 'peak_memory_usage', 'peak_mem_usage'],
+            'nice_mark' => ['friendly', 'human']
         );
 
         // Iterate through methods
