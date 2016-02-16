@@ -109,7 +109,7 @@ class page
      */
     public static function nav($path, $str)
     {
-        // Chec if the path is an alternative route
+        // Check if the path is an alternative route
         if (\io::route()['controller'] == $path) {
 
             // Return the provided string
@@ -118,6 +118,13 @@ class page
 
         // Check if the path equals the controller action
         if ($path == \io::route()['controller'].'/'.\io::route()['action']) {
+
+            // Return the provided string
+            return $str;
+        }
+
+        // Check if the path is equal to the REQUEST_URI
+        if ($_SERVER['REQUEST_URI'] == $path) {
 
             // Return the provided string
             return $str;
