@@ -482,7 +482,7 @@ class io
             // Check for valid aliases
             if (in_array($called, $aliases)) {
 
-                // Send to factory self::create() for MCLH and send V to self::views()
+                // Send to factory for MCLH and send V to self::views()
                 return self::_factory($aliases[0], array_shift($args), $args);
             }
         }
@@ -500,9 +500,6 @@ class io
 
         // Class or method could not be found in aliases or methods
         throw new \Exception('Call to ' . $called . '() could not be resolved.');
-
-        // Use the alias to call the static class method with arguments
-        //return call_user_func_array([self::$_internals['alias'][$called], $called], $args);
     }
 }
 
