@@ -93,9 +93,6 @@ class agent
 
         // Prepares parameters for new CURL request
         $this->resetter('pre', 'post', 'status');
-
-        // Register shortcut aliases using io::method();
-        \io::alias(__CLASS__, get_class_methods(__CLASS__));
     }
 
     /**
