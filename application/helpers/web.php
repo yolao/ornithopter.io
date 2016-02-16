@@ -30,7 +30,6 @@
  * @method io::helpers('web')->domain();
  * @method io::helpers('web')->requesturi();
  * @method io::helpers('web')->querystring();
- * @method io::helpers('web')->get( $param );
  * @method io::helpers('web')->index();
  * @method io::helpers('web')->current();
  */
@@ -385,24 +384,6 @@ class web
     {
         // Return the Query String
         return \io::route()['query'];
-    }
-
-    /**
-     * Wrapper for $_GET parameters with decoding.
-     *
-     * @return string
-     */
-    public static function get($param)
-    {
-        // Check if parameter exists
-        if (isset(\io::route()['get'][$param])) {
-
-            // Return specific $_GET variable
-            return urldecode(\io::route()['get'][$param]);
-        }
-
-        // Not found
-        return false;
     }
 
     /**
