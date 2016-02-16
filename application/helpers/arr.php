@@ -80,23 +80,8 @@ class arr
      */
     public function __construct()
     {
-        // Methods within this class
-        $methodArr = get_class_methods(__CLASS__);
-
-        // Create a list of methods that use references
-        $referenceMethodArr = ['add', 'pull', 'keep', 'sort', 'flatten', 'dot',
-            'undot', 'write', 'select', 'exists', 'insert', 'update', 'delete', ];
-
-        // Remove the reference methods from shortcuts (not allowed)
-        $methodArr = array_diff($methodArr, $referenceMethodArr);
-
-        // Developer notes for troubleshooting
-        \io::_notes('helpers\arr',
-            'Following shortcuts are not available: '.implode(', ', $referenceMethodArr)
-            .' ... try using io::arr()->method() instead of io::method()');
-
         // Register shortcut aliases using h::method();
-        \io::alias('helpers\arr', array_merge($methodArr, $referenceMethodArr));
+        \io::alias('helpers\arr', get_class_methods(__CLASS__));
     }
 
     /**
@@ -119,7 +104,7 @@ class arr
      *
      * @return mixed
      */
-    public static function add(&$arr, $keypair, $notfound = false)
+    public static function add($arr, $keypair, $notfound = false)
     {
         // Check if $keypair is an array
         if (!is_array($keypair)) {
@@ -473,7 +458,7 @@ class arr
      *
      * @return mixed
      */
-    public static function pull(&$arr, $key, $notfound = false)
+    public static function pull($arr, $key, $notfound = false)
     {
         // Validity check
         if (!is_array($arr)) {
@@ -507,7 +492,7 @@ class arr
      *
      * @return mixed
      */
-    public static function keep(&$arr, $mixed)
+    public static function keep($arr, $mixed)
     {
         // Validity check
         if (!is_array($arr)) {
@@ -552,7 +537,7 @@ class arr
      *
      * @return mixed
      */
-    public static function sort(&$arr, $type = 'sort', $original = true)
+    public static function sort($arr, $type = 'sort', $original = true)
     {
         // Validity check
         if (!is_array($arr)) {
@@ -597,7 +582,7 @@ class arr
      *
      * @return array
      */
-    public static function flatten(&$arr, $original = true)
+    public static function flatten($arr, $original = true)
     {
         // Create an array
         $flatArr = array();
@@ -644,7 +629,7 @@ class arr
      *
      * @return mixed
      */
-    public static function dot(&$arr, $original = true)
+    public static function dot($arr, $original = true)
     {
         // Validity check
         if (!is_array($arr)) {
@@ -693,7 +678,7 @@ class arr
      *
      * @return mixed
      */
-    public static function undot(&$arr, $original = true, $force = false)
+    public static function undot($arr, $original = true, $force = false)
     {
         // Validity check
         if (!is_array($arr)) {
@@ -739,7 +724,7 @@ class arr
      *
      * @return mixed
      */
-    public static function write(&$arr, $key, $value)
+    public static function write($arr, $key, $value)
     {
         // Validity check
         if (!is_array($arr)) {
@@ -821,7 +806,7 @@ class arr
      *
      * @return mixed
      */
-    public static function insert(&$arr, $dotPath, $value)
+    public static function insert($arr, $dotPath, $value)
     {
         // Pass to self::exists() to determine existence
         if (self::exists($arr, $dotPath)) {
@@ -842,7 +827,7 @@ class arr
      *
      * @return mixed
      */
-    public static function update(&$arr, $dotPath, $value)
+    public static function update($arr, $dotPath, $value)
     {
         // Pass to self::exists() to determine existence
         if (self::exists($arr, $dotPath)) {
@@ -859,7 +844,7 @@ class arr
      *
      * @param string
      */
-    public static function delete(&$arr, $dotPath)
+    public static function delete($arr, $dotPath)
     {
         // Clean dotPath (forgiving) poor dot-notation
         $dotPath = explode('.', ltrim(rtrim($dotPath, '.'), '.'));
