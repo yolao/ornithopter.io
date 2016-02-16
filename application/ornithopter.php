@@ -350,7 +350,7 @@ class io
         $r = &self::$_developers['route'];
 
         // Splits the REQUEST_URI for [0] the Path and [1] the Query String
-        self::$_developers['request'] = explode('?', $_SERVER['REQUEST_URI']);
+        self::$_developers['request'] = explode('?', str_replace(str_replace('index.php', '', $_SERVER['SCRIPT_NAME']), '/', $_SERVER['REQUEST_URI']));
 
         // Removes bad characters except ":" (colon), "~" (tilde), "/" (slash) and "." (period)
         self::$_developers['request'][0] = preg_replace('/[^a-zA-Z0-9:~\/\.\-\_]|:{2,}|\.{2,}/', '', self::$_developers['request'][0]);
