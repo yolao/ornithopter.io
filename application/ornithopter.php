@@ -214,6 +214,19 @@ class io
             include $composer;
         }
 
+        // Create a list of helpers and libraries within Ornithopter.io
+        self::$_developers['ext'] = array(
+            'helpers'   => array_diff(scandir('./application/helpers'), ['.', '..']),
+            'libraries' => array_diff(scandir('./application/libraries'), ['.', '..']),
+        );
+
+        // Iterate through and clean up the available extensions
+        array_walk_recursive(self::$_developers['ext'], function(&$value, $key) {
+
+            // Remove the file extensions
+            $value = str_replace('.php', '', $value);
+        });
+
         /*
          * These are special aliases required for accessing internal functionality
          * like loading and using helpers, libraries, models, views and controllers.
@@ -444,8 +457,10 @@ class io
     }
 
     /**
-     * Serves as a wrapper, condenses code and allows developers to use
-     * abbreviations for loading controllers, models, helpers and libraries.
+     * Serves as a wrapper and condenses code. This allows developers to use
+     * abbreviations for loading controllers, models, helpers and libraries. It
+     * also serves as an aliasing mechanism for helper and library methods and
+     * optionally allows the lazy loading of helpers and libraries too.
      *
      * @param string
      * @param mixed
@@ -454,6 +469,13 @@ class io
      */
     public static function __callStatic($called, $args = array())
     {
+        // Check available aliases
+        if ( array_key_exists($called, self::$_internals['alias']) ) {
+
+            // Use the alias to call the static class method with arguments
+            return call_user_func_array([self::$_internals['alias'][$called], $called], $args);
+        }
+
         // Iterate MVC and Library / Helper methods
         foreach (self::$_internals['methods'] as $method => $aliases) {
 
@@ -465,8 +487,22 @@ class io
             }
         }
 
+        // Iterate through Ornithopter.io extensions
+        foreach (['helpers', 'libraries'] as $type) {
+
+            // Check if this extension exists as a library or helper
+            if ( in_array($called, self::$_developers['ext'][$type]) ) {
+
+                // Shortcut for libraries and helpers
+                return self::_factory($type, $called, $args);
+            }
+        }
+
+        // Class or method could not be found in aliases or methods
+        throw new \Exception('Call to ' . $called . '() could not be resolved.');
+
         // Use the alias to call the static class method with arguments
-        return call_user_func_array([self::$_internals['alias'][$called], $called], $args);
+        //return call_user_func_array([self::$_internals['alias'][$called], $called], $args);
     }
 }
 
