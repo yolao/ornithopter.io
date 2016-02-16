@@ -18,11 +18,11 @@
  * @method io::library('benchmark')->system();
  * @method io::library('benchmark')->peak();
  * @method io::library('benchmark')->mark();
- * @method io::library('benchmark')->first();
- * @method io::library('benchmark')->last();
+ * @method io::library('benchmark')->first_mark();
+ * @method io::library('benchmark')->last_mark();
  * @method io::library('benchmark')->since();
  * @method io::library('benchmark')->diff();
- * @method io::library('benchmark')->all();
+ * @method io::library('benchmark')->all_marks();
  * @method io::library('benchmark')->nice_mark();
  */
 namespace ornithopter\libraries;
@@ -89,7 +89,7 @@ class benchmark
      *
      * @return array
      */
-    public static function all($friendly = false)
+    public static function all_marks($friendly = false)
     {
         // Create a local copy
         $tmp = self::$points;
@@ -125,7 +125,7 @@ class benchmark
      *
      * @return array
      */
-    public static function first()
+    public static function first_mark()
     {
         // Get the first benchmark
         return reset(self::$points);
@@ -136,7 +136,7 @@ class benchmark
      *
      * @return array
      */
-    public static function last()
+    public static function last_mark()
     {
         // Last benchmark
         return end(self::$points);
@@ -153,7 +153,7 @@ class benchmark
         if (!$mark) {
 
             // Difference since last benchmark
-            $compare = self::last();
+            $compare = self::last_mark();
         }
 
         // Check benchmark exists
@@ -217,7 +217,7 @@ class benchmark
 
         return array(
             'memory' => $second['memory'] - $first['memory'],
-            'time' => round($second['time'] - $first['time'], $precision),
+            'time'   => round($second['time'] - $first['time'], $precision),
         );
     }
 
@@ -243,7 +243,7 @@ class benchmark
         // Record and return the benchmark
         return self::$points[$key] = array(
             'memory' => memory_get_usage(),
-            'time' => microtime(true),
+            'time'   => microtime(true),
         );
     }
 
@@ -294,7 +294,7 @@ class benchmark
         if (!$arg) {
 
             // Use the last benchmark
-            $tmp = self::last();
+            $tmp = self::last_mark();
         } elseif (is_array($arg)) {
 
             // User provided
@@ -328,8 +328,8 @@ class benchmark
 
         // Return system load
         return array(
-            '1min' => $load[0],
-            '5min' => $load[1],
+            '1min'  => $load[0],
+            '5min'  => $load[1],
             '15min' => $load[2],
         );
     }
@@ -371,12 +371,15 @@ class benchmark
     public function __call($called, $args = array())
     {
         $aliases = array(
-            'mark'      => ['record', 'break', 'measure', 'point', 'bench'],
-            'system'    => ['sys', 'load', 'proc'],
-            'diff'      => ['between', 'difference'],
-            'memory'    => ['mem', 'memory_usage', 'mem_usage'],
-            'peak'      => ['peak_mem', 'peak_memory_usage', 'peak_mem_usage'],
-            'nice_mark' => ['friendly', 'human']
+            'mark'       => ['record', 'break', 'measure', 'point', 'bench'],
+            'system'     => ['sys', 'load', 'proc'],
+            'diff'       => ['between', 'difference'],
+            'memory'     => ['mem', 'memory_usage', 'mem_usage'],
+            'peak'       => ['peak_mem', 'peak_memory_usage', 'peak_mem_usage'],
+            'nice_mark'  => ['friendly', 'human'],
+            'first_mark' => ['first'],
+            'last_mark'  => ['last'],
+            'all_marks'  => ['all'],
         );
 
         // Iterate through methods
