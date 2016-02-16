@@ -42,7 +42,7 @@
  * @method io::helper('arr')->write( $array, $dotPath, $value );
  * @method io::helper('arr')->insert( $array, $dotPath, $value );
  * @method io::helper('arr')->update( $array, $dotPath, $value );
- * @method io::helper('arr')->delete( $array, $dotPath );
+ * @method io::helper('arr')->remove( $array, $dotPath );
  */
 namespace ornithopter\helpers;
 
@@ -844,7 +844,7 @@ class arr
      *
      * @param string
      */
-    public static function delete($arr, $dotPath)
+    public static function remove($arr, $dotPath)
     {
         // Clean dotPath (forgiving) poor dot-notation
         $dotPath = explode('.', ltrim(rtrim($dotPath, '.'), '.'));
@@ -896,7 +896,7 @@ class arr
             'select'  => ['get', 'getdot', 'getbydot', 'dotget'],
             'insert'  => ['set', 'setdot', 'setbydot', 'dotset'],
             'update'  => ['change', 'updatedot', 'updatebydot', 'dotupdate'],
-            'delete'  => ['forget', 'deletedot', 'deletebydot', 'dotdelete'],
+            'remove'  => ['forget', 'removedot', 'removebydot', 'dotremove', 'delete'],
             'exists'  => ['has', 'exist', 'dotexist', 'dotexists'],
         );
 
