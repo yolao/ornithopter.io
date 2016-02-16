@@ -18,11 +18,10 @@ route::get('/sample.php', function () {
     // Say hello
     echo '<h3>1: All matching <stron>GET</stron> Requests</h3>';
 
-    // Print a Go Home link
-    echo '<a href="/">Go back to Ornithopter.io homepage</a>';
-
-    // Show what session information has been recorded
-    var_dump($_SESSION);
+    // Say something else...
+    echo '<p>This file exists outside of the /application/ folder (sample.php) ... You
+        can use Ornithopter.io with or without standard routing. This might be useful if
+        you want to build RESTful APIs. Or structure your application differently.</p>';
 
 });
 
@@ -46,6 +45,9 @@ route::any('.*', function () {
 
     // Say hello
     echo '<h3>3: Any matching HTTP Requests</h3>';
+
+    // Uh... Say something
+    echo '<p>Not much to say... But hopefully this helps you understand alternative routes!</p>';
 
     // Print a Go Home link
     echo '<a href="/">Go back to Ornithopter.io homepage</a>';

@@ -86,26 +86,60 @@ class demo
         echo $page;
     }
 
-    public function internals()
+    public function framework()
     {
         /*
-         * You can echo HTML and other information directly from the controller
+         * You can echo HTML and other information directly from  models or controllers
          * however it is usually better to create views for displaying model data.
          */
 
-        // Track the age visit
+        // Session tracking
         io::library('session');
 
         // HTML Header
-        echo '<h3>Ornithopter Routing Information</h3>';
+        echo '<h3>Internal Framework Information</h3>';
 
-        // Print a Go Home link
-        echo '<a href="/">Go back to Ornithopter.io homepage</a>';
+        // Explain a little bit
+        echo '<blockquote>Accessible by calling <strong>io::info()</strong> within Ornithopter.io</blockquote>';
+
+        // Even more information
+        var_dump(io::info());
+    }
+
+    public function routing()
+    {
+        /*
+         * You can echo HTML and other information directly from models or controllers
+         * however it is usually better to create views for displaying model data.
+         */
+
+        // Session tracking
+        io::library('session');
+
+        // HTML Header
+        echo '<h3>Routing Information</h3>';
+
+        // Explain a little bit
+        echo '<blockquote>Accessible by calling <strong>io::route()</strong> within Ornithopter.io</blockquote>';
 
         // Access the internals of Ornithopter.io easily
-        var_dump(io::help());
+        var_dump(io::route());
+    }
 
-        // Print a Go Home link
-        echo '<a href="/">Go back to Ornithopter.io homepage</a>';
+    public function session()
+    {
+        /*
+         * You can echo HTML and other information directly from models or controllers
+         * however it is usually better to create views for displaying model data.
+         */
+
+        // Session tracking
+        io::library('session');
+
+        // HTML Header
+        echo '<h3>Session Information</h3>';
+
+        // Show session data for demo purposes
+        var_dump($_SESSION);
     }
 }

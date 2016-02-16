@@ -34,7 +34,27 @@ class home
      */
     public function get_info()
     {
-        io::model('demo')->internals();
+        io::model('demo')->framework();
+    }
+
+    /*
+     * Accessing this method can be done by adding /route/ to your URL bar which
+     * will then inform Ornithopter.io to route home::get_route() instead! If it
+     * doesn't work be sure to check that mod_rewrite is enabled and working.
+     */
+    public function get_route()
+    {
+        io::model('demo')->routing();
+    }
+
+    /*
+     * Accessing this method can be done by adding /session/ to your URL bar which
+     * will then inform Ornithopter.io to route home::get_session() instead! If it
+     * doesn't work be sure to check that mod_rewrite is enabled and working.
+     */
+    public function get_session()
+    {
+        io::model('demo')->session();
     }
 
     /*
@@ -64,7 +84,16 @@ class home
         // Print out the runtime
         echo '<small>This script ran in: '.$this->runtime.' seconds</small>';
 
-        // Try skipping io::helper('bcrypt')->hash('password');
-        echo '<h3><a href="?do_bcrypt=true">Perform Password Hashing?</a> Slower if using bcrypt to hash a password.</h3>';
+        // Detect $_GET variables
+        if (route::has('do_bcrypt')) {
+
+            // Skips password hashing (by default) for demo purposes of showing route::has() feature
+            echo '<h3><a href="./">Don\'t hash password?</a> Skipping hashing will load this page faster!</h3>';
+
+        } elseif (!route::has('do_bcrypt')) {
+
+            // Performs a secure password hash using the io::helper('security')->hash() method
+            echo '<h3><a href="?do_bcrypt=true">Hash Password?</a> Will take a moment longer to load...</h3>';
+        }
     }
 }
