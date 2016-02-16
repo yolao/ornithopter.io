@@ -38,8 +38,8 @@
  * @method io::helper('time')->now();
  * @method io::helper('time')->sql();
  * @method io::helper('time')->unix();
- * @method io::helper('time')->human();
  * @method io::helper('time')->friendly();
+ * @method io::helper('time')->american();
  * @method io::helper('time')->days_in();
  * @method io::helper('time')->date_range();
  */
@@ -416,7 +416,7 @@ class time
      *
      * @return mixed
      */
-    public static function human($time = false)
+    public static function friendly($time = false)
     {
         // Check for user provided time
         if (!$time) {
@@ -450,7 +450,7 @@ class time
      *
      * @return mixed
      */
-    public static function friendly($time = false)
+    public static function american($time = false)
     {
         // Check for user provided time
         if (!$time) {
