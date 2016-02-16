@@ -72,6 +72,10 @@ You can see more information by printing io::help() or io::route()
 
 # Basic Usage
 
+##### Use (auto-load) any helper or library
+
+    io::class()->method();
+
 ##### Loading a Controller
 
 	io::controller('home')->method();
