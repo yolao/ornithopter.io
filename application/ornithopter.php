@@ -314,6 +314,9 @@ class io
             (include self::$_developers['files'][$type][$name] = self::$_developers['paths'][$type].$name.'.php') ?: self::helper('web')->error_404();
         }
 
+        // Remember original path
+        $path = $name;
+
         // Sub directory controllers
         if (strpos($name, '/') !== false) {
 
@@ -343,13 +346,62 @@ class io
 
             // Initialization for Helpers and Libraries using namespaces
             $reflection = new ReflectionClass('ornithopter\\'.$type.'\\'.$name);
+
         } else {
-            // Controllers and models do not have namespaces
-            $reflection = new ReflectionClass($name);
+            // self::_reflector() will determine how to access this object
+            $reflection = self::_reflector($type, $name, true, $path);
         }
 
         // This [1] creates the object instances (with or without arguments) and [2] adds to object tracking array
         return self::$_developers['objects'][$name][] = (count($args) == 0) ? $reflection->newInstance() : $reflection->newInstanceArgs($args);
+    }
+
+    /**
+     * This method searches for an object within various namespaces. What this
+     * allows for is various types of namespace usagage in controllers and models
+     * meaning you can use [0] no namepsaces, [1] simple namespaces likes "model"
+     * and "controller", [2] or even the path name of the controller or model in
+     * namespaces. This can be useful for very large applications, or even smaller
+     * apps who may choose to use the same class names for models and controllers 
+     *
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     *
+     * @return object
+     */
+    private static function _reflector($type, $name, $alias, $path = '')
+    {
+        // Flip path brackets for namespacing
+        $nsp = str_replace('/', '\\', str_replace('/'.$name, '', $path));
+
+        // Inflected type
+        $ntype = io::inflector()->singular($type);
+
+        // Namespaces to check for class
+        $namespace = ['', $ntype.'\\', $type.'\\', $nsp, $ntype.'\\'.$nsp.'\\', $type.'\\'.$nsp.'\\'];
+
+        // Iterate through namespaces
+        foreach (array_unique($namespace) as $ns) {
+
+            // Check for object within namespace
+            if ( class_exists($ns.$name) ) {
+
+                // Do not alias global namespace
+                if ( $alias AND $ns != '' ) {
+
+                    // Universal access to Ornithopter.io without "use" declarations
+                    [class_alias('\io', $ns.'io'), class_alias('\route', $ns.'route')];
+                }
+
+                // Object found in namespace stop processing
+                return $reflection = new ReflectionClass($ns.$name);
+            }
+        }
+
+        // Unexpected namespace or class name used in this file
+        throw new \Exception('Unable to load ' . $name . '() in ' . ucfirst($type));
     }
 
     /**
@@ -419,8 +471,8 @@ class io
                         (include self::$_developers['files']['controllers'][$name] = __DIR__.'/controllers/'.$name.'.php') ?: self::helper('web')->error_404();
                     }
 
-                    // Reverse engineer this controller class
-                    $reflection = new ReflectionClass('home');
+                    // self::_reflector() will determine how to access this object
+                    $reflection = self::_reflector('controller', 'home', false);
 
                     // Pull the methods from the reflected class
                     foreach ($reflection->getMethods() as $methods) {
