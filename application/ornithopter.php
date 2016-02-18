@@ -362,7 +362,7 @@ class io
      * meaning you can use [0] no namepsaces, [1] simple namespaces likes "model"
      * and "controller", [2] or even the path name of the controller or model in
      * namespaces. This can be useful for very large applications, or even smaller
-     * apps who may choose to use the same class names for models and controllers 
+     * apps who may choose to use the same class names for models and controllers
      *
      * @param string
      * @param string
@@ -377,7 +377,7 @@ class io
         $nsp = str_replace('/', '\\', str_replace('/'.$name, '', $path));
 
         // Inflected type
-        $ntype = io::inflector()->singular($type);
+        $ntype = (substr($type,-1)!='s')?$type:substr($type, 0, -1);
 
         // Namespaces to check for class
         $namespace = ['', $ntype.'\\', $type.'\\', $nsp, $ntype.'\\'.$nsp.'\\', $type.'\\'.$nsp.'\\'];
