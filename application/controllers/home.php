@@ -28,6 +28,36 @@ class home
     }
 
     /*
+     * Accessing this method can be done by adding /ext/ to your URL bar which
+     * will then inform Ornithopter.io to route home::get_ext() instead! If it
+     * doesn't work be sure to check that mod_rewrite is enabled and working.
+     */
+    public function get_ext()
+    {
+        io::model('demo')->extensions();
+    }
+
+    /*
+     * Accessing this method can be done by adding /session/ to your URL bar which
+     * will then inform Ornithopter.io to route home::get_session() instead! If it
+     * doesn't work be sure to check that mod_rewrite is enabled and working.
+     */
+    public function get_session()
+    {
+        io::model('demo')->session();
+    }
+
+    /*
+     * Accessing this method can be done by adding /crawl/ to your URL bar which
+     * will then inform Ornithopter.io to route home::get_crawl() instead! If it
+     * doesn't work be sure to check that mod_rewrite is enabled and working.
+     */
+    public function get_crawl()
+    {
+        io::model('demo')->get_site('php.net');
+    }
+
+    /*
      * Accessing this method can be done by adding /info/ to your URL bar which
      * will then inform Ornithopter.io to route home::get_info() instead! If it
      * doesn't work be sure to check that mod_rewrite is enabled and working.
@@ -45,16 +75,6 @@ class home
     public function get_route()
     {
         io::model('demo')->routing();
-    }
-
-    /*
-     * Accessing this method can be done by adding /session/ to your URL bar which
-     * will then inform Ornithopter.io to route home::get_session() instead! If it
-     * doesn't work be sure to check that mod_rewrite is enabled and working.
-     */
-    public function get_session()
-    {
-        io::model('demo')->session();
     }
 
     /*
@@ -82,18 +102,9 @@ class home
         $this->runtime = microtime(true) - $this->runtime;
 
         // Print out the runtime
-        echo '<small>This script ran in: '.$this->runtime.' seconds</small>';
+        echo '<small>Ornithopter.io generated this page in: <strong>'.round($this->runtime,3).'</strong> seconds.';
 
-        // Detect $_GET variables
-        if (route::has('do_bcrypt')) {
-
-            // Skips password hashing (by default) for demo purposes of showing route::has() feature
-            echo '<h3><a href="./">Don\'t hash password?</a> Skipping hashing will load this page faster!</h3>';
-
-        } elseif (!route::has('do_bcrypt')) {
-
-            // Performs a secure password hash using the io::helper('security')->hash() method
-            echo '<h3><a href="?do_bcrypt=true">Hash Password?</a> Will take a moment longer to load...</h3>';
-        }
+        // This page is kinda long
+        echo '<p><a href="#">Back to top</a></small></p><br /><br /><br /><br />';
     }
 }

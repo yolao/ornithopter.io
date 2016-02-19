@@ -4,6 +4,11 @@ class demo
 {
     public function hello()
     {
+        echo io::view('welcome');
+    }
+
+    public function extensions()
+    {
         /*
          * Ornithopter.io is very simple to use. Some sample controllers and
          * sample models (like this one) have been setup to help you understand
@@ -70,7 +75,7 @@ class demo
         $alt = io::html()->tag('blockquote', 'Alternative call to (any helper or library) via <strong>io::html()->tag();</strong>');
 
         // Now we can show some information with a view
-        $page = io::view('welcome', array(
+        $page = io::view('example', array(
             'name'      => $first.' '.$last,
             'bday'      => $dob,
             'bday_ago'  => $birthday,
@@ -101,12 +106,13 @@ class demo
         io::library('session');
 
         // HTML Header
-        echo '<h3>Internal Framework Information</h3>';
+        echo '<h2>Internal Framework Information</h2>';
+        echo '<p>This method may be useful during development. It contains a list of available helpers, libraries, paths to the various folders, routing information, files that have been loaded, as well as all the objects loaded by Ornithopter.io ...</p>';
 
         // Explain a little bit
-        echo '<blockquote>Accessible by calling <strong>io::info()</strong> within Ornithopter.io</blockquote>';
+        echo '<blockquote>Accessible by calling <strong class="io">io::info()</strong> within Ornithopter.io</blockquote>';
 
-        // Even more information
+        // Like so...
         var_dump(io::info());
     }
 
@@ -121,10 +127,11 @@ class demo
         io::library('session');
 
         // HTML Header
-        echo '<h3>Routing Information</h3>';
+        echo '<h2>Routing Information</h2>';
 
         // Explain a little bit
-        echo '<blockquote>Accessible by calling <strong>io::route()</strong> within Ornithopter.io</blockquote>';
+        echo '<p>This method may be useful during development or even within your application. It provides easy access to important information related to routing, like which controller and action were routed. It also conveniently provides access to $_GET, $_POST, $_SESSION, $_COOKIE and parameters passed to Ornithopter during normal routing... </p>';
+        echo '<blockquote>Accessible by calling <strong class="io">io::route()</strong> within Ornithopter.io</blockquote>';
 
         // Access the internals of Ornithopter.io easily
         var_dump(io::route());
@@ -141,9 +148,29 @@ class demo
         io::library('session');
 
         // HTML Header
-        echo '<h3>Session Information</h3>';
+        echo '<h2>Session Information</h2>';
+        echo '<p>This page is here to show you a little bit more about automatic session tracking within Ornithopter.io ... By default the framework logs each page view with a timestamp, tracks the landing and exit time, and calculates a duration of user time spent on site. This provides a useful way to see what the user did, when and in what order, built-in!</p>';
 
         // Show session data for demo purposes
         var_dump($_SESSION);
+    }
+
+    public function get_site($site)
+    {
+        /*
+         * One of the nift features built-in to Ornithopter is a user agent (CURL wrapper)
+         * with a farily decent web crawler. This does require CURL to be installed though.
+         */
+
+        // Explain a little bit
+        echo '<h2>Crawling a website</h2>';
+        echo '<p>A nifty feature built into Ornithopter is crawling websites and interacting with APIs. With the io::agent() library and io::crawler() you should have no problem interacting with other RESTful APIs or crawling other websites if necessary.';
+
+        // Check if CURL is installed
+        if ( extension_loaded('curl') ) {
+
+            // Crawl a website
+            var_dump(io::crawler()->crawl($site));
+        }
     }
 }

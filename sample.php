@@ -16,7 +16,7 @@ route::get('/sample.php', function () {
     io::library('page')->theme('_layout');
 
     // Say hello
-    echo '<h3>1: All matching <stron>GET</stron> Requests</h3>';
+    echo '<h2>1: All matching <stron>GET</stron> Requests</h2>';
 
     // Say something else...
     echo '<p>This file exists outside of the /application/ folder (sample.php) ... You
@@ -33,7 +33,7 @@ route::get('/sample.php', function () {
 route::post('.*', function () {
 
     // Say hello
-    echo '<h3>2: All matching <stron>POST</stron> Requests</h3>';
+    echo '<h2>2: All matching <stron>POST</stron> Requests</h2>';
 });
 
 /*
@@ -44,7 +44,7 @@ route::post('.*', function () {
 route::any('.*', function () {
 
     // Say hello
-    echo '<h3>3: Any matching HTTP Requests</h3>';
+    echo '<h2>3: Any matching HTTP Requests</h2>';
 
     // Uh... Say something
     echo '<p>Not much to say... But hopefully this helps you understand alternative routes!</p>';
