@@ -25,14 +25,14 @@
 <?php
  /*
   * Notice how the $key => $variables transferred over into the view. The variables
-  * from design.php are not avaialable, we only access what was passed to the view
-  * via the array containing the $key => $value pairs. Another look at the view.
+  * from demo.php are not available, we only access what was passed to the view
+  * via the array containing the $key => $value pairs. Another look at the code:
   */
 
 /*
- *	View loaded from design.php
+ *	View loaded from application/models/demo.php
  *
-    $page = io::view('sample', array(
+    $page = io::view('welcome', array(
         'name' 		=> $first . ' ' . $last,
         'bday' 		=> $dob,
         'bday_ago'	=> $birthday,
@@ -43,9 +43,9 @@
     ));
 
     Variables visible within this view;
-        $name, $bday, $bday_ago, $pwd, $currently, $sessid, $xmas_ago
+        $name, $bday, $bday_ago, $pwd, $currently, $sessid, $xmas_is
 
-    Variables not visible within this view (but visible in design.php);
+    Variables not visible within this view (but visible in demo.php);
         $first, $last, $dob, $birthday, $password, $now, $session_id, $christmas
 
     Do you see how the scope of variables is contained within the model and view

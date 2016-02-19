@@ -9,7 +9,7 @@ class home
     public function before_index()
     {
         // Set a variable for this class
-        $this->variable = "<h4>This variables was created before io::model('design.php')->hello(); ran!</h4>";
+        $this->variable = "<h4>This variables was created before io::model('demo')->hello(); ran!</h4>";
 
         // Record script start time
         $this->runtime = microtime(true);
