@@ -26,7 +26,7 @@ in turn can slow down application speeds. First and foremost; a minimalist frame
 
 Ornithopter works by routing all requests through _index.php_ and translating those
 requests to a controller. The main logic is in [application/ornithopter.php][4]. You
-can also use the alternative routing method as seen in [sample.php][5] if you want to
+can also use the alternative routing method as seen in _[sample.php][5]_ if you want to
 build an application outside the standard folder structure. You will find folders
 are intuitively labeled; controllers, helpers, libraries, models, vendors and views
 all within the main **application** folder.
@@ -44,7 +44,7 @@ routes everything to _index.php_ already. Modify for your own purposes.
 ### Structuring your website or web application
 
 Your website or web application should be made up of files in the **controllers**,
-**models** and **views** folders or alternatively routed files like the **samples.php**
+**models** and **views** folders or alternatively routed files like the _samples.php_
 file which may be useful for building RESTful API's or your own custom routing. Using
 alternative routes still allows you access to the Ornithopter libraries, helpers, etc.
 
