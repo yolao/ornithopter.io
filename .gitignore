@@ -1,5 +1,6 @@
 # Introduction:     https://help.github.com/articles/ignoring-files
 # Templates:        https://github.com/github/gitignore
 
+composer.lock
 vendor/
 .DS_Store
