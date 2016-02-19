@@ -33,13 +33,13 @@
  *	View loaded from application/models/demo.php
  *
     $page = io::view('welcome', array(
-        'name' 		=> $first . ' ' . $last,
-        'bday' 		=> $dob,
-        'bday_ago'	=> $birthday,
-        'pwd' 		=> $password,
-        'currently' => $now,
-        'sessid' 	=> $session_id,
-        'xmas_is' 	=> $christmas
+        'name'       => $first.' '.$last,
+        'bday'       => $dob,
+        'bday_ago'   => $birthday,
+        'pwd'        => $password,
+        'currently'  => $now,
+        'sessid'     => $session_id,
+        'xmas_is'    => $christmas
     ));
 
     Variables visible within this view;
@@ -76,3 +76,4 @@
         <strong>Password Hash:</strong> <?= $pwd; ?>
     </li>
 </ul>
+<?= $alt; ?>

@@ -66,15 +66,19 @@ class demo
         // Again I can now use the time helper class by referencing $time
         $christmas = $time->prefix('future')->postfix('future')->context(strtotime('December 25 '.date('Y')));
 
+        // Actually you can call libraries and helpers like this too... (Works for any library or helper)
+        $alt = io::html()->tag('blockquote', 'Alternative call to (any helper or library) via <strong>io::html()->tag();</strong>');
+
         // Now we can show some information with a view
         $page = io::view('welcome', array(
-            'name' => $first.' '.$last,
-            'bday' => $dob,
-            'bday_ago' => $birthday,
-            'pwd' => $password,
+            'name'      => $first.' '.$last,
+            'bday'      => $dob,
+            'bday_ago'  => $birthday,
+            'pwd'       => $password,
             'currently' => $now,
-            'sessid' => $session_id,
-            'xmas_is' => $christmas,
+            'sessid'    => $session_id,
+            'xmas_is'   => $christmas,
+            'alt'       => $alt,
         ));
 
         /*
