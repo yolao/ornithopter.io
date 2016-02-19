@@ -26,7 +26,7 @@ include './application/ornithopter.php';
  * routes in this file that will run across the entire application. Add your
  * alternative routes (see: sample.php) before and after io::ornithopter(); as
  * needed for your project. You can use this for custom routing, loading default
- * models or classes, templating engines, sessio management and so much more!
+ * models or classes, templating engines, session management and so much more!
  */
 
 // Pre application code
