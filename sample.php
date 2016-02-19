@@ -50,7 +50,7 @@ route::any('.*', function () {
     echo '<p>Not much to say... But hopefully this helps you understand alternative routes!</p>';
 
     // Print a Go Home link
-    echo '<a href="/">Go back to Ornithopter.io homepage</a>';
+    echo '<a href="./">Go back to Ornithopter.io homepage</a>';
 
 // Notice the "Stop Routing" true boolean here; Try changing to "false"
 }, true);
