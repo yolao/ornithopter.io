@@ -20,18 +20,7 @@
              * @license     http://opensource.org/licenses/MIT (MIT License)
              * @link        https://github.com/olscore/ornithopter.io
             */?>
-            body { background-color:#fefefe;color:#333;}
-            h1,h2,h3,h4,h5,h6{font-weight:normal;}
-            *{font-family:HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;}
-            .container{max-width:800px;line-height:22px;}
-            .nav{background-color:#30373b;padding-left:20px;}.nav a.btn{background-color:#646AB4;color:#fff;padding:8px 14px;margin:-2px 20px;letter-spacing:1px;}.nav a.btn:hover{background-color:#5D62A7;}
-            blockquote{border:1px dotted #aaa;padding:10px 20px;}blockquote section{padding:0 20px;}blockquote ol li {padding:5px 0;}ul ul {padding:10px 20px;}
-            .examples ul li strong{display:inline-block;width:160px;}
-            hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin: 1em 0;padding:0;}
-            .controller{color:#646AB4;}
-            .action{color:#73B452;}
-            .ugly{color:#DA2E2D;}
-            .io{color:#126CA7;}
+            body{min-width:860px;background-color:#fefefe;color:#333;}h1,h2,h3,h4,h5,h6{font-weight:normal;}*{font-family:HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;}.container{max-width:800px;line-height:22px;}.nav{background-color:#30373b;padding-left:20px;}.nav a.btn{background-color:#646AB4;color:#fff;padding:8px 14px;margin:-2px 20px;letter-spacing:1px;}.nav a.btn:hover{background-color:#5D62A7;}blockquote{border:1px dotted #aaa;padding:10px 20px;}blockquote section{padding:0 20px;}blockquote ol li {padding:5px 0;}ul ul {padding:10px 20px;}.examples ul li strong{display:inline-block;width:160px;}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin: 1em 0;padding:0;}.controller{color:#646AB4;}.action{color:#73B452;}.ugly{color:#DA2E2D;}.io{color:#126CA7;}
         </style>
     </head>
     <body>
