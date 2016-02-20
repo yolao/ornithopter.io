@@ -55,7 +55,7 @@ a few minutes, how Ornithopter works should be obvious.
 # Routing
 
 By default Ornithopter.io routes by {controller}/{action}/{param1}/{param2} and so
-on and so forth. Printing the internal methods `io::help()` and `io::route()` should be
+on and so forth. Printing the internal methods `io::info()` and `io::route()` should be
 useful for those looking to get started with understanding Ornithopter.
 
 The default controller is _home.php_ with the default action being **index** which
@@ -68,7 +68,7 @@ you can see in the demo application controller. Ornithopter will look for `befor
  * Would invoke the `get_list()` method for a HTTP GET request
  * Would invoke the `after_list()` method if it exists
 
-You can see more information by printing `io::help()` or `io::route()`
+You can see more information by printing `io::info()` or `io::route()`
 
 # Basic Usage
 
