@@ -30,7 +30,7 @@ include './application/ornithopter.php';
  */
 
 // Pre application code
-route::any('/*', function () {
+route::any('/.*', function () {
 
     // Your code here
     io::library('page')->theme('_layout')->optimize();
@@ -40,7 +40,7 @@ route::any('/*', function () {
 io::ornithopter();
 
 // Post application code
-route::any('/*', function () {
+route::any('/.*', function () {
 
     // Your code here
 });

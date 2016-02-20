@@ -602,13 +602,12 @@ class route extends io
     public static function _match($request, $route)
     {
         // Check REQUEST_METHOD method against route
-        if ($request == 'ANY') {
-            return true;
-        }
+        if ($request != 'ANY') {
 
-        // Check route request against REQUEST_METHOD
-        elseif ($request != $_SERVER['REQUEST_METHOD']) {
-            return false;
+            // Check route request against REQUEST_METHOD
+            if ($request != $_SERVER['REQUEST_METHOD']) {
+                return false;
+            }
         }
 
         // Update the internal variables for developers
