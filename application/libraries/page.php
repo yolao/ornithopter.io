@@ -74,6 +74,9 @@ class page
 
             // Sets a default page description
             'description' => false,
+
+            // Optimization is disabled by default
+            'optimize' => false,
         );
 
         // Register shortcut aliases using io::method();
@@ -94,12 +97,30 @@ class page
     /**
      * Sets a theme for rendering.
      *
+     * @param string
+     *
      * @return void
      */
     public static function theme($view)
     {
         // Set the page design
         self::$data['theme'] = $view;
+
+        // Allow chaining
+        return self::$instance;
+    }
+
+    /**
+     * Optimize page by stripping whitespace.
+     *
+     * @param string
+     *
+     * @return void
+     */
+    public static function optimize($enabled = true)
+    {
+        // Set the optimization value
+        self::$data['optimize'] = $enabled;
     }
 
     /**
@@ -172,6 +193,6 @@ class page
         ob_end_clean();
 
         // Send the page to the browser (Compressed) or normally
-        echo (false) ? preg_replace('~>\s+<~', '><', $__page) : $__page;
+        echo (self::$data['optimize']) ? preg_replace('~>\s+<~', '><', $__page) : $__page;
     }
 }

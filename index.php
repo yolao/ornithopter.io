@@ -33,7 +33,7 @@ include './application/ornithopter.php';
 route::any('/*', function () {
 
     // Your code here
-    io::library('page')->theme('_layout');
+    io::library('page')->theme('_layout')->optimize();
 });
 
 // Standard routing
