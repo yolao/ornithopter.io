@@ -147,27 +147,150 @@ class crawler
      */
     private static function digest()
     {
+        // Special DOM processing
+        self::domprocess();
+
         // Digest crawler data
         return array(
-            'Status' => self::$data['crawler']->status(),
-            'Path' => self::$data['crawler']->path(),
-            'Protocol' => self::$data['crawler']->protocol(),
-            'Root' => self::$data['crawler']->root(),
-            'Domain' => self::$data['crawler']->domain(),
-            'TLD' => self::$data['crawler']->tld(),
-            'Headers' => self::$data['crawler']->headers(),
-            'Body' => self::$data['crawler']->body(),
-            'BodyCompressed' => preg_replace('~>\s+<~', '><', self::$data['crawler']->body()),
-            'Redirects' => self::$data['crawler']->redirects(),
-            'Details' => self::$data['crawler']->details(),
-            'Links' => self::links(),
+            'Status'         => self::$data['crawler']->status(),
+            'Path'           => self::$data['crawler']->path(),
+            'Protocol'       => self::$data['crawler']->protocol(),
+            'Root'           => self::$data['crawler']->root(),
+            'Domain'         => self::$data['crawler']->domain(),
+            'TLD'            => self::$data['crawler']->tld(),
+            'Headers'        => self::$data['crawler']->headers(),
+            'Title'          => self::title(),
+            'Meta'           => self::meta(),
+            'Body'           => self::$data['crawler']->body(),
+            'BodyCompressed' => preg_replace('~>\s+<~', '> <', self::$data['crawler']->body()),
+            'Content'        => self::content(),
+            'Redirects'      => self::$data['crawler']->redirects(),
+            'Details'        => self::$data['crawler']->details(),
+            'Links'          => self::links(),
         );
     }
 
     /**
      * Return an array of links from the crawled page.
      *
+     * @return void
+     */
+    private static function domprocess()
+    {
+        // DOM: http://php.net/manual/en/class.domdocument.php
+        self::$data['dom'] = new \domDocument();
+
+        // Suppress errors and load HTML from crawled page
+        @self::$data['dom']->loadHTML(self::$data['crawler']->body());
+
+        // Removing whitespace
+        self::$data['dom']->preserveWhiteSpace = false;
+    }
+
+    /**
+     * Returns the documents title if it exists on the crawled page.
+     *
      * @return mixed
+     */
+    private static function title()
+    {
+        // Grab the Title tag from the DOM
+        $title = self::$data['dom']->getElementsByTagName('title')[0];
+
+        // Return the Title tag if it exists
+        return (!isset($title))?false:$title->nodeValue;
+    }
+
+    /**
+     * Returns an array of the meta tags from the crawled page.
+     *
+     * @return array
+     */
+    private static function meta()
+    {
+        // Search for <meta> tags within the document; using regex so we dont have to make another request, e.g., get_meta_tags()
+        preg_match_all('/<[\s]*meta[\s]*name="?' . '([^>"]*)"?[\s]*' . 'content="?([^>"]*)"?[\s]*[\/]?[\s]*>/si', self::$data['crawler']->body(), $match);
+
+        // Digest the meta tags
+        return array(
+
+            // Full HTML tags
+            'Raw'  => $match[0],
+
+            // Meta tags as an key / value pair (with normalized keys)
+            'Tags' => array_combine(array_map('strtolower', $match[1]), $match[2])
+        );
+    }
+
+    /**
+     * Parses the content of the page.
+     *
+     * @return array
+     */
+    private static function content()
+    {
+        // Remove any JavaScript from the Content
+        $content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', ' ', self::$data['crawler']->body());
+
+        // Remove any in-line CSS from the Content
+        $content = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', ' ', $content);
+
+        // Ensure there are spaces between tags
+        $content = str_replace('><', '> <', $content);
+
+        // Remove the HTML tags from the Content while cleaning up whitespace
+        $content = preg_replace('/\s+/', ' ', strip_tags($content));
+
+        // Remove special HTML characters
+        $content = preg_replace('/&#?[a-z0-9]{2,8};/i', '', $content);
+
+        // Iterate through content and generate keyword usage
+        foreach (explode(' ', $content) as $word) {
+
+            /*
+             * Normalize words (remove commas, colons, semi-colons, etc.) This also
+             * casts integers as strings and ignores casing for words for SEO purposes.
+             */
+            $word = (string) strtolower(preg_replace("/[^A-Za-z0-9]/", '', $word));
+
+            // Remove short words
+            if (!isset($word[2])) {
+
+                // Words 2 characters or less are excluded
+                continue;
+            }
+
+            // Check if a word exists
+            if (isset($keywords['Occurance'][$word])) {
+
+                // Increment the keyword count
+                $keywords['Occurance'][$word]++;
+            } else {
+
+                // Add the word
+                $keywords['Occurance'][$word] = 1;
+            }
+        }
+
+        // Sort Keywords by Occurance
+        arsort($keywords['Occurance']);
+
+        // Top 10 keywords in order
+        $keywords['Top'] = array_keys(array_slice($keywords['Occurance'], 0, 10, true));
+
+        // Digest the content
+        return array(
+            'Content'  => $content,
+            'Words'    => str_word_count($content),
+            'Unique'   => count($keywords['Occurance']),
+            'Keywords' => $keywords,
+        );
+    }
+
+    /**
+     * Return an array of links from the crawled page.
+     *
+     * @return array
      */
     private static function links()
     {
@@ -180,17 +303,8 @@ class crawler
          */
         $tracking = array('/', '//', '#');
 
-        // DOM: http://php.net/manual/en/class.domdocument.php
-        $dom = new \domDocument();
-
-        // Suppress errors and load HTML from crawled page
-        @$dom->loadHTML(self::$data['crawler']->body());
-
-        // Removing whitespace
-        $dom->preserveWhiteSpace = false;
-
         // Search for <a> tags within the DOM
-        $tags = $dom->getElementsByTagName('a');
+        $tags = self::$data['dom']->getElementsByTagName('a');
 
         // Iterate over tags
         foreach ($tags as $tag) {
@@ -222,11 +336,8 @@ class crawler
             $tracking[] = $href;
         }
 
-        // Renumber the $links array
-        $links = array_values($links);
-
-        // Return the links
-        return $links;
+        // Renumber the $links array and return
+        return array_values($links);
     }
 
     /**
