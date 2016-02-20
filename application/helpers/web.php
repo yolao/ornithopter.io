@@ -419,7 +419,7 @@ class web
         header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
 
         // Include the 404.html file or exit on failure
-        (include(($path) ?: \io::help()['paths']['root'].'/404.html')) ?: exit();
+        (include(($path) ?: \io::info()['paths']['root'].'/404.html')) ?: exit();
 
         // Exit anyways
         exit();
