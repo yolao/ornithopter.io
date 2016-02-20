@@ -193,6 +193,6 @@ class page
         ob_end_clean();
 
         // Send the page to the browser (Compressed) or normally
-        echo (self::$data['optimize']) ? preg_replace('~>\s+<~', '><', $__page) : $__page;
+        echo (self::$data['optimize']) ? preg_replace('~>\s+<~', '> <', $__page) : $__page;
     }
 }
