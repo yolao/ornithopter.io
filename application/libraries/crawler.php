@@ -261,28 +261,28 @@ class crawler
             }
 
             // Check if a word exists
-            if (isset($keywords['Occurance'][$word])) {
+            if (isset($keywords['Occurrence'][$word])) {
 
                 // Increment the keyword count
-                $keywords['Occurance'][$word]++;
+                $keywords['Occurrence'][$word]++;
             } else {
 
                 // Add the word
-                $keywords['Occurance'][$word] = 1;
+                $keywords['Occurrence'][$word] = 1;
             }
         }
 
-        // Sort Keywords by Occurance
-        arsort($keywords['Occurance']);
+        // Sort Keywords by Occurrence
+        arsort($keywords['Occurrence']);
 
         // Top 10 keywords in order
-        $keywords['Top'] = array_keys(array_slice($keywords['Occurance'], 0, 10, true));
+        $keywords['Top'] = array_keys(array_slice($keywords['Occurrence'], 0, 10, true));
 
         // Digest the content
         return array(
             'Content'  => $content,
             'Words'    => str_word_count($content),
-            'Unique'   => count($keywords['Occurance']),
+            'Unique'   => count($keywords['Occurrence']),
             'Keywords' => $keywords,
         );
     }
