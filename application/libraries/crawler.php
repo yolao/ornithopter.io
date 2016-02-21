@@ -244,6 +244,9 @@ class crawler
         // Remove special HTML characters
         $content = preg_replace('/&#?[a-z0-9]{2,8};/i', '', $content);
 
+        // Get the list of SEO stop words
+        $stopArr = \io::helpers('web')->stop_words();
+
         // Iterate through content and generate keyword usage
         foreach (explode(' ', $content) as $word) {
 
@@ -270,13 +273,23 @@ class crawler
                 // Add the word
                 $keywords['Occurrence'][$word] = 1;
             }
+
+            // Check against SEO stop words
+            if (!in_array($word, $stopArr)) {
+
+                // Add to the SEO relevant keywords
+                $keywords['SEO'][$word] = $keywords['Occurrence'][$word];
+            }
         }
 
         // Sort Keywords by Occurrence
         arsort($keywords['Occurrence']);
+        arsort($keywords['SEO']);
 
         // Top 10 keywords in order
-        $keywords['Top'] = array_keys(array_slice($keywords['Occurrence'], 0, 10, true));
+        $keywords['Top'] = array_keys(array_slice($keywords['SEO'], 0, 10, true));
+
+        var_dump($keywords);
 
         // Digest the content
         return array(
