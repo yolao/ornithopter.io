@@ -148,7 +148,7 @@ class crawler
     private static function digest()
     {
         // Special DOM processing
-        self::domprocess();
+        self::domprocess(self::$data['crawler']->body());
 
         // Digest crawler data
         return array(
@@ -163,25 +163,26 @@ class crawler
             'Meta'           => self::meta(),
             'Body'           => self::$data['crawler']->body(),
             'BodyCompressed' => preg_replace('~>\s+<~', '> <', self::$data['crawler']->body()),
-            'Content'        => self::content(),
+            'Content'        => self::content(self::$data['crawler']->body()),
             'Redirects'      => self::$data['crawler']->redirects(),
             'Details'        => self::$data['crawler']->details(),
             'Links'          => self::links(),
+            'Frames'         => self::frames(),
         );
     }
 
     /**
-     * Return an array of links from the crawled page.
+     * Prepares a DOM object.
      *
      * @return void
      */
-    private static function domprocess()
+    private static function domprocess($html)
     {
         // DOM: http://php.net/manual/en/class.domdocument.php
         self::$data['dom'] = new \domDocument();
 
         // Suppress errors and load HTML from crawled page
-        @self::$data['dom']->loadHTML(self::$data['crawler']->body());
+        @self::$data['dom']->loadHTML($html);
 
         // Removing whitespace
         self::$data['dom']->preserveWhiteSpace = false;
@@ -227,10 +228,10 @@ class crawler
      *
      * @return array
      */
-    private static function content()
+    private static function content($content)
     {
         // Remove any JavaScript from the Content
-        $content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', ' ', self::$data['crawler']->body());
+        $content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', ' ', $content);
 
         // Remove any in-line CSS from the Content
         $content = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', ' ', $content);
@@ -282,14 +283,36 @@ class crawler
             }
         }
 
-        // Sort Keywords by Occurrence
-        arsort($keywords['Occurrence']);
-        arsort($keywords['SEO']);
+        // Check for content
+        if (isset($keywords)) {
 
-        // Top 10 keywords in order
-        $keywords['Top'] = array_keys(array_slice($keywords['SEO'], 0, 10, true));
+            // Sort Keywords by Occurrence
+            arsort($keywords['Occurrence']);
+            arsort($keywords['SEO']);
 
-        // Digest the content
+            // Top 10 keywords in order
+            $keywords['Top'] = array_keys(array_slice($keywords['SEO'], 0, 10, true));
+        } else {
+
+            // No content
+            $keywords = array(
+                'Occurrence' => array(),
+                'SEO'        => array(),
+                'Top'        => array(),
+            );
+        }
+
+        // Normalize content
+        $content = trim($content);
+
+        // Check for empty content
+        if ($content == '') {
+
+            // Make developer friendly variable
+            $content = false;
+        }
+
+        // Digest content
         return array(
             'Content'  => $content,
             'Words'    => str_word_count($content),
@@ -335,16 +358,23 @@ class crawler
                 // Add the absolute path
                 $links[$key] = array(
                     'crawl' => self::link_crawlable($href),
-                    'href' => $href,
+                    'href'  => $href,
                     'title' => (isset($title[0])) ? $title : false,
-                    'text' => (isset($text[0])) ? $text : false,
-                    'type' => self::link_type($href),
+                    'text'  => (isset($text[0])) ? $text : false,
+                    'type'  => self::link_type($href),
                     'querystring' => (strpos($href, '?')) ? true : false,
                 );
             }
 
             // Add to tracking array
             $tracking[] = $href;
+        }
+
+        // Check for no links
+        if (count($links) == 0) {
+
+            // Make developer friendly variable
+            return false;
         }
 
         // Renumber the $links array and return
@@ -379,14 +409,8 @@ class crawler
             return 'absolute';
         }
 
-        // Check for relative links
-        elseif (substr($href, 0, 1) == '/') {
-
-            // Relative path link
-            return 'relative';
-        }
-
-        return false;
+        // Relative path link
+        return 'relative';
     }
 
     /**
@@ -417,14 +441,82 @@ class crawler
             return $href;
         }
 
-        // Check for relative links
+        // Check for relative links (from root)
         elseif (substr($href, 0, 1) == '/') {
 
-            // Transform the relative path into ab absolute (crawlable) link path
+            // Transform the relative path into an absolute (crawlable) link path
             return self::$data['crawler']->protocol().'://'.self::$data['crawler']->domain().$href;
         }
 
-        return false;
+        // Handle relative links based on path crawled
+        elseif (substr(self::$data['crawler']->path(), -1) == '/') {
+
+            // Transform the relative path (missing slash) based on path
+            return self::$data['crawler']->path().'/'.$href;
+        }
+
+        // Relative path from a file (.html, .php; eg., not ending in a trailing slash)
+        $pathArr = explode('/', self::$data['crawler']->path());
+
+        // Remove the last path item
+        array_pop($pathArr);
+
+        // Transform the relative path
+        return implode('/', $pathArr).'/'.$href;
+    }
+
+    /**
+     * Detects legacy (not support in HTML5) frames and iframes.
+     *
+     * @return array
+     */
+    private static function frames()
+    {
+        // Initialize variables
+        $frames = array(
+            'Sources' => array(),
+            'Content' => '',
+        );
+
+        // Create an Xpath based on the DOM
+        $xpath = new \DOMXpath(self::$data['dom']);
+
+        // Iterate over tags
+        foreach ($xpath->query('//frame | //iframe') as $tag) {
+
+            // Check for blank src
+            if (trim($tag->getAttribute('src')) != '') {
+
+                // Get the NAME and SRC attributes from the tags into an array
+                @$frames['Sources'][] = self::link_crawlable(trim($tag->getAttribute('src')));
+            }
+        }
+
+        // Combine content from each frame
+        foreach ($frames['Sources'] as $src) {
+
+            // Append frame content
+            @$frames['Content'] .= file_get_contents($src);
+        }
+
+        // Change DOM to reprocess Links
+        self::domprocess($frames['Content']);
+
+        // Process links for sub frames and iframes
+        $frames['Links'] = self::links();
+
+        // Parse content of frames
+        $frames['Content'] = self::content($frames['Content']);
+
+        // Check for empty sources
+        if (count($frames['Sources']) == 0) {
+
+            // No sources
+            return false;
+        }
+
+        // Combined frames content and sources
+        return $frames;
     }
 
     /**
