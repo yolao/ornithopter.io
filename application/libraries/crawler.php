@@ -289,8 +289,6 @@ class crawler
         // Top 10 keywords in order
         $keywords['Top'] = array_keys(array_slice($keywords['SEO'], 0, 10, true));
 
-        var_dump($keywords);
-
         // Digest the content
         return array(
             'Content'  => $content,
