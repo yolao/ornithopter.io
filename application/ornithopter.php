@@ -389,7 +389,7 @@ class io
             if ( class_exists($ns.$name) ) {
 
                 // Do not alias global namespace
-                if ( $alias AND $ns != '' ) {
+                if ( $alias AND $ns != '' AND ! class_exists($ns.'io') ) {
 
                     // Universal access to Ornithopter.io without "use" declarations
                     [class_alias('\io', $ns.'io'), class_alias('\route', $ns.'route')];
