@@ -1751,28 +1751,6 @@ class database
     }
 
     /**
-     * Internal method for escaping database input.
-     *
-     * @param string
-     * @param bool
-     *
-     * @return string
-     */
-    private function _esc($str, $mode = true)
-    {
-        // Unescaped Array
-        $uArr = array('\\', '\'', '"', '\0', '\r', '\n', '\x1a');
-
-        // Escaped Array
-        $eArr = array('\\\\', '\\\'', '\\"', '\\0', '\\r', '\\n', '\\Z');
-
-        // Return method
-        return ($mode)
-            ? str_replace($uArr, $eArr, $str)
-            : str_replace($eArr, $uArr, $str);
-    }
-
-    /**
      * Internal method for wrapping values with a specified string.
      *
      * @param string
@@ -1796,12 +1774,12 @@ class database
                 } else {
 
                     // Wrap the item with chars
-                    $mixed[$k] = $chr.$val.$chr;
+                    $mixed[$k] = $this->data['dbh']->quote($val);
                 }
             }
         } else {
             // Wrap the item with chars
-            $mixed = $chr.$mixed.$chr;
+            $mixed = $this->data['dbh']->quote($mixed);
         }
 
         // Return the wrapped item
