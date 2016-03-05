@@ -1788,8 +1788,16 @@ class database
             // Iterate through items
             foreach ($mixed as $k => $val) {
 
-                // Wrap the item with chars
-                $mixed[$k] = $chr.$val.$chr;
+                // Wrapping
+                if (is_null($val)) {
+
+                    // Do not wrap null values
+                    $mixed[$k] = 'NULL';
+                } else {
+
+                    // Wrap the item with chars
+                    $mixed[$k] = $chr.$val.$chr;
+                }
             }
         } else {
             // Wrap the item with chars
