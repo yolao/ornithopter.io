@@ -1828,8 +1828,17 @@ class database
                 }
             }
         } else {
-            // Wrap the item with chars
-            $mixed = $this->data['dbh']->quote($mixed);
+
+            // Wrapping
+            if (is_null($mixed)) {
+
+                // Do not wrap null values
+                $mixed = 'NULL';
+            } else {
+
+                // Wrap the item with chars
+                $mixed = $this->data['dbh']->quote($mixed);
+            }
         }
 
         // Return the wrapped item
