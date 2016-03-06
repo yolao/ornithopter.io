@@ -63,6 +63,8 @@
  * @method io::library('database')->or_where();
  * @method io::library('database')->like();
  * @method io::library('database')->or_like();
+ * @method io::library('database')->not_like();
+ * @method io::library('database')->or_not_like();
  * @method io::library('database')->lt();
  * @method io::library('database')->or_lte();
  * @method io::library('database')->lte();
@@ -985,7 +987,7 @@ class database
     /**
      * Add an (AND) WHERE LIKE to query statement.
      *
-     * @param 	mixed
+     * @param mixed
      *
      * @return object
      */
@@ -1015,6 +1017,44 @@ class database
 
         // Pass to internal $this->_like()
         $this->_like($args, 'OR');
+
+        // Allow chaining
+        return $this;
+    }
+
+    /**
+     * Add an (AND) WHERE NOT LIKE to query statement.
+     *
+     * @param mixed
+     *
+     * @return object
+     */
+    public function not_like(...$args)
+    {
+        // Normalize arguments
+        $this->_normalize($args, 'not like');
+
+        // Pass to internal $this->_like()
+        $this->_like($args, 'AND', true);
+
+        // Allow chaining
+        return $this;
+    }
+
+    /**
+     * Add an (OR) WHERE NOT LIKE to query statement.
+     *
+     * @param splat
+     *
+     * @return object
+     */
+    public function or_not_like(...$args)
+    {
+        // Normalize arguments
+        $this->_normalize($args, 'not like');
+
+        // Pass to internal $this->_like()
+        $this->_like($args, 'OR', true);
 
         // Allow chaining
         return $this;
@@ -1627,12 +1667,12 @@ class database
     }
 
     /**
-     * Internal function for calculating WHERE LIKE clauses.
+     * Internal function for calculating WHERE (NOT) LIKE clauses.
      *
      * @param mixed
      * @param string
      */
-    private function _like($args, $mode = 'AND')
+    private function _like($args, $mode = 'AND', $not = false)
     {
         // Status of clause
         if (!$this->data['where']) {
@@ -1644,6 +1684,9 @@ class database
             $this->data['where'] .= ' '.$mode.' ';
         }
 
+        // LIKE or NOT LIKE
+        $like = ($not) ? ' NOT LIKE ' : ' LIKE ';
+
         // Iterate through insert array
         foreach ($args as $field => $value) {
 
@@ -1651,10 +1694,10 @@ class database
             if (substr($value, 0, 1) == '%' or substr($value, -1) == '%') {
 
                 // Wildcard parameter already specified
-                $whArr[] = $field.' LIKE '.$this->_wrap($value);
+                $whArr[] = $field.$like.$this->_wrap($value);
             } else {
                 // Add wildcards to the beginning and end of value
-                $whArr[] = $field.' LIKE '.$this->_wrap('%'.$value.'%');
+                $whArr[] = $field.$like.$this->_wrap('%'.$value.'%');
             }
         }
 
