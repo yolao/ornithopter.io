@@ -1758,8 +1758,15 @@ class database
      *
      * @return string
      */
-    private function _wrap($mixed, $chr = "'")
+    private function _wrap($mixed)
     {
+        // Ensure connection exists
+        if (!isset($this->data['dbh'])) {
+
+            // Connect to database
+            $this->connect();
+        }
+
         // Check for array
         if (is_array($mixed)) {
 
