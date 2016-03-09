@@ -427,6 +427,19 @@ class crawler
             return false;
         }
 
+        if (stripos($href, 'mailto:')!==false) {
+
+            // Possible email
+            $email = trim(str_replace('mailto:', '', $href));
+
+            // Validate and filter email
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+                // Email
+                return $email;
+            }
+        }
+
         // Check for protocol-relative links
         elseif (substr($href, 0, 2) == '//') {
 
