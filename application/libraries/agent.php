@@ -93,6 +93,9 @@ class agent
 
         // Prepares parameters for new CURL request
         $this->resetter('pre', 'post', 'status');
+
+        // Maximum number of redirects
+        $this->data['max_redirects'] = 10;
     }
 
     /**
@@ -259,6 +262,10 @@ class agent
 
         // Detect redirects and record redirection history
         if (isset($this->data['code']) and in_array($this->data['code'], [301, 302, 303, 307, 308])) {
+
+            // Inifite loop detection
+            $this->data['redirects']['Loop'] = false;
+
             // Add to the redirect history
             $this->data['redirects'][] = array(
                 'Status'   => $this->data['code'],
@@ -272,8 +279,26 @@ class agent
                 'Details'  => $this->data['details'],
             );
 
-            // Reissue the request (keeping redirect history)
-            self::curl($this->data['headers']['Location'], true);
+            // Detect maximum amount of redirects
+            if (count($this->data['redirects']) < $this->data['max_redirects']) {
+
+                // Iterate through previous redirects
+                foreach ($this->data['redirects'] as $redirect) {
+
+                    // Detect redirect loops
+                    if ($redirect['Path'] == $this->data['headers']['Location']) {
+
+                        // Inifite loop detected
+                        $this->data['redirects']['Loop'] = true;
+
+                        // Return and set the status code
+                        return $this->data['status'] = $this->data['code'];
+                    }
+                }
+
+                // Reissue the request (keeping redirect history)
+                self::curl($this->data['headers']['Location'], true);
+            }
         }
 
         // Cleanup data and prepare for a new request
