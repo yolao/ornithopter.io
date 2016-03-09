@@ -431,28 +431,35 @@ class crawler
         elseif (substr($href, 0, 2) == '//') {
 
             // Make crawlable using same protocol
-            return self::$data['crawler']->protocol().$href;
+            return filter_var(self::$data['crawler']->protocol().$href, FILTER_VALIDATE_URL);
         }
 
         // Check for absolute paths
         elseif (substr($href, 0, 4) == 'http') {
 
             // Already crawlable
-            return $href;
+            return filter_var($href, FILTER_VALIDATE_URL);
         }
 
         // Check for relative links (from root)
         elseif (substr($href, 0, 1) == '/') {
 
             // Transform the relative path into an absolute (crawlable) link path
-            return self::$data['crawler']->protocol().'://'.self::$data['crawler']->domain().$href;
+            return filter_var(self::$data['crawler']->protocol().'://'.self::$data['crawler']->domain().$href, FILTER_VALIDATE_URL);
         }
 
         // Handle relative links based on path crawled
         elseif (substr(self::$data['crawler']->path(), -1) == '/') {
 
             // Transform the relative path (missing slash) based on path
-            return self::$data['crawler']->path().'/'.$href;
+            return filter_var(self::$data['crawler']->path().'/'.$href, FILTER_VALIDATE_URL);
+        }
+
+        // Handle relative links based on path crawled
+        elseif (substr(self::$data['crawler']->path(), -1) != '/') {
+
+            // Transform the relative path (missing slash) based on path
+            return filter_var(self::$data['crawler']->protocol().'://'.self::$data['crawler']->path().'/'.$href, FILTER_VALIDATE_URL);
         }
 
         // Relative path from a file (.html, .php; eg., not ending in a trailing slash)
@@ -462,7 +469,7 @@ class crawler
         array_pop($pathArr);
 
         // Transform the relative path
-        return implode('/', $pathArr).'/'.$href;
+        return filter_var(implode('/', $pathArr).'/'.$href, FILTER_VALIDATE_URL);
     }
 
     /**
