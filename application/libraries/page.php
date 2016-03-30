@@ -16,6 +16,8 @@
  *
  * @method io::library('page')->theme( $view );
  * @method io::library('page')->nav( $path, $str );
+ * @method io::library('page')->title();
+ * @method io::library('page')->description();
  * @method io::library('page')->disable();
  */
 namespace ornithopter\libraries;
@@ -125,6 +127,32 @@ class page
     }
 
     /**
+     * Set title for page theme.
+     *
+     * @param string
+     *
+     * @return void
+     */
+    public static function title($title)
+    {
+        // Set page title
+        self::$data['title'] = $title;
+    }
+
+    /**
+     * Set description for page theme.
+     *
+     * @param string
+     *
+     * @return void
+     */
+    public static function description($description)
+    {
+        // Set page description
+        self::$data['description'] = $description;
+    }
+
+    /**
      * Disable a page theme.
      *
      * @param string
@@ -180,11 +208,7 @@ class page
     public function __destruct()
     {
         // Check HTTP Status Code
-        if (http_response_code() != 200) {
-
-            // Only show pages on 200 OK
-            return false;
-        }
+        (http_response_code() == 200)?:exit();
 
         // Ensure a theme is selected
         if (isset(self::$data['theme'])) {
