@@ -14,10 +14,10 @@
  *
  * A cron class for creating cron jobs (Linux based hosts only)
  *
- * @method io::library('cron')->tasks();
- * @method io::library('cron')->flush();
- * @method io::library('cron')->schedule();
- * @method io::library('cron')->unschedule();
+ * @method io::helpers('cron')->tasks();
+ * @method io::helpers('cron')->flush();
+ * @method io::helpers('cron')->schedule();
+ * @method io::helpers('cron')->unschedule();
  */
 namespace ornithopter\helpers;
 

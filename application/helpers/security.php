@@ -14,8 +14,8 @@
  *
  * A security class with helper security functions
  *
- * @method io::library('security')->hash( $password );
- * @method io::library('security')->verify( $password, $stored_hash );
+ * @method io::helpers('security')->hash( $password );
+ * @method io::helpers('security')->verify( $password, $stored_hash );
  */
 namespace ornithopter\helpers;
 
