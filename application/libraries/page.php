@@ -16,6 +16,7 @@
  *
  * @method io::library('page')->theme( $view );
  * @method io::library('page')->nav( $path, $str );
+ * @method io::library('page')->disable();
  */
 namespace ornithopter\libraries;
 
@@ -121,6 +122,22 @@ class page
     {
         // Set the optimization value
         self::$data['optimize'] = $enabled;
+    }
+
+    /**
+     * Disable a page theme.
+     *
+     * @param string
+     *
+     * @return void
+     */
+    public static function disable()
+    {
+        // Disable the page theme
+        unset(self::$data['theme']);
+
+        // Disable the optimizer
+        self::$data['optimize'] = false;
     }
 
     /**
