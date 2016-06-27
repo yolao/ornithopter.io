@@ -155,8 +155,6 @@ class page
     /**
      * Disable a page theme.
      *
-     * @param string
-     *
      * @return void
      */
     public static function disable()
@@ -166,6 +164,20 @@ class page
 
         // Disable the optimizer
         self::$data['optimize'] = false;
+    }
+
+    /**
+     * Disable a page theme and immediately end.
+     *
+     * @return void
+     */
+    public static function end()
+    {
+        // Disable page
+        self::disable();
+
+        // Stop processing
+        exit();
     }
 
     /**
