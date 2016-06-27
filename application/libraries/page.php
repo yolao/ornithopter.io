@@ -19,7 +19,7 @@
  * @method io::library('page')->optimize( $enabled );
  * @method io::library('page')->description( $description );
  * @method io::library('page')->disable();
- * @method io::library('page')->end();
+ * @method io::library('page')->end( [$view] );
  * @method io::library('page')->nav( $path, $str );
  */
 namespace ornithopter\libraries;
@@ -171,12 +171,21 @@ class page
     /**
      * Disable a page theme and immediately end.
      *
+     * @param string
+     *
      * @return void
      */
-    public static function end()
+    public static function end($view = false)
     {
         // Disable page
         self::disable();
+
+        // Optional view
+        if ($view !== false) {
+
+            // Display
+            echo \io::view($view);
+        }
 
         // Stop processing
         exit();
