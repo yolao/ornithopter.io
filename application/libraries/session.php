@@ -14,15 +14,17 @@
  *
  * A session library.
  *
- * @method io::library('session')->session_id();
+ * @method io::library('session')->session_id( $new );
  * @method io::library('session')->regenerate();
- * @method io::library('session')->get();
- * @method io::library('session')->set();
+ * @method io::library('session')->get_all();
+ * @method io::library('session')->get( $var );
+ * @method io::library('session')->set( $var, $val );
+ * @method io::library('session')->remove( $var );
  * @method io::library('session')->id();
- * @method io::library('session')->flashdata();
- * @method io::library('session')->isset_flashdata();
- * @method io::library('session')->set_flashdata();
- * @method io::library('session')->keep_flashdata();
+ * @method io::library('session')->flashdata( $var );
+ * @method io::library('session')->isset_flashdata( $var );
+ * @method io::library('session')->set_flashdata( $var, $value [, $persist] );
+ * @method io::library('session')->keep_flashdata( [$var] [, $persist] );
  * @method io::library('session')->clean_flashdata();
  */
 namespace ornithopter\libraries;
@@ -84,7 +86,7 @@ class session
         session_name('app_id');
 
         // Check for a valid session cookie
-        if (!isset($_COOKIE['app_id']) or !isset($_COOKIE['app_id'][63])) {
+        if (!isset($_COOKIE['app_id']) OR !isset($_COOKIE['app_id'][63])) {
 
             // Generate a new session id
             session_id(self::session_id(true));
@@ -163,6 +165,7 @@ class session
 
         // Logout old sessions
         if ($_SESSION['last_active'] <= (time() - self::$session_length)) {
+
             // Destroy the data
             unset($_SESSION);
 
@@ -172,11 +175,9 @@ class session
             // Ends the session
             session_destroy();
         } else {
+
             // Check for regeneration
             if ($_SESSION['last_regeneration'] <= (time() - self::$session_renew)) {
-                // Remove time indentifiers
-                unset($_SESSION['last_active']);
-                unset($_SESSION['last_regeneration']);
 
                 // Recreate session
                 self::regenerate();
@@ -210,8 +211,22 @@ class session
         // Restore session data
         $_SESSION = $temp;
 
+        // Update regeneration timestamp
+        $_SESSION['last_regeneration'] = time();
+
         // Add session security
         self::security();
+    }
+
+    /**
+     * Retrieves All Session Data.
+     *
+     * @return array
+     */
+    public static function get_all()
+    {
+        // All data
+        return $_SESSION;
     }
 
     /**
@@ -484,5 +499,35 @@ class session
         // Record the session data
         self::set('pages', $pages);
         self::set('stats', $stats);
+    }
+
+    /**
+     * Method aliases and function wrappers for coders who like to use alternative
+     * names for these methods. Slight performance impact when using method aliases.
+     *
+     * @param string
+     * @param mixed
+     *
+     * @return mixed
+     */
+    public function __call($called, $args = array())
+    {
+        $aliases = array(
+            'get_all'   => ['all'],
+        );
+
+        // Iterate through methods
+        foreach ($aliases as $method => $list) {
+
+            // Check called against accepted alias list
+            if (in_array($called, $list)) {
+
+                // Dynamic method (alias) call with arbitrary arguments
+                return call_user_func_array(array(__CLASS__, $method), $args);
+            }
+        }
+
+        // No alias found
+        return false;
     }
 }
