@@ -579,6 +579,7 @@ class str
     public function __call($called, $args = array())
     {
         $aliases = array(
+            'uuid'        => ['str_random'],
             'ends'        => ['ends_with', 'ending_with', 'with_ending', 'with_end'],
             'begins'      => ['begins_with', 'beginning_with', 'with_beginning', 'with_begins'],
             'word_random' => ['random_word', 'rand_word', 'word_rand'],
