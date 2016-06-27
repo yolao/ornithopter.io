@@ -3,8 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title><?= $__title; ?></title>
-        <meta name="description" content="<?= $__description; ?>">
+        <title>Sign in Required</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
             <?php /**
@@ -21,27 +20,24 @@
                     * @link        https://github.com/olscore/ornithopter.io
                     */ ?>
             body{min-width:860px;background-color:#fefefe;color:#333;}h1,h2,h3,h4,h5,h6{font-weight:normal;}*{font-family:HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;}.container{max-width:800px;line-height:22px;}.nav{background-color:#30373b;padding-left:20px;}.nav a.btn{background-color:#646AB4;color:#fff;padding:8px 14px;margin:-2px 20px;letter-spacing:1px;}.nav a.btn:hover{background-color:#5D62A7;}blockquote{border:1px dotted #aaa;padding:10px 20px;}blockquote section{padding:0 20px;}blockquote ol li {padding:5px 0;}ul ul {padding:10px 20px;}.examples ul li strong{display:inline-block;width:160px;}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin: 1em 0;padding:0;}.controller{color:#646AB4;}.action{color:#73B452;}.ugly{color:#DA2E2D;}.io{color:#126CA7;}
+            .msg {margin-top:20px;}
         </style>
     </head>
     <body>
         <nav class="nav">
             <div class="col c10">
-                <a class="pagename current" href="./">Ornithopter.io</a>
-                <a class="<?= io::nav('home/index', 'current'); ?>" href="./">Introduction</a>
-                <a class="<?= io::nav('home/ext', 'current'); ?>" href="./ext">Extensions</a>
-                <a class="<?= io::nav('home/session', 'current'); ?>" href="./session">Sessions</a>
-                <a class="<?= io::nav('home/crawl', 'current'); ?>" href="./crawl">Crawler</a>
-                <a class="<?= io::nav('home/info', 'current'); ?>" href="./info">Framework</a>
-                <a class="<?= io::nav('home/route', 'current'); ?>" href="./route">Routing</a>
-                <a class="<?= io::nav('/sample.php', 'current'); ?>"href="./sample.php">Custom Routes</a>
-                <a class="<?= io::nav('home/secret', 'current'); ?>"href="./secret">Secret</a>
-            </div>
-            <div class="col c2" style="float:right;text-align:right;">
-                <a href="https://github.com/olscore/ornithopter.io" class="btn btn-sm smooth">GitHub</a></a>
+                <a class="pagename current" href="/">Ornithopter.io</a>
+                <a href="#">Authorization Required</a>
             </div>
         </nav>
         <div class="container">
-            <?= $__content; ?>
+            <div class="msg">
+                <strong>Restricted area!</strong> You must login to view this content.
+            </div>
+            <p>This is just a demo.</p>
+            <form action="/login/" method="post">
+                <button type="submit" class="btn btn-sm btn-a">Click here to in &rarr;</button>
+            </form>
         </div>
     </body>
 </html>

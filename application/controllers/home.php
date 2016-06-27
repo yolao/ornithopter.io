@@ -78,6 +78,48 @@ class home
     }
 
     /*
+     * This route is blocked by a simple security mechanism. By using the Security
+     * helper you can easily build a user authentication system.
+     */
+    public function get_secret()
+    {
+        // Require users to login in one line
+        io::helper('security')->authenticate('_login');
+
+        // Can you see this?
+        echo io::helper('html')->tag('h3', 'If you can see this, you are logged in!');
+
+        // Try signing out
+        echo '<a href="/logout">Click here to sign out</a>';
+    }
+
+    /*
+     * This method is only accessible by a POST request. Since this is only a demo
+     * we are going to log the user in without any password checking.
+     */
+    public function post_login()
+    {
+        // Authenticate the user
+        io::helper('security')->login();
+
+        // Redirect the user back to the secret location
+        io::helper('web')->redirect('/secret');
+    }
+
+    /*
+     * This method is only accessible by a POST request. Since this is only a demo
+     * we are going to log the user in without any password checking.
+     */
+    public function get_logout()
+    {
+        // Logout the user
+        io::helper('security')->logout();
+
+        // Redirect the user back to the secret location
+        io::helper('web')->redirect('/secret');
+    }
+
+    /*
      * Notice the "get_" and "post_" prepended names for methods. This relates
      * to the REQUEST_METHOD that is used in routing. So home::post_index() will
      * only be executed if you correctly perform a HTTP POST to this route. The

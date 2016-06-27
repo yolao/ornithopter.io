@@ -23,6 +23,9 @@
  * @method io::helpers('security')->clean_input();
  * @method io::helpers('security')->csrf_field();
  * @method io::helpers('security')->csrf_token();
+ * @method io::helpers('security')->authenticate( $view );
+ * @method io::helpers('security')->login();
+ * @method io::helpers('security')->logout();
  * @method io::helpers('security')->tmp_username( [$prefix] [, $length] );
  * @method io::helpers('security')->tmp_password( $length );
  */
@@ -168,6 +171,44 @@ class security
     }
 
     /**
+     * Require user authentication.
+     *
+     * @param string
+     *
+     * @return void
+     */
+    public static function authenticate($view = false)
+    {
+        // Session library
+        \io::library('session');
+
+        // Check for authentication
+        (\io::library('session')->get('__authorized')) ?:\io::library('page')->end($view);
+    }
+
+    /**
+     * User login.
+     *
+     * @return
+     */
+    public static function login()
+    {
+        // Basic authorization system for simple sites
+        \io::library('session')->set('__authorized', true);
+    }
+
+    /**
+     * User logoff.
+     *
+     * @return
+     */
+    public static function logout()
+    {
+        // Basic session is no longer authorized
+        \io::library('session')->remove('__authorized');
+    }
+
+    /**
      * Generate a temporary username.
      *
      * @return string
@@ -211,6 +252,9 @@ class security
     public function __call($called, $args = array())
     {
         $aliases = array(
+            'login'        => ['signin'],
+            'logout'       => ['logoff', 'signoff', 'signout'],
+            'authenticate' => ['auth', 'authentication'],
             'password'     => ['hash', 'hash_pwd', 'hash_password'],
             'verify'       => ['verify_pwd', 'verify_pass', 'verify_password'],
         );
