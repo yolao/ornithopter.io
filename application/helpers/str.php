@@ -40,6 +40,7 @@
  * @method io::helpers('str')->word_limit( $str, $limit );
  * @method io::helpers('str')->word_ellipsis( $str, $limit );
  * @method io::helpers('str')->between( $str, $start, $end );
+ * @method io::helpers('str')->uuid( [$length] [, $case] );
  */
 namespace ornithopter\helpers;
 
@@ -531,6 +532,39 @@ class str
 
         // Return a string between two strings
         return substr($str, $from, $to);
+    }
+
+    /**
+     * Generates a UUID of arbitrary length.
+     *
+     * @param int
+     * @param bool
+     *
+     * @return string
+     */
+    public function uuid($length = 5, $case_sensitive = true)
+    {
+        // Case sensitivity
+        $range = ($case_sensitive)
+
+            // Create a range of 62 characters
+            ? array_merge(range('a', 'z'), range('A', 'Z'), range(0, 9))
+
+            // Create a range of 36 characters
+            : array_merge(range('a', 'z'), range(0, 9));
+
+        // Blank UUID
+        $uuid = '';
+
+        // Generate a UUID
+        for ($i = 0; $i < $length; $i++) {
+
+            // Add random character
+            $uuid .= $range[mt_rand(0,count($range)-1)];
+        }
+
+        // Returns a Unique Universal Identifier string
+        return $uuid;
     }
 
     /**
