@@ -247,6 +247,19 @@ class session
     }
 
     /**
+     * Unset: Stored Session Data.
+     *
+     * @param string
+     *
+     * @return void
+     */
+    public static function remove($var)
+    {
+        // Forget a session variable
+        unset($_SESSION[$var]);
+    }
+
+    /**
      * Get the Anonymous Session ID.
      *
      * @param bool
