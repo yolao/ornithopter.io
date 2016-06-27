@@ -14,8 +14,17 @@
  *
  * A security class with helper security functions
  *
- * @method io::helpers('security')->hash( $password );
- * @method io::helpers('security')->verify( $password, $stored_hash );
+ * @method io::helpers('security')->bcrypt( $password );
+ * @method io::helpers('security')->password( $password );
+ * @method io::helpers('security')->verify( $password, $hash );
+ * @method io::helpers('security')->css();
+ * @method io::helpers('security')->filename();
+ * @method io::helpers('security')->image_tags();
+ * @method io::helpers('security')->clean_input();
+ * @method io::helpers('security')->csrf_field();
+ * @method io::helpers('security')->csrf_token();
+ * @method io::helpers('security')->tmp_username( [$prefix] [, $length] );
+ * @method io::helpers('security')->tmp_password( $length );
  */
 namespace ornithopter\helpers;
 
@@ -159,6 +168,38 @@ class security
     }
 
     /**
+     * Generate a temporary username.
+     *
+     * @return string
+     */
+    public static function tmp_username($prefix = 'user', $length = 5)
+    {
+        // Temporary username
+        $username = $prefix;
+
+        // Randomly add numbers to prefix
+        for ($i = 0; $i < $length; $i++) {
+
+            // Add random character
+            $username .= mt_rand(0,9);
+        }
+
+        // Random username for new users
+        return $username;
+    }
+
+    /**
+     * Generate a temporary password.
+     *
+     * @return string
+     */
+    public static function tmp_password($length = 8)
+    {
+        // Random password from string helper
+        return \io::helpers('str')->uuid($length);
+    }
+
+    /**
      * Method aliases and function wrappers for coders who like to use alternative
      * names for these methods. Slight performance impact when using method aliases.
      *
@@ -170,8 +211,8 @@ class security
     public function __call($called, $args = array())
     {
         $aliases = array(
-            'password' => ['hash', 'hash_pwd', 'hash_password'],
-            'verify'   => ['verify_pwd', 'verify_pass', 'verify_password'],
+            'password'     => ['hash', 'hash_pwd', 'hash_password'],
+            'verify'       => ['verify_pwd', 'verify_pass', 'verify_password'],
         );
 
         // Iterate through methods
