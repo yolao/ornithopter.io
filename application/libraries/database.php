@@ -658,7 +658,7 @@ class database
     public function status()
     {
         // Converts the result into boolean status
-        return ($this->data['result'] !== false) ? true : false;
+        return ($this->data['result'] !== false OR $this->data['affected'] !== false ) ? true : false;
     }
 
     /**
