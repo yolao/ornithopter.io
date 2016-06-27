@@ -15,10 +15,12 @@
  * A class for handling pages and layouts
  *
  * @method io::library('page')->theme( $view );
- * @method io::library('page')->nav( $path, $str );
- * @method io::library('page')->title();
- * @method io::library('page')->description();
+ * @method io::library('page')->title( $title );
+ * @method io::library('page')->optimize( $enabled );
+ * @method io::library('page')->description( $description );
  * @method io::library('page')->disable();
+ * @method io::library('page')->end();
+ * @method io::library('page')->nav( $path, $str );
  */
 namespace ornithopter\libraries;
 
